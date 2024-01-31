@@ -6,7 +6,10 @@ namespace NCL {
 	
 	namespace CSC8503 {
 		class Transform;
-
+        enum class CollisionType {
+            Impulse,
+            Spring
+        };
 		class PhysicsObject	{
 		public:
 			PhysicsObject(Transform* parentTransform, const CollisionVolume* parentVolume);
@@ -55,7 +58,9 @@ namespace NCL {
 			void SetAngularVelocity(const Vector3& v) {
 				angularVelocity = v;
 			}
-
+            Transform*	 GetTransForm(){
+                return transform;
+            }
 			void InitCubeInertia();
 			void InitSphereInertia();
 
@@ -65,7 +70,10 @@ namespace NCL {
 				return inverseInteriaTensor;
 			}
 
-		protected:
+            void SetCollisionType(CollisionType t) { this->collisionType = t; }
+            CollisionType GetCollisionType() { return collisionType; }
+
+        protected:
 			const CollisionVolume* volume;
 			Transform*		transform;
 
@@ -82,6 +90,8 @@ namespace NCL {
 			Vector3 torque;
 			Vector3 inverseInertia;
 			Matrix3 inverseInteriaTensor;
+
+            CollisionType collisionType;
 		};
 	}
 }

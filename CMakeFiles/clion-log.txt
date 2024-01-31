@@ -1,4 +1,0 @@
-Cannot generate into /Users/wmy/Downloads/CSC8503 2023
-It is already used for project H:/CSC8503 2023
-
-Please either delete it manually or select another generation directory
