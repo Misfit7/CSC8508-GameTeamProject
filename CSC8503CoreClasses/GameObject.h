@@ -9,8 +9,6 @@ namespace NCL::CSC8503 {
 	class RenderObject;
 	class PhysicsObject;
 
-
-
 	class GameObject	{
 	public:
 		GameObject(const std::string& name = "");
@@ -27,12 +25,7 @@ namespace NCL::CSC8503 {
 		bool IsActive() const {
 			return isActive;
 		}
-        void  SetIsActive(bool act)  {
-             isActive = act;
-        }
-        void  SetName(std::string na)  {
-            name = na;
-        }
+
 		Transform& GetTransform() {
 			return transform;
 		}

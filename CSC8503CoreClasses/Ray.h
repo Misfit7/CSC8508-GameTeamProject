@@ -5,7 +5,6 @@ namespace NCL {
 		struct RayCollision {
 			void*		node;			//Node that was hit
 			Vector3		collidedAt;		//WORLD SPACE position of the collision!
-            Vector3		collidedNormal;//Normal Direction of the collision surface
 			float		rayDistance;
 
 			RayCollision(void*node, Vector3 collidedAt) {

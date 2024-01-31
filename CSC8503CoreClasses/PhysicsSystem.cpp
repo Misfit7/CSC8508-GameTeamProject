@@ -15,7 +15,6 @@ using namespace CSC8503;
 
 PhysicsSystem::PhysicsSystem(GameWorld &g) : gameWorld(g) {
     applyGravity = false;
-    //useBroadPhase = false;
     useBroadPhase = false;
     dTOffset = 0.0f;
     globalDamping = 0.995f;
@@ -97,7 +96,7 @@ void PhysicsSystem::Update(float dt) {
         IntegrateAccel(realDT); //Update accelerations from external forces
         if (useBroadPhase) {
             BroadPhase();
-            NarrowPhase(dt);
+            NarrowPhase();
         } else {
             BasicCollisionDetection();
         }
@@ -184,7 +183,7 @@ void PhysicsSystem::UpdateObjectAABBs() {
     std::vector<GameObject *>::const_iterator last;
     gameWorld.GetObjectIterators(first, last);
     for (auto i = first; i != last; ++i) {
-        (*i)->UpdateBroadphaseAABB();
+        (*i) -> UpdateBroadphaseAABB();
     }
 
 }
@@ -289,37 +288,6 @@ void PhysicsSystem::ImpulseResolveCollision(GameObject &a, GameObject &b, Collis
 
 }
 
-// Collision resolution by changing the object acceleration, rather than their position and velocity
-// Using Hooke's spring calculations to move the objects
-void PhysicsSystem::ResolveSpringCollision(GameObject &a, GameObject &b, CollisionDetection::ContactPoint &p,
-                                           float dt) const {
-    float springRestingLength = 0.0f; // temporary initial resting length of 0
-    float springCoefficient = 15.0f; // How quickly the spring should snap back to its resting length when stretched or compressed
-
-    /* Hooke's law: F = -kx, where the spring force F is the result of the difference is spring length x from the 'resting length'
-        multiplied by the spring constant k, which represents how snappy the spring is - so the larger the k is, the more force is applied,
-        and the quicker the spring tries to return to its resting length */
-
-    PhysicsObject *physA = a.GetPhysicsObject();
-    PhysicsObject *physB = b.GetPhysicsObject();
-    Transform &transformA = a.GetTransform();
-    Transform &transformB = b.GetTransform();
-
-    float totalMass = physA->GetInverseMass() +
-                      physB->GetInverseMass(); // Calculating total inverse mass, used later to calculate impulse J
-
-    if (totalMass == 0) return; // two static objects
-
-    float x = (p.penetration * springCoefficient) * dt;
-    Vector3 forceToApply = p.normal * x;
-
-    physA->ApplyLinearImpulse(-forceToApply);
-    physB->ApplyLinearImpulse(forceToApply);
-
-    physA->ApplyAngularImpulse(Vector3::Cross(p.localA, -forceToApply));
-    physB->ApplyAngularImpulse(Vector3::Cross(p.localB, forceToApply));
-}
-
 /*
 
 Later, we replace the BasicCollisionDetection method with a broadphase
@@ -365,7 +333,7 @@ void PhysicsSystem::BroadPhase() {
 The broadphase will now only give us likely collisions, so we can now go through them,
 and work out if they are truly colliding, and if so, add them into the main collision list
 */
-void PhysicsSystem::NarrowPhase(float dt) {
+void PhysicsSystem::NarrowPhase() {
     for (std::set<CollisionDetection::CollisionInfo>::iterator i = broadphaseCollisions.begin();
          i != broadphaseCollisions.end(); ++i) {
         CollisionDetection::CollisionInfo info = *i;
