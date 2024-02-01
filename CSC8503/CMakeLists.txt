@@ -204,10 +204,19 @@ endif()
 include_directories("../OpenGLRendering/")
 include_directories("../NCLCoreClasses/")
 include_directories("../CSC8503CoreClasses/")
+include_directories("../irrKlang")
 
+target_link_libraries(${PROJECT_NAME} LINK_PUBLIC "../irrKlang/lib/irrKlang")
 target_link_libraries(${PROJECT_NAME} LINK_PUBLIC NCLCoreClasses)
 target_link_libraries(${PROJECT_NAME} LINK_PUBLIC CSC8503CoreClasses)
 target_link_libraries(${PROJECT_NAME} LINK_PUBLIC OpenGLRendering)
+
+# copy dlls
+file(GLOB DLLS "../irrKlang/bin/*.dll")
+
+foreach(DLL ${DLLS})
+    add_custom_command(TARGET ${PROJECT_NAME} PRE_BUILD COMMAND ${CMAKE_COMMAND} -E copy ${DLL} $<TARGET_FILE_DIR:${PROJECT_NAME}>)
+endforeach(DLL)
 
 if(USE_VULKAN)
     include_directories("../VulkanRendering/")

@@ -13,11 +13,16 @@ x64/
 #*.ipch
 #*.db
 #/.vs/CSC8503/FileContentIndex/read.lock
-#/.vs
+/.vs
 #/Build
 #/out/build/x64-Debug
 # CMake build directory
 build/
+[Dd]ebug
+
+.vcxproj
+.vcxproj.filters
+.vcxproj.user
 
 # Compiled object files
 *.o
@@ -31,6 +36,7 @@ CMakeFiles/
 CMakeCache.txt
 cmake_install.cmake
 CMakeLists.txt.user
+*.dir/
 
 # Generated Makefiles
 Makefile
