@@ -9,6 +9,7 @@
 #include "OBBVolume.h"
 #include "SphereVolume.h"
 #include "CapsuleVolume.h"
+#include "PlaneVolume.h"
 #include "Ray.h"
 
 using NCL::Camera;
@@ -44,8 +45,8 @@ namespace NCL {
 
 			//Advanced collision detection / resolution
 			bool operator < (const CollisionInfo& other) const {
-				size_t otherHash = (size_t)other.a + ((size_t)other.b << 32);
-				size_t thisHash  = (size_t)a + ((size_t)b << 32);
+				size_t otherHash = (size_t)other.a->GetWorldID() + ((size_t)other.b->GetWorldID() << 32);
+				size_t thisHash  = (size_t)a->GetWorldID() + ((size_t)b->GetWorldID() << 32);
 
 				if (thisHash < otherHash) {
 					return true;
@@ -71,6 +72,7 @@ namespace NCL {
 
 		//TODO ADD THIS PROPERLY
 		static bool RayBoxIntersection(const Ray&r, const Vector3& boxPos, const Vector3& boxSize, RayCollision& collision);
+		static int RayCylinderIntersection(const Ray& r, const float halfHeight, const float radius, RayCollision& collision);
 
 		static Ray BuildRayFromMouse(const PerspectiveCamera& c);
 
@@ -82,10 +84,16 @@ namespace NCL {
 		static bool RaySphereIntersection(const Ray&r, const Transform& worldTransform, const SphereVolume& volume, RayCollision& collision);
 		static bool RayCapsuleIntersection(const Ray& r, const Transform& worldTransform, const CapsuleVolume& volume, RayCollision& collision);
 
-
 		static bool RayPlaneIntersection(const Ray&r, const Plane&p, RayCollision& collisions);
 
 		static bool	AABBTest(const Vector3& posA, const Vector3& posB, const Vector3& halfSizeA, const Vector3& halfSizeB);
+
+		static bool SATTest(const Vector3& sizeA, const Matrix3& rotationA, const Vector3& sizeB, const Matrix3& rotationB,
+			const Vector3& centerDist, const Vector3& axis, float& overlap);
+
+		static Vector3 BoxCornerDir(int index);
+
+		static Vector3 FindClosestNormalOnBox(const Vector3& localNormal);
 
 
 		static bool ObjectIntersection(GameObject* a, GameObject* b, CollisionInfo& collisionInfo);
@@ -103,10 +111,22 @@ namespace NCL {
 		static bool OBBIntersection(	const OBBVolume& volumeA, const Transform& worldTransformA,
 										const OBBVolume& volumeB, const Transform& worldTransformB, CollisionInfo& collisionInfo);
 
+		static bool BoxOBBIntersection(const Vector3& boxSize, const Vector3& boxPos,
+			const OBBVolume& volumeOBB, const Transform& TransformOBB, CollisionInfo& collisionInfo);
+
+		static bool AABBOBBIntersection(const AABBVolume& volumeA, const Transform& worldTransformA,
+			const OBBVolume& volumeB, const Transform& worldTransformB, CollisionInfo& collisionInfo);
+		
+
 
 		static bool OBBSphereIntersection(const OBBVolume& volumeA, const Transform& worldTransformA,
 			const SphereVolume& volumeB, const Transform& worldTransformB, CollisionInfo& collisionInfo);
 
+		static bool CapsuleOBBIntersection(const CapsuleVolume& volumeA, const Transform& worldTransformA,
+			const OBBVolume& volumeB, const Transform& worldTransformB, CollisionInfo& collisionInfo);
+
+		static bool PlaneSphereIntersection(const PlaneVolume& volumeA, const Transform& worldTransformA,
+			const SphereVolume& volumeB, const Transform& worldTransformB, CollisionInfo& collisionInfo);
 
 		static Vector3 Unproject(const Vector3& screenPos, const PerspectiveCamera& cam);
 
