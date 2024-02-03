@@ -7,6 +7,7 @@ namespace NCL {
 		Mesh	= 8,
 		Capsule = 16,
 		Compound= 32,
+		Plane   = 64,
 		Invalid = 256
 	};
 

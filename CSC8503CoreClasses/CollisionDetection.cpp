@@ -473,7 +473,7 @@ bool CollisionDetection::AABBSphereIntersection(const AABBVolume& volumeA, const
 	Vector3 boxSize = volumeA.GetHalfDimensions();
 
 	Vector3 delta = worldTransformB.GetPosition() - worldTransformA.GetPosition();
-	Vector3 closestPointOnBox = Maths::Clamp(delta, -boxSize, boxSize);
+	Vector3 closestPointOnBox = Maths::Vector3::Clamp(delta, -boxSize, boxSize);
 
 	Vector3 localPoint = delta - closestPointOnBox;
 	float distance = localPoint.Length();
@@ -502,7 +502,7 @@ bool CollisionDetection::OBBSphereIntersection(const OBBVolume& volumeA, const T
 
 	Vector3 delta = worldTransformB.GetPosition() - worldTransformA.GetPosition();
 	Vector3 invDelta = invTransform * delta;
-	Vector3 closestPointOnBox = Maths::Clamp(invDelta, -boxSize, boxSize);
+	Vector3 closestPointOnBox = Maths::Vector3::Clamp(invDelta, -boxSize, boxSize);
 
 	Vector3 localPoint = invDelta - closestPointOnBox;
 	float distance = localPoint.Length();
@@ -529,7 +529,7 @@ bool CollisionDetection::AABBCapsuleIntersection(const CapsuleVolume& volumeA, c
 	float capsuleR = volumeA.GetRadius();
 
 	Vector3 delta = boxPos - capsulePos;
-	Vector3 boxClosest = Maths::Clamp(delta, -boxSize, boxSize);
+	Vector3 boxClosest = Maths::Vector3::Clamp(delta, -boxSize, boxSize);
 	Vector3 localP = delta - boxClosest;
 	float distance = localP.Length();
 
@@ -686,7 +686,7 @@ bool CollisionDetection::BoxOBBIntersection(const Vector3& boxSize, const Vector
 			if (side < 0) {
 				if (abs(side) > minPenetration - 0.01f) {
 					num += 1.0f;
-					sum += Maths::Clamp(VertexOBB, -boxSize, boxSize);
+					sum += Maths::Vector3::Clamp(VertexOBB, -boxSize, boxSize);
 				}
 			}
 		}
@@ -708,7 +708,7 @@ bool CollisionDetection::BoxOBBIntersection(const Vector3& boxSize, const Vector
 			if (side < 0) {
 				if (abs(side) > minPenetration - 0.01f) {
 					num += 1.0f;
-					sum += Maths::Clamp(VertexBox, -sizeOBB, sizeOBB);
+					sum += Maths::Vector3::Clamp(VertexBox, -sizeOBB, sizeOBB);
 				}
 			}
 		}
@@ -806,7 +806,7 @@ bool CollisionDetection::CapsuleOBBIntersection(const CapsuleVolume& volumeA, co
 
 	delta = capsulePos - boxPos;
 	Vector3 invDelta = invTransform * delta;
-	Vector3 closestPointOnBox = Maths::Clamp(invDelta, -boxSize, boxSize);
+	Vector3 closestPointOnBox = Maths::Vector3::Clamp(invDelta, -boxSize, boxSize);
 	localP = invDelta - closestPointOnBox;
 	distance = localP.Length();
 
