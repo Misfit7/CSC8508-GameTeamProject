@@ -50,6 +50,7 @@ set(Collision_Detection
     "CollisionDetection.cpp"
      "CollisionVolume.h"
     "OBBVolume.h"
+    "PlaneVolume.h"
     "QuadTree.h"
     "QuadTree.cpp"
     "Ray.h"
