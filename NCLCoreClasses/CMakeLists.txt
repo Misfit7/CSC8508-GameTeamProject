@@ -60,6 +60,11 @@ set(Rendering
 	
 	"MshLoader.cpp"
     "MshLoader.h"
+
+    "common.h"
+    "ChildMeshInterface.h"
+    "OBJMesh.h"
+    "OBJMesh.cpp"
 	
     "MeshMaterial.cpp"
     "MeshMaterial.h"

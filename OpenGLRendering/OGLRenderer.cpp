@@ -93,6 +93,14 @@ void OGLRenderer::BindMesh(const OGLMesh& m) {
 	boundMesh = &m;
 }
 
+void OGLRenderer::BindOBJMesh(const OGLOBJMesh& m) {
+	if (m.GetVAO() == 0) {
+		std::cout << __FUNCTION__ << ": Mesh has not been uploaded!\n";
+	}
+	glBindVertexArray(m.GetVAO());
+	objBoundMesh = &m;
+}
+
 void OGLRenderer::DrawBoundMesh(uint32_t subLayer, uint32_t numInstances) {
 	if (!boundMesh) {
 		std::cout << __FUNCTION__ << " has been called without a bound mesh!\n";
@@ -139,6 +147,60 @@ void OGLRenderer::DrawBoundMesh(uint32_t subLayer, uint32_t numInstances) {
 	}
 	else {
 		if (boundMesh->GetIndexCount() > 0) {
+			glDrawElements(mode, count, GL_UNSIGNED_INT, (const GLvoid*)(offset * sizeof(unsigned int)));
+		}
+		else {
+			glDrawArrays(mode, 0, count);
+		}
+	}
+}
+
+void OGLRenderer::DrawBoundOBJMesh(uint32_t subLayer, uint32_t numInstances) {
+	if (!objBoundMesh) {
+		std::cout << __FUNCTION__ << " has been called without a bound mesh!\n";
+		return;
+	}
+	if (!activeShader) {
+		std::cout << __FUNCTION__ << " has been called without a bound shader!\n";
+		return;
+	}
+	GLuint	mode = 0;
+	int		count = 0;
+	int		offset = 0;
+
+	if (objBoundMesh->GetSubMeshCount() == 0) {
+		if (objBoundMesh->GetIndexCount() > 0) {
+			count = objBoundMesh->GetIndexCount();
+		}
+		else {
+			count = objBoundMesh->GetVertexCount();
+		}
+	}
+	else {
+		const SubMesh* m = objBoundMesh->GetSubMesh(subLayer);
+		offset = m->start;
+		count = m->count;
+	}
+
+	switch (boundMesh->GetPrimitiveType()) {
+	case GeometryPrimitive::Triangles:		mode = GL_TRIANGLES;		break;
+	case GeometryPrimitive::Points:			mode = GL_POINTS;			break;
+	case GeometryPrimitive::Lines:			mode = GL_LINES;			break;
+	case GeometryPrimitive::TriangleFan:	mode = GL_TRIANGLE_FAN;		break;
+	case GeometryPrimitive::TriangleStrip:	mode = GL_TRIANGLE_STRIP;	break;
+	case GeometryPrimitive::Patches:		mode = GL_PATCHES;			break;
+	}
+
+	if (numInstances > 1) {
+		if (objBoundMesh->GetIndexCount() > 0) {
+			glDrawElementsInstanced(mode, count, GL_UNSIGNED_INT, (const GLvoid*)(offset * sizeof(unsigned int)), numInstances);
+		}
+		else {
+			glDrawArraysInstanced(mode, 0, count, numInstances);
+		}
+	}
+	else {
+		if (objBoundMesh->GetIndexCount() > 0) {
 			glDrawElements(mode, count, GL_UNSIGNED_INT, (const GLvoid*)(offset * sizeof(unsigned int)));
 		}
 		else {

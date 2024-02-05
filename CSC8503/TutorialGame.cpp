@@ -55,8 +55,11 @@ void TutorialGame::InitialiseAssets() {
     bonusMesh = renderer->LoadMesh("apple.msh");
     capsuleMesh = renderer->LoadMesh("capsule.msh");
 
-    basicTex = renderer->LoadTexture("checkerboard.png");
-    basicShader = renderer->LoadShader("scene.vert", "scene.frag");
+	trainMesh   = renderer->LoadOBJMesh("Train.obj");
+
+	basicTex	= renderer->LoadTexture("checkerboard.png");
+	trainTex    = renderer->LoadTexture("Train.jpg");
+	basicShader = renderer->LoadShader("scene.vert", "scene.frag");
 
     InitCamera();
     InitWorld();
@@ -399,24 +402,24 @@ GameObject* TutorialGame::AddEnemyToWorld(const Vector3& position) {
     return character;
 }
 
-GameObject* TutorialGame::AddBonusToWorld(const Vector3& position) {
-    GameObject* apple = new GameObject();
+GameObject* TutorialGame::AddTrainToWorld(const Vector3& position) {
+	GameObject* train = new GameObject();
 
-    SphereVolume* volume = new SphereVolume(0.5f);
-    apple->SetBoundingVolume((CollisionVolume*)volume);
-    apple->GetTransform()
-        .SetScale(Vector3(2, 2, 2))
-        .SetPosition(position);
+	SphereVolume* volume = new SphereVolume(0.5f);
+	train->SetBoundingVolume((CollisionVolume*)volume);
+	train->GetTransform()
+		.SetScale(Vector3(2, 2, 2))
+		.SetPosition(position);
 
-    apple->SetRenderObject(new RenderObject(&apple->GetTransform(), bonusMesh, nullptr, basicShader));
-    apple->SetPhysicsObject(new PhysicsObject(&apple->GetTransform(), apple->GetBoundingVolume()));
+	train->SetRenderObject(new RenderObject(&train->GetTransform(), trainMesh, nullptr, basicShader));
+	train->SetPhysicsObject(new PhysicsObject(&train->GetTransform(), train->GetBoundingVolume()));
 
-    apple->GetPhysicsObject()->SetInverseMass(1.0f);
-    apple->GetPhysicsObject()->InitSphereInertia();
+	train->GetPhysicsObject()->SetInverseMass(1.0f);
+	train->GetPhysicsObject()->InitSphereInertia();
 
-    world->AddGameObject(apple);
+	world->AddGameObject(train);
 
-    return apple;
+	return train;
 }
 
 void TutorialGame::InitDefaultFloor() {
@@ -424,11 +427,9 @@ void TutorialGame::InitDefaultFloor() {
 }
 
 void TutorialGame::InitGameExamples() {
-    AddPlayerToWorld(Vector3(0, 5, 0));
-    AddEnemyToWorld(Vector3(5, 5, 0));
-    //AddBonusToWorld(Vector3(10, 5, 0));
-
-
+	AddPlayerToWorld(Vector3(0, 5, 0));
+	AddEnemyToWorld(Vector3(5, 5, 0));
+	AddTrainToWorld(Vector3(10, 5, 0));
 }
 
 void TutorialGame::InitSphereGridWorld(int numRows, int numCols, float rowSpacing, float colSpacing, float radius) {

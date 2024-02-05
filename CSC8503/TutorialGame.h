@@ -49,9 +49,9 @@ namespace NCL {
             GameObject* AddSphereToWorld(const Vector3& position, float radius, float inverseMass = 10.0f);
             GameObject* AddCubeToWorld(const Vector3& position, Vector3 dimensions, float inverseMass = 10.0f);
 
-            GameObject* AddPlayerToWorld(const Vector3& position);
-            GameObject* AddEnemyToWorld(const Vector3& position);
-            GameObject* AddBonusToWorld(const Vector3& position);
+			GameObject* AddPlayerToWorld(const Vector3& position);
+			GameObject* AddEnemyToWorld(const Vector3& position);
+			GameObject* AddTrainToWorld(const Vector3& position);
 
             StateGameObject* AddStateObjectToWorld(const Vector3& position);
             StateGameObject* testStateObject = nullptr;
@@ -81,20 +81,23 @@ namespace NCL {
             Mesh* cubeMesh = nullptr;
             Mesh* sphereMesh = nullptr;
 
-            Texture* basicTex = nullptr;
-            Shader* basicShader = nullptr;
+			Texture*	basicTex	= nullptr;
+			Texture*    trainTex    = nullptr;
+			Shader*		basicShader = nullptr;
 
             //Coursework Meshes
             Mesh* charMesh = nullptr;
             Mesh* enemyMesh = nullptr;
             Mesh* bonusMesh = nullptr;
 
-            //Coursework Additional functionality	
-            GameObject* lockedObject = nullptr;
-            Vector3 lockedOffset = Vector3(0, 14, 20);
-            void LockCameraToObject(GameObject* o) {
-                lockedObject = o;
-            }
+			OBJMesh* trainMesh = nullptr;
+
+			//Coursework Additional functionality	
+			GameObject* lockedObject	= nullptr;
+			Vector3 lockedOffset		= Vector3(0, 14, 20);
+			void LockCameraToObject(GameObject* o) {
+				lockedObject = o;
+			}
 
             GameObject* objClosest = nullptr;
 
