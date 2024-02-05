@@ -206,6 +206,16 @@ namespace NCL::Rendering {
 			assetID = newID;
 		}
 
+		std::vector<Vector3> GetPositions() {
+			return positions;
+		}
+		std::vector<Vector2> GetTexCoords() {
+			return texCoords;
+		}
+		std::vector<Vector3> GetNormals() {
+			return normals;
+		}
+
 	protected:
 		Mesh();
 
