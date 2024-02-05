@@ -43,7 +43,7 @@ void Audio::UpdateKeys()
     vec3df position(cp.x, cp.y, cp.z);  // position of the listener
     Vector3 forward = Matrix4::Rotation(world->GetMainCamera().GetYaw(),
         Vector3(0, 1, 0)) * Matrix4::Rotation(world->GetMainCamera().GetPitch(), Vector3(1, 0, 0)) * Vector3(0, 0, -1);
-    cout << forward << endl;
+    //cout << forward << endl;
     vec3df lookDirection(-forward.x, forward.y, -forward.z);  // the direction the listener looks into
 
     soundEngine->setListenerPosition(position, lookDirection);
