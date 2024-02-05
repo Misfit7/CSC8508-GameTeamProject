@@ -22,6 +22,9 @@
     <ClCompile Include="C:\Users\84251\Desktop\C++\TeamProject\TeamProject\CSC8503\TutorialGame.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="C:\Users\84251\Desktop\C++\TeamProject\TeamProject\CSC8503\Audio.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="C:\Users\84251\Desktop\C++\TeamProject\TeamProject\CSC8503\GameTechRenderer.h">
@@ -37,6 +40,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="C:\Users\84251\Desktop\C++\TeamProject\TeamProject\CSC8503\TutorialGame.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\84251\Desktop\C++\TeamProject\TeamProject\CSC8503\Audio.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="C:\Users\84251\Desktop\C++\TeamProject\TeamProject\CSC8503\CMakeFiles\CSC8503.dir\Debug\cmake_pch.hxx">

@@ -118,6 +118,9 @@
     <ClCompile Include="C:\Users\84251\Desktop\C++\TeamProject\TeamProject\CSC8503CoreClasses\OBBVolume.h">
       <Filter>Collision Detection</Filter>
     </ClCompile>
+    <ClCompile Include="C:\Users\84251\Desktop\C++\TeamProject\TeamProject\CSC8503CoreClasses\PlaneVolume.h">
+      <Filter>Collision Detection</Filter>
+    </ClCompile>
     <ClCompile Include="C:\Users\84251\Desktop\C++\TeamProject\TeamProject\CSC8503CoreClasses\QuadTree.h">
       <Filter>Collision Detection</Filter>
     </ClCompile>

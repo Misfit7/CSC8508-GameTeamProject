@@ -24,20 +24,10 @@
 #include "BehaviourSequence.h"
 #include "BehaviourAction.h"
 
-#include "Assets.h"
-
-//irrKlang
-#include <stdio.h>
-#include <irrKlang.h>
-#include <conio.h>
-
 #include <chrono>
 #include <thread>
 #include <sstream>
 
-#pragma comment(lib, "irrKlang.lib") // link with irrKlang.dll
-
-using namespace irrklang;
 using namespace NCL;
 using namespace CSC8503;
 
@@ -377,19 +367,10 @@ int main() {
         return -1;
     }
 
-    // start the sound engine with default parameters
-    ISoundEngine* soundEngine = createIrrKlangDevice();
-    if (!soundEngine)
-    {
-        printf("Could not startup soundEngine\n");
-        return 0; // error starting up the engine
-    }
-    soundEngine->play2D((Assets::SOUNDSDIR + "getout.ogg").c_str(), true);
-
     w->ShowOSPointer(false);
     w->LockMouseToWindow(true);
     TestPathfinding();
-    NetworkedGame *g = new NetworkedGame();
+    NetworkedGame* g = new NetworkedGame();
     w->GetTimer().GetTimeDeltaSeconds(); //Clear the timer so we don't get a larget first dt!
     while (w->UpdateWindow() && !Window::GetKeyboard()->KeyDown(KeyCodes::ESCAPE)) {
         float dt = w->GetTimer().GetTimeDeltaSeconds();

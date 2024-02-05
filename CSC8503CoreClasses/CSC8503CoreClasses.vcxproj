@@ -469,6 +469,14 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
       <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:/Users/84251/Desktop/C++/TeamProject/TeamProject/CSC8503CoreClasses/CMakeFiles/CSC8503CoreClasses.dir/Release/cmake_pch.hxx;%(ForcedIncludeFiles)</ForcedIncludeFiles>
       <ScanSourceforModuleDependencies Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ScanSourceforModuleDependencies>
     </ClCompile>
+    <ClCompile Include="C:\Users\84251\Desktop\C++\TeamProject\TeamProject\CSC8503CoreClasses\PlaneVolume.h">
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">CompileAsCpp</CompileAs>
+      <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:/Users/84251/Desktop/C++/TeamProject/TeamProject/CSC8503CoreClasses/CMakeFiles/CSC8503CoreClasses.dir/Debug/cmake_pch.hxx;%(ForcedIncludeFiles)</ForcedIncludeFiles>
+      <ScanSourceforModuleDependencies Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ScanSourceforModuleDependencies>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">CompileAsCpp</CompileAs>
+      <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:/Users/84251/Desktop/C++/TeamProject/TeamProject/CSC8503CoreClasses/CMakeFiles/CSC8503CoreClasses.dir/Release/cmake_pch.hxx;%(ForcedIncludeFiles)</ForcedIncludeFiles>
+      <ScanSourceforModuleDependencies Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ScanSourceforModuleDependencies>
+    </ClCompile>
     <ClCompile Include="C:\Users\84251\Desktop\C++\TeamProject\TeamProject\CSC8503CoreClasses\QuadTree.h">
       <ObjectFileName>$(IntDir)/QuadTree.h.obj</ObjectFileName>
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">CompileAsCpp</CompileAs>
