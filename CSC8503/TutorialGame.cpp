@@ -13,7 +13,7 @@ using namespace CSC8503;
 
 TutorialGame::TutorialGame() : controller(*Window::GetWindow()->GetKeyboard(), *Window::GetWindow()->GetMouse()) {
     world = new GameWorld();
-    audio = new Audio();
+    audio = new Audio(world);
 #ifdef USEVULKAN
     renderer = new GameTechVulkanRenderer(*world);
     renderer->Init();
@@ -55,11 +55,13 @@ void TutorialGame::InitialiseAssets() {
     bonusMesh = renderer->LoadMesh("apple.msh");
     capsuleMesh = renderer->LoadMesh("capsule.msh");
 
-	trainMesh   = renderer->LoadOBJMesh("Train.obj");
+    trainMesh = renderer->LoadOBJMesh("Train.obj");
 
-	basicTex	= renderer->LoadTexture("checkerboard.png");
-	trainTex    = renderer->LoadTexture("Train.jpg");
-	basicShader = renderer->LoadShader("scene.vert", "scene.frag");
+    trainMesh = renderer->LoadOBJMesh("Train.obj");
+
+    basicTex = renderer->LoadTexture("checkerboard.png");
+    trainTex = renderer->LoadTexture("Train.jpg");
+    basicShader = renderer->LoadShader("scene.vert", "scene.frag");
 
     InitCamera();
     InitWorld();
@@ -104,19 +106,19 @@ void TutorialGame::UpdateGame(float dt) {
     UpdateKeys();
     audio->UpdateKeys();
 
-	if (useGravity) {
-		Debug::Print("(G)ravity on", Vector2(5, 95), Debug::RED);
-	}
-	else {
-		Debug::Print("(G)ravity off", Vector2(5, 95), Debug::RED);
-	}
-    Debug::DrawLine(Vector3(0,0,0),Vector3(100,0,0),Debug::RED);
-    Debug::DrawLine(Vector3(0,0,0),Vector3(0,100,0),Debug::GREEN);
-    Debug::DrawLine(Vector3(0,0,0),Vector3(0,0,100),Debug::BLUE);
-	RayCollision closestCollision;
-	if (Window::GetKeyboard()->KeyPressed(KeyCodes::K) && selectionObject) {
-		Vector3 rayPos;
-		Vector3 rayDir;
+    if (useGravity) {
+        Debug::Print("(G)ravity on", Vector2(5, 95), Debug::RED);
+    }
+    else {
+        Debug::Print("(G)ravity off", Vector2(5, 95), Debug::RED);
+    }
+    Debug::DrawLine(Vector3(0, 0, 0), Vector3(100, 0, 0), Debug::RED);
+    Debug::DrawLine(Vector3(0, 0, 0), Vector3(0, 100, 0), Debug::GREEN);
+    Debug::DrawLine(Vector3(0, 0, 0), Vector3(0, 0, 100), Debug::BLUE);
+    RayCollision closestCollision;
+    if (Window::GetKeyboard()->KeyPressed(KeyCodes::K) && selectionObject) {
+        Vector3 rayPos;
+        Vector3 rayDir;
 
         rayDir = selectionObject->GetTransform().GetOrientation() * Vector3(0, 0, -1);
 
@@ -405,33 +407,33 @@ GameObject* TutorialGame::AddEnemyToWorld(const Vector3& position) {
 }
 
 GameObject* TutorialGame::AddTrainToWorld(const Vector3& position) {
-	GameObject* train = new GameObject();
+    GameObject* train = new GameObject();
 
-	SphereVolume* volume = new SphereVolume(0.5f);
-	train->SetBoundingVolume((CollisionVolume*)volume);
-	train->GetTransform()
-		.SetScale(Vector3(2, 2, 2))
-		.SetPosition(position);
+    SphereVolume* volume = new SphereVolume(0.5f);
+    train->SetBoundingVolume((CollisionVolume*)volume);
+    train->GetTransform()
+        .SetScale(Vector3(2, 2, 2))
+        .SetPosition(position);
 
-	train->SetRenderObject(new RenderObject(&train->GetTransform(), trainMesh, nullptr, basicShader));
-	train->SetPhysicsObject(new PhysicsObject(&train->GetTransform(), train->GetBoundingVolume()));
+    train->SetRenderObject(new RenderObject(&train->GetTransform(), trainMesh, nullptr, basicShader));
+    train->SetPhysicsObject(new PhysicsObject(&train->GetTransform(), train->GetBoundingVolume()));
 
-	train->GetPhysicsObject()->SetInverseMass(1.0f);
-	train->GetPhysicsObject()->InitSphereInertia();
+    train->GetPhysicsObject()->SetInverseMass(1.0f);
+    train->GetPhysicsObject()->InitSphereInertia();
 
-	world->AddGameObject(train);
+    world->AddGameObject(train);
 
-	return train;
+    return train;
 }
 
 void TutorialGame::InitDefaultFloor() {
-	AddFloorToWorld(Vector3(0, 0, 0));
+    AddFloorToWorld(Vector3(0, 0, 0));
 }
 
 void TutorialGame::InitGameExamples() {
-	AddPlayerToWorld(Vector3(0, 5, 0));
-	AddEnemyToWorld(Vector3(5, 5, 0));
-	AddTrainToWorld(Vector3(10, 5, 0));
+    AddPlayerToWorld(Vector3(0, 5, 0));
+    AddEnemyToWorld(Vector3(5, 5, 0));
+    AddTrainToWorld(Vector3(10, 5, 0));
 }
 
 void TutorialGame::InitSphereGridWorld(int numRows, int numCols, float rowSpacing, float colSpacing, float radius) {
