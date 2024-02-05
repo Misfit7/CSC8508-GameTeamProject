@@ -2,6 +2,7 @@
 #include "Texture.h"
 #include "Shader.h"
 #include "Mesh.h"
+#include "OBJMesh.h"
 
 namespace NCL {
 	using namespace NCL::Rendering;
@@ -13,7 +14,8 @@ namespace NCL {
 		class RenderObject
 		{
 		public:
-			RenderObject(Transform* parentTransform, Mesh* mesh, Texture* tex, Shader* shader);
+			RenderObject(Transform* parentTransform, Mesh* mesh, Texture* tex, Shader* shader, bool isOBJ = false);
+			RenderObject(Transform* parentTransform, OBJMesh* mesh, Texture* tex, Shader* shader, bool isOBJ = true);
 			~RenderObject();
 
 			void SetDefaultTexture(Texture* t) {
@@ -26,6 +28,14 @@ namespace NCL {
 
 			Mesh*	GetMesh() const {
 				return mesh;
+			}
+
+			OBJMesh* GetOBJMesh() const {
+				return objMesh;
+			}
+
+			bool IsOBJ() const {
+				return isOBJ;
 			}
 
 			Transform*		GetTransform() const {
@@ -46,10 +56,12 @@ namespace NCL {
 
 		protected:
 			Mesh*		mesh;
+			OBJMesh*    objMesh;
 			Texture*	texture;
 			Shader*		shader;
 			Transform*	transform;
 			Vector4		colour;
+			bool isOBJ;
 		};
 	}
 }

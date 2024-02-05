@@ -171,10 +171,20 @@ void GameTechRenderer::RenderShadowMap() {
 		Matrix4 modelMatrix = (*i).GetTransform()->GetMatrix();
 		Matrix4 mvpMatrix	= mvMatrix * modelMatrix;
 		glUniformMatrix4fv(mvpLocation, 1, false, (float*)&mvpMatrix);
-		BindMesh((OGLMesh&)*(*i).GetMesh());
-		size_t layerCount = (*i).GetMesh()->GetSubMeshCount();
-		for (size_t i = 0; i < layerCount; ++i) {
-			DrawBoundMesh((uint32_t)i);
+		if (!(*i).IsOBJ()) {
+			BindMesh((OGLMesh&)*(*i).GetMesh());
+			size_t layerCount = (*i).GetMesh()->GetSubMeshCount();
+			for (size_t i = 0; i < layerCount; ++i) {
+				DrawBoundMesh((uint32_t)i);
+			}
+		}
+		else {
+			BindOBJMesh((OGLOBJMesh&)*(*i).GetOBJMesh());
+			DrawBoundOBJMesh();
+			for (unsigned int j = 0; j < (*i).GetOBJMesh()->GetChildrenList().size(); ++j) {
+				BindOBJMesh((OGLOBJMesh&)*(*i).GetOBJMesh()->GetChildrenList().at(j));
+				DrawBoundOBJMesh();
+			}
 		}
 	}
 
@@ -241,8 +251,15 @@ void GameTechRenderer::RenderCamera() {
 		OGLShader* shader = (OGLShader*)(*i).GetShader();
 		BindShader(*shader);
 
-		if ((*i).GetDefaultTexture()) {
-			BindTextureToShader(*(OGLTexture*)(*i).GetDefaultTexture(), "mainTex", 0);
+		if (!(*i).IsOBJ()) {
+			if ((*i).GetDefaultTexture()) {
+				BindTextureToShader(*(OGLTexture*)(*i).GetDefaultTexture(), "mainTex", 0);
+			}
+		}
+		else {
+			if ((*i).GetOBJMesh()->GetOBJTexture()) {
+				BindTextureToShader(*(OGLTexture*)(*i).GetOBJMesh()->GetOBJTexture(), "mainTex", 0);
+			}
 		}
 
 		if (activeShader != shader) {
@@ -285,14 +302,29 @@ void GameTechRenderer::RenderCamera() {
 		Vector4 colour = i->GetColour();
 		glUniform4fv(colourLocation, 1, &colour.x);
 
-		glUniform1i(hasVColLocation, !(*i).GetMesh()->GetColourData().empty());
+		if(!(*i).IsOBJ())
+			glUniform1i(hasTexLocation, (OGLTexture*)(*i).GetDefaultTexture() ? 1 : 0);
+		else
+			glUniform1i(hasTexLocation, (OGLTexture*)(*i).GetOBJMesh()->GetOBJTexture() ? 1 : 0);
 
-		glUniform1i(hasTexLocation, (OGLTexture*)(*i).GetDefaultTexture() ? 1:0);
+		if (!(*i).IsOBJ()) {
+			glUniform1i(hasVColLocation, !(*i).GetMesh()->GetColourData().empty());
 
-		BindMesh((OGLMesh&)*(*i).GetMesh());
-		size_t layerCount = (*i).GetMesh()->GetSubMeshCount();
-		for (size_t i = 0; i < layerCount; ++i) {
-			DrawBoundMesh((uint32_t)i);
+			BindMesh((OGLMesh&)*(*i).GetMesh());
+			size_t layerCount = (*i).GetMesh()->GetSubMeshCount();
+			for (size_t i = 0; i < layerCount; ++i) {
+				DrawBoundMesh((uint32_t)i);
+			}
+		}
+		else {
+			glUniform1i(hasVColLocation, !(*i).GetOBJMesh()->GetColourData().empty());
+
+			BindOBJMesh((OGLOBJMesh&)*(*i).GetOBJMesh());
+			DrawBoundOBJMesh();
+			for (unsigned int j = 0; j < (*i).GetOBJMesh()->GetChildrenList().size(); ++j) {
+				BindOBJMesh((OGLOBJMesh&)*(*i).GetOBJMesh()->GetChildrenList().at(j));
+				DrawBoundOBJMesh();
+			}
 		}
 	}
 }
@@ -300,8 +332,16 @@ void GameTechRenderer::RenderCamera() {
 Mesh* GameTechRenderer::LoadMesh(const std::string& name) {
 	OGLMesh* mesh = new OGLMesh();
 	MshLoader::LoadMesh(name, *mesh);
-	mesh->SetPrimitiveType(GeometryPrimitive::Triangles);
 	mesh->UploadToGPU();
+	mesh->SetPrimitiveType(GeometryPrimitive::Triangles);
+	return mesh;
+}
+
+OBJMesh* GameTechRenderer::LoadOBJMesh(const std::string& name) {
+	OGLOBJMesh* mesh = new OGLOBJMesh();
+	mesh->LoadOBJMesh(name);
+	mesh->UploadOBJMesh(nullptr, mesh->GetTempSM(), mesh->GetTempV(), mesh->GetTempTC(), mesh->GetTempN());
+	mesh->SetPrimitiveType(GeometryPrimitive::Triangles);
 	return mesh;
 }
 
