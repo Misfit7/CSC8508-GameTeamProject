@@ -110,7 +110,9 @@ void TutorialGame::UpdateGame(float dt) {
 	else {
 		Debug::Print("(G)ravity off", Vector2(5, 95), Debug::RED);
 	}
-
+    Debug::DrawLine(Vector3(0,0,0),Vector3(100,0,0),Debug::RED);
+    Debug::DrawLine(Vector3(0,0,0),Vector3(0,100,0),Debug::GREEN);
+    Debug::DrawLine(Vector3(0,0,0),Vector3(0,0,100),Debug::BLUE);
 	RayCollision closestCollision;
 	if (Window::GetKeyboard()->KeyPressed(KeyCodes::K) && selectionObject) {
 		Vector3 rayPos;
@@ -423,7 +425,7 @@ GameObject* TutorialGame::AddTrainToWorld(const Vector3& position) {
 }
 
 void TutorialGame::InitDefaultFloor() {
-	AddFloorToWorld(Vector3(0, -20, 0));
+	AddFloorToWorld(Vector3(0, 0, 0));
 }
 
 void TutorialGame::InitGameExamples() {
