@@ -9,7 +9,8 @@
 #include "NavigationGrid.h"
 #include "Audio.h"
 #include "StateGameObject.h"
-
+#include <cmath>
+#include <limits>
 namespace NCL {
     namespace CSC8503 {
         class TutorialGame {
@@ -58,7 +59,7 @@ namespace NCL {
             StateGameObject* AddStateObjectToWorld(const Vector3& position);
             StateGameObject* testStateObject = nullptr;
 
-
+            
             void BridgeConstraintTest();
 
 #ifdef USEVULKAN
@@ -105,6 +106,41 @@ namespace NCL {
 
             vector<Vector3> mazeNodes;
             NavigationGrid* navGrid;
+            const int GRID_SIZE_X = 10;
+            const int GRID_SIZE_Y = 10;
+            const float GRID_CENTER_X = 5.0f; 
+            const float  GRID_CENTER_Y = 5.0f;
+
+            double euclideanDistance(float x1, float y1, float x2, float y2) {
+                return sqrt(pow(x1 - x2, 2) + pow(y1 - y2, 2));
+            }
+
+            struct GridCenter {
+                int x;
+                int y;
+            };
+
+            Vector3 findNearestGridCenter(const Vector3& position) {
+                float inputX = position.x;
+                float inputY = position.y;
+                GridCenter nearestGridCenter;
+                Vector3 _nearestGridCenter;
+                double minDistance = 1000;
+                for (int x = 0; x < GRID_SIZE_X; ++x) {
+                    for (int y = 0; y < GRID_SIZE_Y; ++y) {
+                        double distance = euclideanDistance(inputX, inputY, x * 10 + GRID_CENTER_X, y * 10 + GRID_CENTER_Y);
+                        if (distance < minDistance) {
+                            minDistance = distance;
+                            nearestGridCenter.x = x * 10 + GRID_CENTER_X;
+                            nearestGridCenter.y = y * 10 + GRID_CENTER_Y;
+                        }
+                    }
+                }
+                _nearestGridCenter.x = nearestGridCenter.x;
+                _nearestGridCenter.y = nearestGridCenter.y;
+                _nearestGridCenter.z = 5;
+                return _nearestGridCenter;
+            }
         };
     }
 }

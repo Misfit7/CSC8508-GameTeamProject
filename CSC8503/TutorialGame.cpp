@@ -446,6 +446,7 @@ GameObject* TutorialGame::AddTrainToWorld(const Vector3& position) {
     return train;
 }
 
+
 void TutorialGame::InitDefaultFloor() {
     AddFloorToWorld(Vector3(0, 0, 0));
 }
@@ -540,6 +541,9 @@ bool TutorialGame::SelectObject() {
     }
     else {
         Debug::Print("Press Q to change to select mode!", Vector2(5, 85));
+        //Vector3 position = findNearestGridCenter(Vector3(3, 12.5, 0));
+        //Debug::Print("x:" + std::to_string(position.x), Vector2(5, 85));
+        //Debug::Print("y:" + std::to_string(position.y), Vector2(5, 100));
     }
     return false;
 }
