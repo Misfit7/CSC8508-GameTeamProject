@@ -103,6 +103,8 @@ void TutorialGame::UpdateGame(float dt) {
         world->GetMainCamera().SetPosition(camPos);
         world->GetMainCamera().SetPitch(angles.x);
         world->GetMainCamera().SetYaw(angles.y);
+        world->GetMainCamera().SetPitch(-90);
+        world->GetMainCamera().SetYaw(0);
     }
 
     UpdateKeys();
