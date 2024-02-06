@@ -14,7 +14,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{7510CA69-4555-35CB-83B3-CEB1030CB6C8}</ProjectGuid>
+    <ProjectGuid>{E161FC56-A39A-382E-A994-FC333E76BBB7}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <WindowsTargetPlatformVersion>10.0.22621.0</WindowsTargetPlatformVersion>
     <Platform>x64</Platform>
@@ -42,13 +42,13 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup>
     <_ProjectFileVersion>10.0.20506.1</_ProjectFileVersion>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Users\84251\Desktop\C++\TeamProject\TeamProject\x64\Debug\</OutDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">D:\8509\x64\Debug\</OutDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">CSC8503.dir\Debug\</IntDir>
     <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">CSC8503</TargetName>
     <TargetExt Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">.exe</TargetExt>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</LinkIncremental>
     <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</GenerateManifest>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Users\84251\Desktop\C++\TeamProject\TeamProject\x64\Release\</OutDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">D:\8509\x64\Release\</OutDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">CSC8503.dir\Release\</IntDir>
     <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">CSC8503</TargetName>
     <TargetExt Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.exe</TargetExt>
@@ -56,7 +56,7 @@
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>C:\Users\84251\Desktop\C++\TeamProject\TeamProject\CSC8503\..\OpenGLRendering;C:\Users\84251\Desktop\C++\TeamProject\TeamProject\CSC8503\..\NCLCoreClasses;C:\Users\84251\Desktop\C++\TeamProject\TeamProject\CSC8503\..\CSC8503CoreClasses;C:\Users\84251\Desktop\C++\TeamProject\TeamProject\CSC8503\..\irrKlang;C:\Users\84251\Desktop\C++\TeamProject\TeamProject\NCLCoreClasses;C:\Users\84251\Desktop\C++\TeamProject\TeamProject\OpenGLRendering;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\8509\CSC8503\..\OpenGLRendering;D:\8509\CSC8503\..\NCLCoreClasses;D:\8509\CSC8503\..\CSC8503CoreClasses;D:\8509\CSC8503\..\irrKlang;D:\8509\NCLCoreClasses;D:\8509\OpenGLRendering;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <ConformanceMode>true</ConformanceMode>
@@ -66,22 +66,22 @@
       <LanguageStandard>stdcpplatest</LanguageStandard>
       <Optimization>Disabled</Optimization>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
-      <PrecompiledHeaderFile>C:/Users/84251/Desktop/C++/TeamProject/TeamProject/CSC8503/CMakeFiles/CSC8503.dir/Debug/cmake_pch.hxx</PrecompiledHeaderFile>
-      <PrecompiledHeaderOutputFile>C:/Users/84251/Desktop/C++/TeamProject/TeamProject/CSC8503/CSC8503.dir/Debug/cmake_pch.pch</PrecompiledHeaderOutputFile>
+      <PrecompiledHeaderFile>D:/8509/CSC8503/CMakeFiles/CSC8503.dir/Debug/cmake_pch.hxx</PrecompiledHeaderFile>
+      <PrecompiledHeaderOutputFile>D:/8509/CSC8503/CSC8503.dir/Debug/cmake_pch.pch</PrecompiledHeaderOutputFile>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
       <SDLCheck>true</SDLCheck>
       <UseFullPaths>false</UseFullPaths>
       <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32_LEAN_AND_MEAN;_WINSOCKAPI_;_WINSOCK2API_;_WINSOCK_DEPRECATED_NO_WARNINGS;ASSETROOTLOCATION="C:/Users/84251/Desktop/C++/TeamProject/TeamProject/Assets/";NOMINMAX;CMAKE_INTDIR="Debug"</PreprocessorDefinitions>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32_LEAN_AND_MEAN;_WINSOCKAPI_;_WINSOCK2API_;_WINSOCK_DEPRECATED_NO_WARNINGS;ASSETROOTLOCATION="D:/8509/Assets/";NOMINMAX;CMAKE_INTDIR="Debug"</PreprocessorDefinitions>
       <ObjectFileName>$(IntDir)</ObjectFileName>
     </ClCompile>
     <ResourceCompile>
-      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_DEBUG;_WINDOWS;UNICODE;_UNICODE;WIN32_LEAN_AND_MEAN;_WINSOCKAPI_;_WINSOCK2API_;_WINSOCK_DEPRECATED_NO_WARNINGS;ASSETROOTLOCATION=\"C:/Users/84251/Desktop/C++/TeamProject/TeamProject/Assets/\";NOMINMAX;CMAKE_INTDIR=\"Debug\"</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>C:\Users\84251\Desktop\C++\TeamProject\TeamProject\CSC8503\..\OpenGLRendering;C:\Users\84251\Desktop\C++\TeamProject\TeamProject\CSC8503\..\NCLCoreClasses;C:\Users\84251\Desktop\C++\TeamProject\TeamProject\CSC8503\..\CSC8503CoreClasses;C:\Users\84251\Desktop\C++\TeamProject\TeamProject\CSC8503\..\irrKlang;C:\Users\84251\Desktop\C++\TeamProject\TeamProject\NCLCoreClasses;C:\Users\84251\Desktop\C++\TeamProject\TeamProject\OpenGLRendering;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_DEBUG;_WINDOWS;UNICODE;_UNICODE;WIN32_LEAN_AND_MEAN;_WINSOCKAPI_;_WINSOCK2API_;_WINSOCK_DEPRECATED_NO_WARNINGS;ASSETROOTLOCATION=\"D:/8509/Assets/\";NOMINMAX;CMAKE_INTDIR=\"Debug\"</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>D:\8509\CSC8503\..\OpenGLRendering;D:\8509\CSC8503\..\NCLCoreClasses;D:\8509\CSC8503\..\CSC8503CoreClasses;D:\8509\CSC8503\..\irrKlang;D:\8509\NCLCoreClasses;D:\8509\OpenGLRendering;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Midl>
-      <AdditionalIncludeDirectories>C:\Users\84251\Desktop\C++\TeamProject\TeamProject\CSC8503\..\OpenGLRendering;C:\Users\84251\Desktop\C++\TeamProject\TeamProject\CSC8503\..\NCLCoreClasses;C:\Users\84251\Desktop\C++\TeamProject\TeamProject\CSC8503\..\CSC8503CoreClasses;C:\Users\84251\Desktop\C++\TeamProject\TeamProject\CSC8503\..\irrKlang;C:\Users\84251\Desktop\C++\TeamProject\TeamProject\NCLCoreClasses;C:\Users\84251\Desktop\C++\TeamProject\TeamProject\OpenGLRendering;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\8509\CSC8503\..\OpenGLRendering;D:\8509\CSC8503\..\NCLCoreClasses;D:\8509\CSC8503\..\CSC8503CoreClasses;D:\8509\CSC8503\..\irrKlang;D:\8509\NCLCoreClasses;D:\8509\OpenGLRendering;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
       <HeaderFileName>%(Filename).h</HeaderFileName>
       <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
@@ -91,7 +91,7 @@
     <PreBuildEvent>
       <Message>		</Message>
       <Command>setlocal
-C:\Users\84251\Desktop\C++\cmake-3.28.0-rc5-windows-x86_64\bin\cmake.exe -E copy C:/Users/84251/Desktop/C++/TeamProject/TeamProject/CSC8503/../irrKlang/bin/ikpFlac.dll C:/Users/84251/Desktop/C++/TeamProject/TeamProject/x64/Debug
+C:\Users\mtf\Desktop\cmake-3.28.0-rc5-windows-x86_64\cmake-3.28.0-rc5-windows-x86_64\bin\cmake.exe -E copy D:/8509/CSC8503/../irrKlang/bin/ikpFlac.dll D:/8509/x64/Debug
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
@@ -100,7 +100,7 @@ exit /b %1
 :cmDone
 if %errorlevel% neq 0 goto :VCEnd
 setlocal
-C:\Users\84251\Desktop\C++\cmake-3.28.0-rc5-windows-x86_64\bin\cmake.exe -E copy C:/Users/84251/Desktop/C++/TeamProject/TeamProject/CSC8503/../irrKlang/bin/ikpMP3.dll C:/Users/84251/Desktop/C++/TeamProject/TeamProject/x64/Debug
+C:\Users\mtf\Desktop\cmake-3.28.0-rc5-windows-x86_64\cmake-3.28.0-rc5-windows-x86_64\bin\cmake.exe -E copy D:/8509/CSC8503/../irrKlang/bin/ikpMP3.dll D:/8509/x64/Debug
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
@@ -109,7 +109,7 @@ exit /b %1
 :cmDone
 if %errorlevel% neq 0 goto :VCEnd
 setlocal
-C:\Users\84251\Desktop\C++\cmake-3.28.0-rc5-windows-x86_64\bin\cmake.exe -E copy C:/Users/84251/Desktop/C++/TeamProject/TeamProject/CSC8503/../irrKlang/bin/irrKlang.dll C:/Users/84251/Desktop/C++/TeamProject/TeamProject/x64/Debug
+C:\Users\mtf\Desktop\cmake-3.28.0-rc5-windows-x86_64\cmake-3.28.0-rc5-windows-x86_64\bin\cmake.exe -E copy D:/8509/CSC8503/../irrKlang/bin/irrKlang.dll D:/8509/x64/Debug
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
@@ -124,8 +124,8 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
       <AdditionalOptions>%(AdditionalOptions) /machine:x64</AdditionalOptions>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
-      <ImportLibrary>C:/Users/84251/Desktop/C++/TeamProject/TeamProject/x64/Debug/CSC8503.lib</ImportLibrary>
-      <ProgramDataBaseFile>C:/Users/84251/Desktop/C++/TeamProject/TeamProject/x64/Debug/CSC8503.pdb</ProgramDataBaseFile>
+      <ImportLibrary>D:/8509/x64/Debug/CSC8503.lib</ImportLibrary>
+      <ProgramDataBaseFile>D:/8509/x64/Debug/CSC8503.pdb</ProgramDataBaseFile>
       <SubSystem>Console</SubSystem>
     </Link>
     <ProjectReference>
@@ -134,7 +134,7 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>C:\Users\84251\Desktop\C++\TeamProject\TeamProject\CSC8503\..\OpenGLRendering;C:\Users\84251\Desktop\C++\TeamProject\TeamProject\CSC8503\..\NCLCoreClasses;C:\Users\84251\Desktop\C++\TeamProject\TeamProject\CSC8503\..\CSC8503CoreClasses;C:\Users\84251\Desktop\C++\TeamProject\TeamProject\CSC8503\..\irrKlang;C:\Users\84251\Desktop\C++\TeamProject\TeamProject\NCLCoreClasses;C:\Users\84251\Desktop\C++\TeamProject\TeamProject\OpenGLRendering;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\8509\CSC8503\..\OpenGLRendering;D:\8509\CSC8503\..\NCLCoreClasses;D:\8509\CSC8503\..\CSC8503CoreClasses;D:\8509\CSC8503\..\irrKlang;D:\8509\NCLCoreClasses;D:\8509\OpenGLRendering;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
       <ConformanceMode>true</ConformanceMode>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
@@ -145,22 +145,22 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
       <LanguageStandard>stdcpplatest</LanguageStandard>
       <Optimization>MaxSpeed</Optimization>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
-      <PrecompiledHeaderFile>C:/Users/84251/Desktop/C++/TeamProject/TeamProject/CSC8503/CMakeFiles/CSC8503.dir/Release/cmake_pch.hxx</PrecompiledHeaderFile>
-      <PrecompiledHeaderOutputFile>C:/Users/84251/Desktop/C++/TeamProject/TeamProject/CSC8503/CSC8503.dir/Release/cmake_pch.pch</PrecompiledHeaderOutputFile>
+      <PrecompiledHeaderFile>D:/8509/CSC8503/CMakeFiles/CSC8503.dir/Release/cmake_pch.hxx</PrecompiledHeaderFile>
+      <PrecompiledHeaderOutputFile>D:/8509/CSC8503/CSC8503.dir/Release/cmake_pch.pch</PrecompiledHeaderOutputFile>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
       <SDLCheck>true</SDLCheck>
       <UseFullPaths>false</UseFullPaths>
       <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;UNICODE;_UNICODE;WIN32_LEAN_AND_MEAN;_WINSOCKAPI_;_WINSOCK2API_;_WINSOCK_DEPRECATED_NO_WARNINGS;ASSETROOTLOCATION="C:/Users/84251/Desktop/C++/TeamProject/TeamProject/Assets/";NOMINMAX;CMAKE_INTDIR="Release"</PreprocessorDefinitions>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;UNICODE;_UNICODE;WIN32_LEAN_AND_MEAN;_WINSOCKAPI_;_WINSOCK2API_;_WINSOCK_DEPRECATED_NO_WARNINGS;ASSETROOTLOCATION="D:/8509/Assets/";NOMINMAX;CMAKE_INTDIR="Release"</PreprocessorDefinitions>
       <ObjectFileName>$(IntDir)</ObjectFileName>
     </ClCompile>
     <ResourceCompile>
-      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;UNICODE;_UNICODE;WIN32_LEAN_AND_MEAN;_WINSOCKAPI_;_WINSOCK2API_;_WINSOCK_DEPRECATED_NO_WARNINGS;ASSETROOTLOCATION=\"C:/Users/84251/Desktop/C++/TeamProject/TeamProject/Assets/\";NOMINMAX;CMAKE_INTDIR=\"Release\"</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>C:\Users\84251\Desktop\C++\TeamProject\TeamProject\CSC8503\..\OpenGLRendering;C:\Users\84251\Desktop\C++\TeamProject\TeamProject\CSC8503\..\NCLCoreClasses;C:\Users\84251\Desktop\C++\TeamProject\TeamProject\CSC8503\..\CSC8503CoreClasses;C:\Users\84251\Desktop\C++\TeamProject\TeamProject\CSC8503\..\irrKlang;C:\Users\84251\Desktop\C++\TeamProject\TeamProject\NCLCoreClasses;C:\Users\84251\Desktop\C++\TeamProject\TeamProject\OpenGLRendering;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;UNICODE;_UNICODE;WIN32_LEAN_AND_MEAN;_WINSOCKAPI_;_WINSOCK2API_;_WINSOCK_DEPRECATED_NO_WARNINGS;ASSETROOTLOCATION=\"D:/8509/Assets/\";NOMINMAX;CMAKE_INTDIR=\"Release\"</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>D:\8509\CSC8503\..\OpenGLRendering;D:\8509\CSC8503\..\NCLCoreClasses;D:\8509\CSC8503\..\CSC8503CoreClasses;D:\8509\CSC8503\..\irrKlang;D:\8509\NCLCoreClasses;D:\8509\OpenGLRendering;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Midl>
-      <AdditionalIncludeDirectories>C:\Users\84251\Desktop\C++\TeamProject\TeamProject\CSC8503\..\OpenGLRendering;C:\Users\84251\Desktop\C++\TeamProject\TeamProject\CSC8503\..\NCLCoreClasses;C:\Users\84251\Desktop\C++\TeamProject\TeamProject\CSC8503\..\CSC8503CoreClasses;C:\Users\84251\Desktop\C++\TeamProject\TeamProject\CSC8503\..\irrKlang;C:\Users\84251\Desktop\C++\TeamProject\TeamProject\NCLCoreClasses;C:\Users\84251\Desktop\C++\TeamProject\TeamProject\OpenGLRendering;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\8509\CSC8503\..\OpenGLRendering;D:\8509\CSC8503\..\NCLCoreClasses;D:\8509\CSC8503\..\CSC8503CoreClasses;D:\8509\CSC8503\..\irrKlang;D:\8509\NCLCoreClasses;D:\8509\OpenGLRendering;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
       <HeaderFileName>%(Filename).h</HeaderFileName>
       <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
@@ -170,7 +170,7 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     <PreBuildEvent>
       <Message>		</Message>
       <Command>setlocal
-C:\Users\84251\Desktop\C++\cmake-3.28.0-rc5-windows-x86_64\bin\cmake.exe -E copy C:/Users/84251/Desktop/C++/TeamProject/TeamProject/CSC8503/../irrKlang/bin/ikpFlac.dll C:/Users/84251/Desktop/C++/TeamProject/TeamProject/x64/Release
+C:\Users\mtf\Desktop\cmake-3.28.0-rc5-windows-x86_64\cmake-3.28.0-rc5-windows-x86_64\bin\cmake.exe -E copy D:/8509/CSC8503/../irrKlang/bin/ikpFlac.dll D:/8509/x64/Release
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
@@ -179,7 +179,7 @@ exit /b %1
 :cmDone
 if %errorlevel% neq 0 goto :VCEnd
 setlocal
-C:\Users\84251\Desktop\C++\cmake-3.28.0-rc5-windows-x86_64\bin\cmake.exe -E copy C:/Users/84251/Desktop/C++/TeamProject/TeamProject/CSC8503/../irrKlang/bin/ikpMP3.dll C:/Users/84251/Desktop/C++/TeamProject/TeamProject/x64/Release
+C:\Users\mtf\Desktop\cmake-3.28.0-rc5-windows-x86_64\cmake-3.28.0-rc5-windows-x86_64\bin\cmake.exe -E copy D:/8509/CSC8503/../irrKlang/bin/ikpMP3.dll D:/8509/x64/Release
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
@@ -188,7 +188,7 @@ exit /b %1
 :cmDone
 if %errorlevel% neq 0 goto :VCEnd
 setlocal
-C:\Users\84251\Desktop\C++\cmake-3.28.0-rc5-windows-x86_64\bin\cmake.exe -E copy C:/Users/84251/Desktop/C++/TeamProject/TeamProject/CSC8503/../irrKlang/bin/irrKlang.dll C:/Users/84251/Desktop/C++/TeamProject/TeamProject/x64/Release
+C:\Users\mtf\Desktop\cmake-3.28.0-rc5-windows-x86_64\cmake-3.28.0-rc5-windows-x86_64\bin\cmake.exe -E copy D:/8509/CSC8503/../irrKlang/bin/irrKlang.dll D:/8509/x64/Release
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
@@ -204,9 +204,9 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <GenerateDebugInformation>false</GenerateDebugInformation>
       <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
-      <ImportLibrary>C:/Users/84251/Desktop/C++/TeamProject/TeamProject/x64/Release/CSC8503.lib</ImportLibrary>
+      <ImportLibrary>D:/8509/x64/Release/CSC8503.lib</ImportLibrary>
       <OptimizeReferences>true</OptimizeReferences>
-      <ProgramDataBaseFile>C:/Users/84251/Desktop/C++/TeamProject/TeamProject/x64/Release/CSC8503.pdb</ProgramDataBaseFile>
+      <ProgramDataBaseFile>D:/8509/x64/Release/CSC8503.pdb</ProgramDataBaseFile>
       <SubSystem>Console</SubSystem>
     </Link>
     <ProjectReference>
@@ -214,11 +214,11 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     </ProjectReference>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <CustomBuild Include="C:\Users\84251\Desktop\C++\TeamProject\TeamProject\CSC8503\CMakeLists.txt">
+    <CustomBuild Include="D:\8509\CSC8503\CMakeLists.txt">
       <UseUtf8Encoding>Always</UseUtf8Encoding>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Building Custom Rule C:/Users/84251/Desktop/C++/TeamProject/TeamProject/CSC8503/CMakeLists.txt</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Building Custom Rule D:/8509/CSC8503/CMakeLists.txt</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">setlocal
-C:\Users\84251\Desktop\C++\cmake-3.28.0-rc5-windows-x86_64\bin\cmake.exe -SC:/Users/84251/Desktop/C++/TeamProject/TeamProject -BC:/Users/84251/Desktop/C++/TeamProject/TeamProject --check-stamp-file C:/Users/84251/Desktop/C++/TeamProject/TeamProject/CSC8503/CMakeFiles/generate.stamp
+C:\Users\mtf\Desktop\cmake-3.28.0-rc5-windows-x86_64\cmake-3.28.0-rc5-windows-x86_64\bin\cmake.exe -SD:/8509 -BD:/8509 --check-stamp-file D:/8509/CSC8503/CMakeFiles/generate.stamp
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
@@ -226,12 +226,12 @@ endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
 exit /b %1
 :cmDone
 if %errorlevel% neq 0 goto :VCEnd</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Users\84251\Desktop\C++\TeamProject\TeamProject\CMake\Default.cmake;C:\Users\84251\Desktop\C++\TeamProject\TeamProject\CMake\DefaultCXX.cmake;%(AdditionalInputs)</AdditionalInputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Users\84251\Desktop\C++\TeamProject\TeamProject\CSC8503\CMakeFiles\generate.stamp</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">D:\8509\CMake\Default.cmake;D:\8509\CMake\DefaultCXX.cmake;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">D:\8509\CSC8503\CMakeFiles\generate.stamp</Outputs>
       <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</LinkObjects>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Building Custom Rule C:/Users/84251/Desktop/C++/TeamProject/TeamProject/CSC8503/CMakeLists.txt</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Building Custom Rule D:/8509/CSC8503/CMakeLists.txt</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">setlocal
-C:\Users\84251\Desktop\C++\cmake-3.28.0-rc5-windows-x86_64\bin\cmake.exe -SC:/Users/84251/Desktop/C++/TeamProject/TeamProject -BC:/Users/84251/Desktop/C++/TeamProject/TeamProject --check-stamp-file C:/Users/84251/Desktop/C++/TeamProject/TeamProject/CSC8503/CMakeFiles/generate.stamp
+C:\Users\mtf\Desktop\cmake-3.28.0-rc5-windows-x86_64\cmake-3.28.0-rc5-windows-x86_64\bin\cmake.exe -SD:/8509 -BD:/8509 --check-stamp-file D:/8509/CSC8503/CMakeFiles/generate.stamp
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
@@ -239,92 +239,92 @@ endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
 exit /b %1
 :cmDone
 if %errorlevel% neq 0 goto :VCEnd</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Users\84251\Desktop\C++\TeamProject\TeamProject\CMake\Default.cmake;C:\Users\84251\Desktop\C++\TeamProject\TeamProject\CMake\DefaultCXX.cmake;%(AdditionalInputs)</AdditionalInputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Users\84251\Desktop\C++\TeamProject\TeamProject\CSC8503\CMakeFiles\generate.stamp</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">D:\8509\CMake\Default.cmake;D:\8509\CMake\DefaultCXX.cmake;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">D:\8509\CSC8503\CMakeFiles\generate.stamp</Outputs>
       <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkObjects>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="C:\Users\84251\Desktop\C++\TeamProject\TeamProject\CSC8503\CMakeFiles\CSC8503.dir\cmake_pch.cxx">
-      <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:/Users/84251/Desktop/C++/TeamProject/TeamProject/CSC8503/CMakeFiles/CSC8503.dir/Debug/cmake_pch.hxx;%(ForcedIncludeFiles)</ForcedIncludeFiles>
+    <ClCompile Include="D:\8509\CSC8503\CMakeFiles\CSC8503.dir\cmake_pch.cxx">
+      <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">D:/8509/CSC8503/CMakeFiles/CSC8503.dir/Debug/cmake_pch.hxx;%(ForcedIncludeFiles)</ForcedIncludeFiles>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
-      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:/Users/84251/Desktop/C++/TeamProject/TeamProject/CSC8503/CMakeFiles/CSC8503.dir/Debug/cmake_pch.hxx</PrecompiledHeaderFile>
-      <PrecompiledHeaderOutputFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:/Users/84251/Desktop/C++/TeamProject/TeamProject/CSC8503/CSC8503.dir/Debug/cmake_pch.pch</PrecompiledHeaderOutputFile>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">D:/8509/CSC8503/CMakeFiles/CSC8503.dir/Debug/cmake_pch.hxx</PrecompiledHeaderFile>
+      <PrecompiledHeaderOutputFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">D:/8509/CSC8503/CSC8503.dir/Debug/cmake_pch.pch</PrecompiledHeaderOutputFile>
       <ScanSourceforModuleDependencies Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ScanSourceforModuleDependencies>
-      <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:/Users/84251/Desktop/C++/TeamProject/TeamProject/CSC8503/CMakeFiles/CSC8503.dir/Release/cmake_pch.hxx;%(ForcedIncludeFiles)</ForcedIncludeFiles>
+      <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Release|x64'">D:/8509/CSC8503/CMakeFiles/CSC8503.dir/Release/cmake_pch.hxx;%(ForcedIncludeFiles)</ForcedIncludeFiles>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
-      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:/Users/84251/Desktop/C++/TeamProject/TeamProject/CSC8503/CMakeFiles/CSC8503.dir/Release/cmake_pch.hxx</PrecompiledHeaderFile>
-      <PrecompiledHeaderOutputFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:/Users/84251/Desktop/C++/TeamProject/TeamProject/CSC8503/CSC8503.dir/Release/cmake_pch.pch</PrecompiledHeaderOutputFile>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">D:/8509/CSC8503/CMakeFiles/CSC8503.dir/Release/cmake_pch.hxx</PrecompiledHeaderFile>
+      <PrecompiledHeaderOutputFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">D:/8509/CSC8503/CSC8503.dir/Release/cmake_pch.pch</PrecompiledHeaderOutputFile>
       <ScanSourceforModuleDependencies Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ScanSourceforModuleDependencies>
     </ClCompile>
-    <ClInclude Include="C:\Users\84251\Desktop\C++\TeamProject\TeamProject\CSC8503\GameTechRenderer.h" />
-    <ClInclude Include="C:\Users\84251\Desktop\C++\TeamProject\TeamProject\CSC8503\NetworkedGame.h" />
-    <ClInclude Include="C:\Users\84251\Desktop\C++\TeamProject\TeamProject\CSC8503\NetworkPlayer.h" />
-    <ClInclude Include="C:\Users\84251\Desktop\C++\TeamProject\TeamProject\CSC8503\StateGameObject.h" />
-    <ClInclude Include="C:\Users\84251\Desktop\C++\TeamProject\TeamProject\CSC8503\TutorialGame.h" />
-    <ClInclude Include="C:\Users\84251\Desktop\C++\TeamProject\TeamProject\CSC8503\Audio.h" />
-    <ClCompile Include="C:\Users\84251\Desktop\C++\TeamProject\TeamProject\CSC8503\GameTechRenderer.cpp">
-      <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:/Users/84251/Desktop/C++/TeamProject/TeamProject/CSC8503/CMakeFiles/CSC8503.dir/Debug/cmake_pch.hxx;%(ForcedIncludeFiles)</ForcedIncludeFiles>
+    <ClInclude Include="D:\8509\CSC8503\GameTechRenderer.h" />
+    <ClInclude Include="D:\8509\CSC8503\NetworkedGame.h" />
+    <ClInclude Include="D:\8509\CSC8503\NetworkPlayer.h" />
+    <ClInclude Include="D:\8509\CSC8503\StateGameObject.h" />
+    <ClInclude Include="D:\8509\CSC8503\TutorialGame.h" />
+    <ClInclude Include="D:\8509\CSC8503\Audio.h" />
+    <ClCompile Include="D:\8509\CSC8503\GameTechRenderer.cpp">
+      <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">D:/8509/CSC8503/CMakeFiles/CSC8503.dir/Debug/cmake_pch.hxx;%(ForcedIncludeFiles)</ForcedIncludeFiles>
       <ScanSourceforModuleDependencies Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ScanSourceforModuleDependencies>
-      <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:/Users/84251/Desktop/C++/TeamProject/TeamProject/CSC8503/CMakeFiles/CSC8503.dir/Release/cmake_pch.hxx;%(ForcedIncludeFiles)</ForcedIncludeFiles>
+      <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Release|x64'">D:/8509/CSC8503/CMakeFiles/CSC8503.dir/Release/cmake_pch.hxx;%(ForcedIncludeFiles)</ForcedIncludeFiles>
       <ScanSourceforModuleDependencies Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ScanSourceforModuleDependencies>
     </ClCompile>
-    <ClCompile Include="C:\Users\84251\Desktop\C++\TeamProject\TeamProject\CSC8503\Main.cpp">
-      <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:/Users/84251/Desktop/C++/TeamProject/TeamProject/CSC8503/CMakeFiles/CSC8503.dir/Debug/cmake_pch.hxx;%(ForcedIncludeFiles)</ForcedIncludeFiles>
+    <ClCompile Include="D:\8509\CSC8503\Main.cpp">
+      <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">D:/8509/CSC8503/CMakeFiles/CSC8503.dir/Debug/cmake_pch.hxx;%(ForcedIncludeFiles)</ForcedIncludeFiles>
       <ScanSourceforModuleDependencies Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ScanSourceforModuleDependencies>
-      <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:/Users/84251/Desktop/C++/TeamProject/TeamProject/CSC8503/CMakeFiles/CSC8503.dir/Release/cmake_pch.hxx;%(ForcedIncludeFiles)</ForcedIncludeFiles>
+      <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Release|x64'">D:/8509/CSC8503/CMakeFiles/CSC8503.dir/Release/cmake_pch.hxx;%(ForcedIncludeFiles)</ForcedIncludeFiles>
       <ScanSourceforModuleDependencies Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ScanSourceforModuleDependencies>
     </ClCompile>
-    <ClCompile Include="C:\Users\84251\Desktop\C++\TeamProject\TeamProject\CSC8503\NetworkedGame.cpp">
-      <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:/Users/84251/Desktop/C++/TeamProject/TeamProject/CSC8503/CMakeFiles/CSC8503.dir/Debug/cmake_pch.hxx;%(ForcedIncludeFiles)</ForcedIncludeFiles>
+    <ClCompile Include="D:\8509\CSC8503\NetworkedGame.cpp">
+      <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">D:/8509/CSC8503/CMakeFiles/CSC8503.dir/Debug/cmake_pch.hxx;%(ForcedIncludeFiles)</ForcedIncludeFiles>
       <ScanSourceforModuleDependencies Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ScanSourceforModuleDependencies>
-      <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:/Users/84251/Desktop/C++/TeamProject/TeamProject/CSC8503/CMakeFiles/CSC8503.dir/Release/cmake_pch.hxx;%(ForcedIncludeFiles)</ForcedIncludeFiles>
+      <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Release|x64'">D:/8509/CSC8503/CMakeFiles/CSC8503.dir/Release/cmake_pch.hxx;%(ForcedIncludeFiles)</ForcedIncludeFiles>
       <ScanSourceforModuleDependencies Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ScanSourceforModuleDependencies>
     </ClCompile>
-    <ClCompile Include="C:\Users\84251\Desktop\C++\TeamProject\TeamProject\CSC8503\NetworkPlayer.cpp">
-      <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:/Users/84251/Desktop/C++/TeamProject/TeamProject/CSC8503/CMakeFiles/CSC8503.dir/Debug/cmake_pch.hxx;%(ForcedIncludeFiles)</ForcedIncludeFiles>
+    <ClCompile Include="D:\8509\CSC8503\NetworkPlayer.cpp">
+      <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">D:/8509/CSC8503/CMakeFiles/CSC8503.dir/Debug/cmake_pch.hxx;%(ForcedIncludeFiles)</ForcedIncludeFiles>
       <ScanSourceforModuleDependencies Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ScanSourceforModuleDependencies>
-      <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:/Users/84251/Desktop/C++/TeamProject/TeamProject/CSC8503/CMakeFiles/CSC8503.dir/Release/cmake_pch.hxx;%(ForcedIncludeFiles)</ForcedIncludeFiles>
+      <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Release|x64'">D:/8509/CSC8503/CMakeFiles/CSC8503.dir/Release/cmake_pch.hxx;%(ForcedIncludeFiles)</ForcedIncludeFiles>
       <ScanSourceforModuleDependencies Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ScanSourceforModuleDependencies>
     </ClCompile>
-    <ClCompile Include="C:\Users\84251\Desktop\C++\TeamProject\TeamProject\CSC8503\StateGameObject.cpp">
-      <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:/Users/84251/Desktop/C++/TeamProject/TeamProject/CSC8503/CMakeFiles/CSC8503.dir/Debug/cmake_pch.hxx;%(ForcedIncludeFiles)</ForcedIncludeFiles>
+    <ClCompile Include="D:\8509\CSC8503\StateGameObject.cpp">
+      <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">D:/8509/CSC8503/CMakeFiles/CSC8503.dir/Debug/cmake_pch.hxx;%(ForcedIncludeFiles)</ForcedIncludeFiles>
       <ScanSourceforModuleDependencies Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ScanSourceforModuleDependencies>
-      <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:/Users/84251/Desktop/C++/TeamProject/TeamProject/CSC8503/CMakeFiles/CSC8503.dir/Release/cmake_pch.hxx;%(ForcedIncludeFiles)</ForcedIncludeFiles>
+      <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Release|x64'">D:/8509/CSC8503/CMakeFiles/CSC8503.dir/Release/cmake_pch.hxx;%(ForcedIncludeFiles)</ForcedIncludeFiles>
       <ScanSourceforModuleDependencies Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ScanSourceforModuleDependencies>
     </ClCompile>
-    <ClCompile Include="C:\Users\84251\Desktop\C++\TeamProject\TeamProject\CSC8503\TutorialGame.cpp">
-      <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:/Users/84251/Desktop/C++/TeamProject/TeamProject/CSC8503/CMakeFiles/CSC8503.dir/Debug/cmake_pch.hxx;%(ForcedIncludeFiles)</ForcedIncludeFiles>
+    <ClCompile Include="D:\8509\CSC8503\TutorialGame.cpp">
+      <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">D:/8509/CSC8503/CMakeFiles/CSC8503.dir/Debug/cmake_pch.hxx;%(ForcedIncludeFiles)</ForcedIncludeFiles>
       <ScanSourceforModuleDependencies Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ScanSourceforModuleDependencies>
-      <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:/Users/84251/Desktop/C++/TeamProject/TeamProject/CSC8503/CMakeFiles/CSC8503.dir/Release/cmake_pch.hxx;%(ForcedIncludeFiles)</ForcedIncludeFiles>
+      <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Release|x64'">D:/8509/CSC8503/CMakeFiles/CSC8503.dir/Release/cmake_pch.hxx;%(ForcedIncludeFiles)</ForcedIncludeFiles>
       <ScanSourceforModuleDependencies Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ScanSourceforModuleDependencies>
     </ClCompile>
-    <ClCompile Include="C:\Users\84251\Desktop\C++\TeamProject\TeamProject\CSC8503\Audio.cpp">
-      <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:/Users/84251/Desktop/C++/TeamProject/TeamProject/CSC8503/CMakeFiles/CSC8503.dir/Debug/cmake_pch.hxx;%(ForcedIncludeFiles)</ForcedIncludeFiles>
+    <ClCompile Include="D:\8509\CSC8503\Audio.cpp">
+      <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">D:/8509/CSC8503/CMakeFiles/CSC8503.dir/Debug/cmake_pch.hxx;%(ForcedIncludeFiles)</ForcedIncludeFiles>
       <ScanSourceforModuleDependencies Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ScanSourceforModuleDependencies>
-      <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:/Users/84251/Desktop/C++/TeamProject/TeamProject/CSC8503/CMakeFiles/CSC8503.dir/Release/cmake_pch.hxx;%(ForcedIncludeFiles)</ForcedIncludeFiles>
+      <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Release|x64'">D:/8509/CSC8503/CMakeFiles/CSC8503.dir/Release/cmake_pch.hxx;%(ForcedIncludeFiles)</ForcedIncludeFiles>
       <ScanSourceforModuleDependencies Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ScanSourceforModuleDependencies>
     </ClCompile>
-    <ClInclude Include="C:\Users\84251\Desktop\C++\TeamProject\TeamProject\CSC8503\CMakeFiles\CSC8503.dir\Debug\cmake_pch.hxx" />
-    <ClInclude Include="C:\Users\84251\Desktop\C++\TeamProject\TeamProject\CSC8503\CMakeFiles\CSC8503.dir\Release\cmake_pch.hxx" />
+    <ClInclude Include="D:\8509\CSC8503\CMakeFiles\CSC8503.dir\Debug\cmake_pch.hxx" />
+    <ClInclude Include="D:\8509\CSC8503\CMakeFiles\CSC8503.dir\Release\cmake_pch.hxx" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="C:\Users\84251\Desktop\C++\TeamProject\TeamProject\ZERO_CHECK.vcxproj">
-      <Project>{1713FD01-4695-3B04-92EA-C0E651D290C8}</Project>
+    <ProjectReference Include="D:\8509\ZERO_CHECK.vcxproj">
+      <Project>{CB51FD3C-51B2-3472-B75F-7ED9C67EFB04}</Project>
       <Name>ZERO_CHECK</Name>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </ProjectReference>
-    <ProjectReference Include="C:\Users\84251\Desktop\C++\TeamProject\TeamProject\CSC8503CoreClasses\CSC8503CoreClasses.vcxproj">
-      <Project>{63D8B38C-DB2F-3FE8-B4A0-970727A30B91}</Project>
+    <ProjectReference Include="D:\8509\CSC8503CoreClasses\CSC8503CoreClasses.vcxproj">
+      <Project>{8F3E9ED7-7395-3AED-B6E2-C8840CCC849D}</Project>
       <Name>CSC8503CoreClasses</Name>
     </ProjectReference>
-    <ProjectReference Include="C:\Users\84251\Desktop\C++\TeamProject\TeamProject\NCLCoreClasses\NCLCoreClasses.vcxproj">
-      <Project>{7D972789-507E-31C8-9A8C-319994659406}</Project>
+    <ProjectReference Include="D:\8509\NCLCoreClasses\NCLCoreClasses.vcxproj">
+      <Project>{27FDAA52-B174-371E-8F6D-6DAFB5C1FE03}</Project>
       <Name>NCLCoreClasses</Name>
     </ProjectReference>
-    <ProjectReference Include="C:\Users\84251\Desktop\C++\TeamProject\TeamProject\OpenGLRendering\OpenGLRendering.vcxproj">
-      <Project>{698230CA-1511-35FD-BDAC-FB12BF9C55F3}</Project>
+    <ProjectReference Include="D:\8509\OpenGLRendering\OpenGLRendering.vcxproj">
+      <Project>{0A2862BE-8C0C-3AB4-B830-87FE6858A8CF}</Project>
       <Name>OpenGLRendering</Name>
     </ProjectReference>
   </ItemGroup>
