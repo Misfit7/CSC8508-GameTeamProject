@@ -20,7 +20,7 @@ TutorialGame::TutorialGame() : controller(*Window::GetWindow()->GetKeyboard(), *
     renderer = new GameTechVulkanRenderer(*world);
     renderer->Init();
     renderer->InitStructures();
-#else 
+#else
     renderer = new GameTechRenderer(*world);
 #endif
     physics = new PhysicsSystem(*world);
@@ -279,9 +279,10 @@ void TutorialGame::InitWorld() {
     testStateObject = AddStateObjectToWorld(Vector3(0, 10, 0));
 
     // InitMixedGridWorld(15, 15, 3.5f, 3.5f);
-    AddSceneToWorld();
-    /*InitGameExamples();*/
+   // AddSceneToWorld();
+    InitGameExamples();
     InitDefaultFloor();
+
 }
 
 void TutorialGame::AddSceneToWorld()
@@ -560,6 +561,23 @@ void TutorialGame::MoveSelectedObject() {
             }
         }
     }
+
+    if (Window::GetKeyboard()->KeyHeld(NCL::KeyCodes::W)){
+        selectionObject->GetPhysicsObject()->AddForceAtPosition(Vector3(100,0,0),selectionObject->GetTransform().GetPosition());
+    }
+    else if (Window::GetKeyboard()->KeyHeld(NCL::KeyCodes::A)){
+        selectionObject->GetPhysicsObject()->AddForceAtPosition(Vector3(0,0,100),selectionObject->GetTransform().GetPosition());
+    }
+    else if (Window::GetKeyboard()->KeyHeld(NCL::KeyCodes::S)){
+        selectionObject->GetPhysicsObject()->AddForceAtPosition(Vector3(-100,0,0),selectionObject->GetTransform().GetPosition());
+    }
+    else if (Window::GetKeyboard()->KeyHeld(NCL::KeyCodes::D)){
+        selectionObject->GetPhysicsObject()->AddForceAtPosition(Vector3(0,0,-100),selectionObject->GetTransform().GetPosition());
+    }
+    else {
+        selectionObject->GetPhysicsObject()->SetLinearVelocity(Vector3(0,0,0));
+    }
+
 }
 
 void TutorialGame::BridgeConstraintTest() {
