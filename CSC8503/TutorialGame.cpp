@@ -8,6 +8,8 @@
 #include "OrientationConstraint.h"
 #include "StateGameObject.h"
 
+#include "Assets.h"
+#include <fstream>
 using namespace NCL;
 using namespace CSC8503;
 
@@ -277,16 +279,38 @@ void TutorialGame::InitWorld() {
     testStateObject = AddStateObjectToWorld(Vector3(0, 10, 0));
 
     // InitMixedGridWorld(15, 15, 3.5f, 3.5f);
-
-    InitGameExamples();
+    AddSceneToWorld();
+    /*InitGameExamples();*/
     InitDefaultFloor();
 }
 
-/*
+void TutorialGame::AddSceneToWorld()
+{
+    int nodeSize;
+    int gridWidth;
+    int gridHeight;
+    std::ifstream infile(Assets::DATADIR + "TestGrid1.txt");
+    infile >> nodeSize;
+    infile >> gridWidth;
+    infile >> gridHeight;
+    navGrid = new NavigationGrid("TestGrid1.txt");
 
-A single function to add a large immoveable cube to the bottom of our world
+    GridNode* nodes = new GridNode[gridWidth * gridHeight];
+    for (int y = 0; y < gridHeight; ++y) {
+        for (int x = 0; x < gridWidth; ++x)
+        {
+            GridNode& n = nodes[(gridWidth * y) + x];
+            char type = 0;
+            infile >> type;
+            n.type = type;
+            n.position = Vector3((float)(x * nodeSize), 7, (float)(y * nodeSize));
+            if (type == 120)scene.emplace_back(AddCubeToWorld(n.position, { (float)nodeSize / 2,(float)nodeSize / 2,(float)nodeSize / 2 }, 0));
 
-*/
+        }
+    }
+    return;
+}
+
 GameObject* TutorialGame::AddFloorToWorld(const Vector3& position) {
     GameObject* floor = new GameObject("Floor");
 
@@ -308,13 +332,6 @@ GameObject* TutorialGame::AddFloorToWorld(const Vector3& position) {
     return floor;
 }
 
-/*
-
-Builds a game object that uses a sphere mesh for its graphics, and a bounding sphere for its
-rigid body representation. This and the cube function will let you build a lot of 'simple'
-physics worlds. You'll probably need another function for the creation of OBB cubes too.
-
-*/
 GameObject* TutorialGame::AddSphereToWorld(const Vector3& position, float radius, float inverseMass) {
     GameObject* sphere = new GameObject();
 
@@ -473,13 +490,6 @@ void TutorialGame::InitCubeGridWorld(int numRows, int numCols, float rowSpacing,
     }
 }
 
-/*
-Every frame, this code will let you perform a raycast, to see if there's an object
-underneath the cursor, and if so 'select it' into a pointer, so that it can be
-manipulated later. Pressing Q will let you toggle between this behaviour and instead
-letting you move the camera around.
-
-*/
 bool TutorialGame::SelectObject() {
     if (Window::GetKeyboard()->KeyPressed(KeyCodes::Q)) {
         inSelectionMode = !inSelectionMode;
@@ -531,13 +541,6 @@ bool TutorialGame::SelectObject() {
     return false;
 }
 
-/*
-If an object has been clicked, it can be pushed with the right mouse button, by an amount
-determined by the scroll wheel. In the first tutorial this won't do anything, as we haven't
-added linear motion into our physics system. After the second tutorial, objects will move in a straight
-line - after the third, they'll be able to twist under torque aswell.
-*/
-
 void TutorialGame::MoveSelectedObject() {
     // renderer -> DrawString ( " Click Force : " + std :: to_string ( forceMagnitude ) , Vector2 (10 , 20));
     Debug::Print("Click Force:" + std::to_string(forceMagnitude), Vector2(5, 90));
@@ -558,7 +561,6 @@ void TutorialGame::MoveSelectedObject() {
         }
     }
 }
-
 
 void TutorialGame::BridgeConstraintTest() {
     Vector3 cubeSize = Vector3(8, 8, 8);
