@@ -39,7 +39,7 @@ _-_-_-_-_-_-_-""  ""
 #include "Vector2.h"
 #include "Mesh.h"
 #include "ChildMeshInterface.h"
-#include "Texture.h"
+#include "glad/gl.h"
 #include <fstream>
 #include <string>
 #include <sstream>
@@ -105,14 +105,14 @@ namespace NCL::Rendering {
 		}
 		std::vector<Vector2> GetTempTC() {
 			return tempTexCoords;
-		}
+		};
 
-		Texture* GetOBJTexture() const {
-			return texture;
-		}
+		GLuint GetOBJTexture() const {
+			return OBJTexture;
+		};
 
 	protected:
-		Texture* texture;
+		GLuint OBJTexture;
 		std::vector<OBJSubMesh*> tempSubMeshes;
 		std::vector<Vector3> tempVertices;
 		std::vector<Vector3> tempNormals;

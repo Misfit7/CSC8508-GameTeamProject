@@ -155,3 +155,6 @@ if(MSVC)
         ${DEFAULT_CXX_EXCEPTION_HANDLING};
     )
 endif()
+
+include_directories("../OpenGLRendering/")
+target_link_libraries(${PROJECT_NAME} LINK_PUBLIC OpenGLRendering)
