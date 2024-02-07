@@ -10,6 +10,7 @@ License: MIT (see LICENSE file at the top of the source tree)
 #include "OBJMesh.h"
 #include "OGLTexture.h"
 #include "glad\gl.h"
+#include "SOIL\SOIL.h"
 
 namespace NCL::Rendering {	
 	using UniqueOGLMesh		= std::unique_ptr<class OGLMesh>;
@@ -40,7 +41,7 @@ namespace NCL::Rendering {
 		string diffuse;
 
 		//GLuint bumpNum;
-		Texture* diffuseNum;
+		GLuint diffuseNum;
 
 		MTLInfo() {
 			//bumpNum = 0;

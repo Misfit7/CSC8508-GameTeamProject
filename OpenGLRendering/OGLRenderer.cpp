@@ -18,10 +18,6 @@ License: MIT (see LICENSE file at the top of the source tree)
 #ifdef _WIN32
 #include "Win32Window.h"
 
-#include "KHR\khrplatform.h"
-#include "glad\gl.h"
-#include "KHR/WGLext.h"
-
 PFNWGLSWAPINTERVALEXTPROC wglSwapIntervalEXT = NULL;
 #endif
 
@@ -226,6 +222,25 @@ void OGLRenderer::BindTextureToShader(const OGLTexture& t, const std::string& un
 
 	glActiveTexture(GL_TEXTURE0 + texUnit);
 	glBindTexture(GL_TEXTURE_2D, texID);
+
+	glUniform1i(slot, texUnit);
+}
+
+void OGLRenderer::BindOBJTextureToShader(const GLuint& texture, const std::string& uniform, int texUnit) const {
+	if (!activeShader) {
+		std::cout << __FUNCTION__ << " has been called without a bound shader!\n";
+		return;//Debug message time!
+	}
+
+	GLuint slot = glGetUniformLocation(activeShader->GetProgramID(), uniform.c_str());
+
+	if (slot < 0) {
+
+		return;
+	}
+
+	glActiveTexture(GL_TEXTURE0 + texUnit);
+	glBindTexture(GL_TEXTURE_2D, texture);
 
 	glUniform1i(slot, texUnit);
 }

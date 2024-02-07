@@ -55,6 +55,7 @@ namespace NCL {
             GameObject* AddPlayerToWorld(const Vector3& position);
             GameObject* AddEnemyToWorld(const Vector3& position);
             GameObject* AddTrainToWorld(const Vector3& position);
+            GameObject* AddCreeperToWorld(const Vector3& position);
 
             StateGameObject* AddStateObjectToWorld(const Vector3& position);
             StateGameObject* testStateObject = nullptr;
@@ -94,6 +95,7 @@ namespace NCL {
             Mesh* bonusMesh = nullptr;
 
             OBJMesh* trainMesh = nullptr;
+            OBJMesh* creeperMesh = nullptr;
 
             //Coursework Additional functionality	
             GameObject* lockedObject = nullptr;

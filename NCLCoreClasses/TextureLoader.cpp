@@ -9,7 +9,7 @@ https://research.ncl.ac.uk/game/
 #include "TextureLoader.h"
 #define STB_IMAGE_IMPLEMENTATION
 
-#include "./stb/stb_image.h"
+#include "./SOIL/stb_image_aug.h"
 
 #include "Assets.h"
 

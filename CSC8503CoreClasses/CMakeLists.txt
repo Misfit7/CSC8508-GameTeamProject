@@ -204,8 +204,11 @@ set(ADDITIONAL_LIBRARY_DEPENDENCIES
 )
 
 include_directories("../NCLCoreClasses/")
+include_directories("../OpenGLRendering/")
 include_directories("./")
 
 if(MSVC)
     target_link_libraries(${PROJECT_NAME} PRIVATE "ws2_32.lib")
 endif()
+
+target_link_libraries(${PROJECT_NAME} LINK_PUBLIC OpenGLRendering)

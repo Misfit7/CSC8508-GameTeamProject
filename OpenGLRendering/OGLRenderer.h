@@ -10,6 +10,10 @@ License: MIT (see LICENSE file at the top of the source tree)
 
 #ifdef _WIN32
 #include "windows.h"
+
+#include "KHR\khrplatform.h"
+#include "glad\gl.h"
+#include "KHR/WGLext.h"
 #endif
 
 #ifdef _DEBUG
@@ -54,6 +58,7 @@ namespace NCL {
 
 			void BindShader(const OGLShader& s);
 			void BindTextureToShader(const OGLTexture& t, const std::string& uniform, int texUnit) const;
+			void BindOBJTextureToShader(const GLuint& t, const std::string& uniform, int texUnit) const;
 			void BindMesh(const OGLMesh& m);
 			void BindOBJMesh(const OGLOBJMesh& m);
 			void DrawBoundMesh(uint32_t subLayer = 0, uint32_t numInstances = 1);

@@ -58,8 +58,7 @@ void TutorialGame::InitialiseAssets() {
     capsuleMesh = renderer->LoadMesh("capsule.msh");
 
     trainMesh = renderer->LoadOBJMesh("Train.obj");
-
-    trainMesh = renderer->LoadOBJMesh("Train.obj");
+    creeperMesh = renderer->LoadOBJMesh("Creeper.obj");
 
     basicTex = renderer->LoadTexture("checkerboard.png");
     trainTex = renderer->LoadTexture("Train.jpg");
@@ -280,8 +279,8 @@ void TutorialGame::InitWorld() {
 
     testStateObject = AddStateObjectToWorld(Vector3(0, 10, 0));
 
-    // InitMixedGridWorld(15, 15, 3.5f, 3.5f);
-   // AddSceneToWorld();
+    //InitMixedGridWorld(15, 15, 3.5f, 3.5f);
+    //AddSceneToWorld();
     InitGameExamples();
     InitDefaultFloor();
 
@@ -446,6 +445,26 @@ GameObject* TutorialGame::AddTrainToWorld(const Vector3& position) {
     return train;
 }
 
+GameObject* TutorialGame::AddCreeperToWorld(const Vector3& position) {
+    GameObject* creeper = new GameObject();
+
+    SphereVolume* volume = new SphereVolume(0.5f);
+    creeper->SetBoundingVolume((CollisionVolume*)volume);
+    creeper->GetTransform()
+        .SetScale(Vector3(2, 2, 2))
+        .SetPosition(position);
+
+    creeper->SetRenderObject(new RenderObject(&creeper->GetTransform(), creeperMesh, nullptr, basicShader));
+    creeper->SetPhysicsObject(new PhysicsObject(&creeper->GetTransform(), creeper->GetBoundingVolume()));
+
+    creeper->GetPhysicsObject()->SetInverseMass(1.0f);
+    creeper->GetPhysicsObject()->InitSphereInertia();
+
+    world->AddGameObject(creeper);
+
+    return creeper;
+}
+
 
 void TutorialGame::InitDefaultFloor() {
     AddFloorToWorld(Vector3(0, 0, 0));
@@ -455,6 +474,7 @@ void TutorialGame::InitGameExamples() {
     AddPlayerToWorld(Vector3(0, 5, 0));
     AddEnemyToWorld(Vector3(5, 5, 0));
     AddTrainToWorld(Vector3(10, 5, 0));
+    AddCreeperToWorld(Vector3(15, 5, 0));
 }
 
 void TutorialGame::InitSphereGridWorld(int numRows, int numCols, float rowSpacing, float colSpacing, float radius) {

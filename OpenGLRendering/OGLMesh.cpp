@@ -7,6 +7,7 @@ License: MIT (see LICENSE file at the top of the source tree)
 */////////////////////////////////////////////////////////////////////////////
 #include "OGLMesh.h"
 #include "Assets.h"
+//#include "SOIL/SOIL.h"
 
 using namespace NCL;
 using namespace NCL::Rendering;
@@ -301,7 +302,7 @@ void OGLOBJMesh::SetTexturesFromMTL(string& mtlFile, string& mtlType) {
 
 	if (i != materials.end()) {
 		if (!i->second.diffuse.empty()) {
-			texture = i->second.diffuseNum;
+			OBJTexture = i->second.diffuseNum;
 		}
 
 		//if (!i->second.bump.empty()) {
@@ -350,7 +351,7 @@ void OGLOBJMesh::SetTexturesFromMTL(string& mtlFile, string& mtlType) {
 			}
 
 			if (!currentMTL.diffuse.empty()) {
-				currentMTL.diffuseNum = OGLTexture::TextureFromFile(string(Assets::TEXTUREDIR + currentMTL.diffuse).c_str()).release();
+				currentMTL.diffuseNum = SOIL_load_OGL_texture(string(Assets::TEXTUREDIR + currentMTL.diffuse).c_str(), SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_INVERT_Y | SOIL_FLAG_TEXTURE_REPEATS);
 			}
 		}
 		//else if (currentLine == MTLBUMPMAP || currentLine == MTLBUMPMAPALT) {

@@ -9,6 +9,7 @@ set(Header_Files
     "OGLRenderer.h"
     "OGLMesh.h"
     "OGLComputeShader.h"
+    
 )
 source_group("Header Files" FILES ${Header_Files})
 
@@ -55,7 +56,7 @@ target_precompile_headers(${PROJECT_NAME} PRIVATE
     <string>
     <iosfwd>
     <set>
-	<assert.h>
+    <assert.h>
 
     <Matrix2.h>
     <Matrix3.h>
@@ -81,4 +82,7 @@ set(ADDITIONAL_LIBRARY_DEPENDENCIES
     "opengl32.lib"
 )
 
+include_directories("SOIL")
+
+target_link_libraries(${PROJECT_NAME} LINK_PUBLIC "../OpenGLRendering/SOIL/lib/SOIL")
 target_link_libraries(${PROJECT_NAME} PUBLIC "${ADDITIONAL_LIBRARY_DEPENDENCIES}")
