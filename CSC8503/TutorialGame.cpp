@@ -383,7 +383,7 @@ GameObject* TutorialGame::AddPlayerToWorld(const Vector3& position) {
     float meshSize = 1.0f;
     float inverseMass = 0.5f;
 
-    GameObject* character = new GameObject("Player");
+    character = new GameObject("Player");
     SphereVolume* volume = new SphereVolume(1.0f);
 
     character->SetBoundingVolume((CollisionVolume*)volume);
@@ -653,5 +653,46 @@ StateGameObject* TutorialGame::AddStateObjectToWorld(const Vector3& position) {
     world->AddGameObject(cube);
 
     return cube;
+}
+CollectableObject* TutorialGame::CreateObject(int objectId)
+{
+    Vector3 CameraPos = world->GetMainCamera().GetPosition();
+    object = new CollectableObject(world);
+    AABBVolume* volume = new AABBVolume(Vector3(1, 1, 1));
+    object->SetBoundingVolume((CollisionVolume*)volume);
+    object->GetTransform().SetPosition(CameraPos);
+    object->GetTransform().SetScale(Vector3(1, 1, 1));
+
+    object->SetPhysicsObject(new PhysicsObject(&object->GetTransform(), object->GetBoundingVolume()));
+    object->GetPhysicsObject()->SetInverseMass(1.0f);
+    object->GetPhysicsObject()->InitCubeInertia();
+
+    switch (objectId)
+    {
+    case 1:
+        object->SetRenderObject(new RenderObject(&object->GetTransform(), sphereMesh, nullptr, basicShader));
+        break;
+    case 2:
+        //别的物品
+        break;
+    default:
+        //别的物品
+        break;
+    }
+    world->AddGameObject(object);
+
+    return object;
+
+}
+
+void TutorialGame::HoldObject()
+{
+    Vector3 playerPos = character->GetTransform().GetPosition();
+    Quaternion facingDir = character->GetTransform().GetOrientation();
+    Vector3 ObjectOffset(0, 2, -5);
+    ObjectPos = facingDir * ObjectOffset;
+    ObjectOffset = facingDir * ObjectOffset;
+    finalObjectPos = ObjectPos + playerPos;
+    object->GetTransform().SetPosition(finalObjectPos);
 }
 
