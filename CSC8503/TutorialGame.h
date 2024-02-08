@@ -12,6 +12,22 @@
 #include <cmath>
 #include "TrainObject.h"
 #include <limits>
+class CollectableObject : public GameObject {
+public:
+    int objectId;
+    CollectableObject(GameWorld* world, std::string name = "") : GameObject(name) {
+        this->world = world;
+        triggerDelete = true;
+    };
+    void OnCollisionBegin(GameObject* otherObject) override {
+        if (otherObject->GetName() == "Player")
+        {
+            world->RemoveGameObject(this, true);
+        }
+    }
+
+    GameWorld* world;
+};
 namespace NCL {
     namespace CSC8503 {
         class TutorialGame {
@@ -48,6 +64,7 @@ namespace NCL {
             void LockedObjectMovement();
 
             void AddSceneToWorld();
+            void HoldObject();
 
             GameObject* AddFloorToWorld(const Vector3& position);
             GameObject* AddSphereToWorld(const Vector3& position, float radius, float inverseMass = 10.0f);
@@ -57,6 +74,8 @@ namespace NCL {
             GameObject* AddEnemyToWorld(const Vector3& position);
             TrainObject* AddTrainToWorld(const Vector3& position);
             GameObject* AddCreeperToWorld(const Vector3& position);
+
+            CollectableObject* CreateObject(int ID);
 
             StateGameObject* AddStateObjectToWorld(const Vector3& position);
             StateGameObject* testStateObject = nullptr;
@@ -74,6 +93,12 @@ namespace NCL {
             Audio* audio;
             std::vector<GameObject*> scene;
             KeyboardMouseController controller;
+
+            //collectObject
+            CollectableObject* object = nullptr;
+            Vector3 ObjectPos;
+            Vector3 finalObjectPos;
+
 
             bool useGravity;
             bool inSelectionMode;
@@ -111,7 +136,7 @@ namespace NCL {
 
 
 
-
+            GameObject* character = nullptr;
             GameObject* objClosest = nullptr;
 
             vector<Vector3> mazeNodes;

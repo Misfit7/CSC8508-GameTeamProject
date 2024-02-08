@@ -73,6 +73,7 @@ namespace NCL::CSC8503 {
 		int		GetWorldID() const {
 			return worldID;
 		}
+		bool triggerDelete;
 
 	protected:
 		Transform			transform;
