@@ -152,7 +152,9 @@ void TutorialGame::UpdateGame(float dt) {
         //std::cout<<"debug"<<std::endl;
         testStateObject->Update(dt);
     }
-
+    if(trainObject){
+        trainObject->Update(dt);
+    }
 
     renderer->Render();
     Debug::UpdateRenderables(dt);
@@ -425,8 +427,8 @@ GameObject* TutorialGame::AddEnemyToWorld(const Vector3& position) {
     return character;
 }
 
-GameObject* TutorialGame::AddTrainToWorld(const Vector3& position) {
-    GameObject* train = new GameObject();
+TrainObject* TutorialGame::AddTrainToWorld(const Vector3& position) {
+    TrainObject* train = new TrainObject();
 
     SphereVolume* volume = new SphereVolume(0.5f);
     train->SetBoundingVolume((CollisionVolume*)volume);
@@ -473,7 +475,7 @@ void TutorialGame::InitDefaultFloor() {
 void TutorialGame::InitGameExamples() {
     AddPlayerToWorld(Vector3(0, 5, 0));
     AddEnemyToWorld(Vector3(5, 5, 0));
-    AddTrainToWorld(Vector3(10, 5, 0));
+    trainObject = AddTrainToWorld(Vector3(10, 5, 0));
     AddCreeperToWorld(Vector3(15, 5, 0));
 }
 

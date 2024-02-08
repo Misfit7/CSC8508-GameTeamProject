@@ -10,6 +10,7 @@
 #include "Audio.h"
 #include "StateGameObject.h"
 #include <cmath>
+#include "TrainObject.h"
 #include <limits>
 namespace NCL {
     namespace CSC8503 {
@@ -54,7 +55,7 @@ namespace NCL {
 
             GameObject* AddPlayerToWorld(const Vector3& position);
             GameObject* AddEnemyToWorld(const Vector3& position);
-            GameObject* AddTrainToWorld(const Vector3& position);
+            TrainObject* AddTrainToWorld(const Vector3& position);
             GameObject* AddCreeperToWorld(const Vector3& position);
 
             StateGameObject* AddStateObjectToWorld(const Vector3& position);
@@ -103,6 +104,13 @@ namespace NCL {
             void LockCameraToObject(GameObject* o) {
                 lockedObject = o;
             }
+
+
+
+            TrainObject* trainObject = nullptr;
+
+
+
 
             GameObject* objClosest = nullptr;
 
