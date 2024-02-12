@@ -1,288 +1,288 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="F:\Study\CSC8508\4\CSC8508-TeamProject\CSC8503CoreClasses\CMakeFiles\CSC8503CoreClasses.dir\cmake_pch.cxx">
+    <ClCompile Include="C:\Users\84251\Desktop\C++\TeamProject\TeamProject\CSC8503CoreClasses\CMakeFiles\CSC8503CoreClasses.dir\cmake_pch.cxx">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="F:\Study\CSC8508\4\CSC8508-TeamProject\CSC8503CoreClasses\Debug.h">
+    <ClCompile Include="C:\Users\84251\Desktop\C++\TeamProject\TeamProject\CSC8503CoreClasses\Debug.h">
       <Filter>Header Files</Filter>
     </ClCompile>
-    <ClCompile Include="F:\Study\CSC8508\4\CSC8508-TeamProject\CSC8503CoreClasses\GameObject.h">
+    <ClCompile Include="C:\Users\84251\Desktop\C++\TeamProject\TeamProject\CSC8503CoreClasses\GameObject.h">
       <Filter>Header Files</Filter>
     </ClCompile>
-    <ClCompile Include="F:\Study\CSC8508\4\CSC8508-TeamProject\CSC8503CoreClasses\GameWorld.h">
+    <ClCompile Include="C:\Users\84251\Desktop\C++\TeamProject\TeamProject\CSC8503CoreClasses\GameWorld.h">
       <Filter>Header Files</Filter>
     </ClCompile>
-    <ClCompile Include="F:\Study\CSC8508\4\CSC8508-TeamProject\CSC8503CoreClasses\RenderObject.h">
+    <ClCompile Include="C:\Users\84251\Desktop\C++\TeamProject\TeamProject\CSC8503CoreClasses\RenderObject.h">
       <Filter>Header Files</Filter>
     </ClCompile>
-    <ClCompile Include="F:\Study\CSC8508\4\CSC8508-TeamProject\CSC8503CoreClasses\Transform.h">
+    <ClCompile Include="C:\Users\84251\Desktop\C++\TeamProject\TeamProject\CSC8503CoreClasses\Transform.h">
       <Filter>Header Files</Filter>
     </ClCompile>
-    <ClCompile Include="F:\Study\CSC8508\4\CSC8508-TeamProject\CSC8503CoreClasses\Debug.cpp">
+    <ClCompile Include="C:\Users\84251\Desktop\C++\TeamProject\TeamProject\CSC8503CoreClasses\Debug.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="F:\Study\CSC8508\4\CSC8508-TeamProject\CSC8503CoreClasses\GameObject.cpp">
+    <ClCompile Include="C:\Users\84251\Desktop\C++\TeamProject\TeamProject\CSC8503CoreClasses\GameObject.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="F:\Study\CSC8508\4\CSC8508-TeamProject\CSC8503CoreClasses\GameWorld.cpp">
+    <ClCompile Include="C:\Users\84251\Desktop\C++\TeamProject\TeamProject\CSC8503CoreClasses\GameWorld.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="F:\Study\CSC8508\4\CSC8508-TeamProject\CSC8503CoreClasses\RenderObject.cpp">
+    <ClCompile Include="C:\Users\84251\Desktop\C++\TeamProject\TeamProject\CSC8503CoreClasses\RenderObject.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="F:\Study\CSC8508\4\CSC8508-TeamProject\CSC8503CoreClasses\Transform.cpp">
+    <ClCompile Include="C:\Users\84251\Desktop\C++\TeamProject\TeamProject\CSC8503CoreClasses\Transform.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="F:\Study\CSC8508\4\CSC8508-TeamProject\CSC8503CoreClasses\BehaviourAction.h">
+    <ClCompile Include="C:\Users\84251\Desktop\C++\TeamProject\TeamProject\CSC8503CoreClasses\BehaviourAction.h">
       <Filter>AI\Behaviour Trees</Filter>
     </ClCompile>
-    <ClCompile Include="F:\Study\CSC8508\4\CSC8508-TeamProject\CSC8503CoreClasses\BehaviourNode.h">
+    <ClCompile Include="C:\Users\84251\Desktop\C++\TeamProject\TeamProject\CSC8503CoreClasses\BehaviourNode.h">
       <Filter>AI\Behaviour Trees</Filter>
     </ClCompile>
-    <ClCompile Include="F:\Study\CSC8508\4\CSC8508-TeamProject\CSC8503CoreClasses\BehaviourNodeWithChildren.h">
+    <ClCompile Include="C:\Users\84251\Desktop\C++\TeamProject\TeamProject\CSC8503CoreClasses\BehaviourNodeWithChildren.h">
       <Filter>AI\Behaviour Trees</Filter>
     </ClCompile>
-    <ClCompile Include="F:\Study\CSC8508\4\CSC8508-TeamProject\CSC8503CoreClasses\BehaviourSelector.h">
+    <ClCompile Include="C:\Users\84251\Desktop\C++\TeamProject\TeamProject\CSC8503CoreClasses\BehaviourSelector.h">
       <Filter>AI\Behaviour Trees</Filter>
     </ClCompile>
-    <ClCompile Include="F:\Study\CSC8508\4\CSC8508-TeamProject\CSC8503CoreClasses\BehaviourSelector.cpp">
+    <ClCompile Include="C:\Users\84251\Desktop\C++\TeamProject\TeamProject\CSC8503CoreClasses\BehaviourSelector.cpp">
       <Filter>AI\Behaviour Trees</Filter>
     </ClCompile>
-    <ClCompile Include="F:\Study\CSC8508\4\CSC8508-TeamProject\CSC8503CoreClasses\BehaviourSequence.h">
+    <ClCompile Include="C:\Users\84251\Desktop\C++\TeamProject\TeamProject\CSC8503CoreClasses\BehaviourSequence.h">
       <Filter>AI\Behaviour Trees</Filter>
     </ClCompile>
-    <ClCompile Include="F:\Study\CSC8508\4\CSC8508-TeamProject\CSC8503CoreClasses\BehaviourSequence.cpp">
+    <ClCompile Include="C:\Users\84251\Desktop\C++\TeamProject\TeamProject\CSC8503CoreClasses\BehaviourSequence.cpp">
       <Filter>AI\Behaviour Trees</Filter>
     </ClCompile>
-    <ClCompile Include="F:\Study\CSC8508\4\CSC8508-TeamProject\CSC8503CoreClasses\PushdownMachine.h">
+    <ClCompile Include="C:\Users\84251\Desktop\C++\TeamProject\TeamProject\CSC8503CoreClasses\PushdownMachine.h">
       <Filter>AI\Pushdown Automata</Filter>
     </ClCompile>
-    <ClCompile Include="F:\Study\CSC8508\4\CSC8508-TeamProject\CSC8503CoreClasses\PushdownMachine.cpp">
+    <ClCompile Include="C:\Users\84251\Desktop\C++\TeamProject\TeamProject\CSC8503CoreClasses\PushdownMachine.cpp">
       <Filter>AI\Pushdown Automata</Filter>
     </ClCompile>
-    <ClCompile Include="F:\Study\CSC8508\4\CSC8508-TeamProject\CSC8503CoreClasses\PushdownState.h">
+    <ClCompile Include="C:\Users\84251\Desktop\C++\TeamProject\TeamProject\CSC8503CoreClasses\PushdownState.h">
       <Filter>AI\Pushdown Automata</Filter>
     </ClCompile>
-    <ClCompile Include="F:\Study\CSC8508\4\CSC8508-TeamProject\CSC8503CoreClasses\PushdownState.cpp">
+    <ClCompile Include="C:\Users\84251\Desktop\C++\TeamProject\TeamProject\CSC8503CoreClasses\PushdownState.cpp">
       <Filter>AI\Pushdown Automata</Filter>
     </ClCompile>
-    <ClCompile Include="F:\Study\CSC8508\4\CSC8508-TeamProject\CSC8503CoreClasses\State.h">
+    <ClCompile Include="C:\Users\84251\Desktop\C++\TeamProject\TeamProject\CSC8503CoreClasses\State.h">
       <Filter>AI\State Machine</Filter>
     </ClCompile>
-    <ClCompile Include="F:\Study\CSC8508\4\CSC8508-TeamProject\CSC8503CoreClasses\StateMachine.h">
+    <ClCompile Include="C:\Users\84251\Desktop\C++\TeamProject\TeamProject\CSC8503CoreClasses\StateMachine.h">
       <Filter>AI\State Machine</Filter>
     </ClCompile>
-    <ClCompile Include="F:\Study\CSC8508\4\CSC8508-TeamProject\CSC8503CoreClasses\StateMachine.cpp">
+    <ClCompile Include="C:\Users\84251\Desktop\C++\TeamProject\TeamProject\CSC8503CoreClasses\StateMachine.cpp">
       <Filter>AI\State Machine</Filter>
     </ClCompile>
-    <ClCompile Include="F:\Study\CSC8508\4\CSC8508-TeamProject\CSC8503CoreClasses\StateTransition.h">
+    <ClCompile Include="C:\Users\84251\Desktop\C++\TeamProject\TeamProject\CSC8503CoreClasses\StateTransition.h">
       <Filter>AI\State Machine</Filter>
     </ClCompile>
-    <ClCompile Include="F:\Study\CSC8508\4\CSC8508-TeamProject\CSC8503CoreClasses\NavigationGrid.h">
+    <ClCompile Include="C:\Users\84251\Desktop\C++\TeamProject\TeamProject\CSC8503CoreClasses\NavigationGrid.h">
       <Filter>AI\Pathfinding</Filter>
     </ClCompile>
-    <ClCompile Include="F:\Study\CSC8508\4\CSC8508-TeamProject\CSC8503CoreClasses\NavigationGrid.cpp">
+    <ClCompile Include="C:\Users\84251\Desktop\C++\TeamProject\TeamProject\CSC8503CoreClasses\NavigationGrid.cpp">
       <Filter>AI\Pathfinding</Filter>
     </ClCompile>
-    <ClCompile Include="F:\Study\CSC8508\4\CSC8508-TeamProject\CSC8503CoreClasses\NavigationMesh.cpp">
+    <ClCompile Include="C:\Users\84251\Desktop\C++\TeamProject\TeamProject\CSC8503CoreClasses\NavigationMesh.cpp">
       <Filter>AI\Pathfinding</Filter>
     </ClCompile>
-    <ClCompile Include="F:\Study\CSC8508\4\CSC8508-TeamProject\CSC8503CoreClasses\NavigationMesh.h">
+    <ClCompile Include="C:\Users\84251\Desktop\C++\TeamProject\TeamProject\CSC8503CoreClasses\NavigationMesh.h">
       <Filter>AI\Pathfinding</Filter>
     </ClCompile>
-    <ClCompile Include="F:\Study\CSC8508\4\CSC8508-TeamProject\CSC8503CoreClasses\NavigationMap.h">
+    <ClCompile Include="C:\Users\84251\Desktop\C++\TeamProject\TeamProject\CSC8503CoreClasses\NavigationMap.h">
       <Filter>AI\Pathfinding</Filter>
     </ClCompile>
-    <ClCompile Include="F:\Study\CSC8508\4\CSC8508-TeamProject\CSC8503CoreClasses\NavigationPath.h">
+    <ClCompile Include="C:\Users\84251\Desktop\C++\TeamProject\TeamProject\CSC8503CoreClasses\NavigationPath.h">
       <Filter>AI\Pathfinding</Filter>
     </ClCompile>
-    <ClCompile Include="F:\Study\CSC8508\4\CSC8508-TeamProject\CSC8503CoreClasses\AABBVolume.h">
+    <ClCompile Include="C:\Users\84251\Desktop\C++\TeamProject\TeamProject\CSC8503CoreClasses\AABBVolume.h">
       <Filter>Collision Detection</Filter>
     </ClCompile>
-    <ClCompile Include="F:\Study\CSC8508\4\CSC8508-TeamProject\CSC8503CoreClasses\CapsuleVolume.h">
+    <ClCompile Include="C:\Users\84251\Desktop\C++\TeamProject\TeamProject\CSC8503CoreClasses\CapsuleVolume.h">
       <Filter>Collision Detection</Filter>
     </ClCompile>
-    <ClCompile Include="F:\Study\CSC8508\4\CSC8508-TeamProject\CSC8503CoreClasses\CapsuleVolume.cpp">
+    <ClCompile Include="C:\Users\84251\Desktop\C++\TeamProject\TeamProject\CSC8503CoreClasses\CapsuleVolume.cpp">
       <Filter>Collision Detection</Filter>
     </ClCompile>
-    <ClCompile Include="F:\Study\CSC8508\4\CSC8508-TeamProject\CSC8503CoreClasses\CollisionDetection.h">
+    <ClCompile Include="C:\Users\84251\Desktop\C++\TeamProject\TeamProject\CSC8503CoreClasses\CollisionDetection.h">
       <Filter>Collision Detection</Filter>
     </ClCompile>
-    <ClCompile Include="F:\Study\CSC8508\4\CSC8508-TeamProject\CSC8503CoreClasses\CollisionDetection.cpp">
+    <ClCompile Include="C:\Users\84251\Desktop\C++\TeamProject\TeamProject\CSC8503CoreClasses\CollisionDetection.cpp">
       <Filter>Collision Detection</Filter>
     </ClCompile>
-    <ClCompile Include="F:\Study\CSC8508\4\CSC8508-TeamProject\CSC8503CoreClasses\CollisionVolume.h">
+    <ClCompile Include="C:\Users\84251\Desktop\C++\TeamProject\TeamProject\CSC8503CoreClasses\CollisionVolume.h">
       <Filter>Collision Detection</Filter>
     </ClCompile>
-    <ClCompile Include="F:\Study\CSC8508\4\CSC8508-TeamProject\CSC8503CoreClasses\OBBVolume.h">
+    <ClCompile Include="C:\Users\84251\Desktop\C++\TeamProject\TeamProject\CSC8503CoreClasses\OBBVolume.h">
       <Filter>Collision Detection</Filter>
     </ClCompile>
-    <ClCompile Include="F:\Study\CSC8508\4\CSC8508-TeamProject\CSC8503CoreClasses\PlaneVolume.h">
+    <ClCompile Include="C:\Users\84251\Desktop\C++\TeamProject\TeamProject\CSC8503CoreClasses\PlaneVolume.h">
       <Filter>Collision Detection</Filter>
     </ClCompile>
-    <ClCompile Include="F:\Study\CSC8508\4\CSC8508-TeamProject\CSC8503CoreClasses\QuadTree.h">
+    <ClCompile Include="C:\Users\84251\Desktop\C++\TeamProject\TeamProject\CSC8503CoreClasses\QuadTree.h">
       <Filter>Collision Detection</Filter>
     </ClCompile>
-    <ClCompile Include="F:\Study\CSC8508\4\CSC8508-TeamProject\CSC8503CoreClasses\QuadTree.cpp">
+    <ClCompile Include="C:\Users\84251\Desktop\C++\TeamProject\TeamProject\CSC8503CoreClasses\QuadTree.cpp">
       <Filter>Collision Detection</Filter>
     </ClCompile>
-    <ClCompile Include="F:\Study\CSC8508\4\CSC8508-TeamProject\CSC8503CoreClasses\Ray.h">
+    <ClCompile Include="C:\Users\84251\Desktop\C++\TeamProject\TeamProject\CSC8503CoreClasses\Ray.h">
       <Filter>Collision Detection</Filter>
     </ClCompile>
-    <ClCompile Include="F:\Study\CSC8508\4\CSC8508-TeamProject\CSC8503CoreClasses\SphereVolume.h">
+    <ClCompile Include="C:\Users\84251\Desktop\C++\TeamProject\TeamProject\CSC8503CoreClasses\SphereVolume.h">
       <Filter>Collision Detection</Filter>
     </ClCompile>
-    <ClCompile Include="F:\Study\CSC8508\4\CSC8508-TeamProject\CSC8503CoreClasses\GameClient.h">
+    <ClCompile Include="C:\Users\84251\Desktop\C++\TeamProject\TeamProject\CSC8503CoreClasses\GameClient.h">
       <Filter>Networking</Filter>
     </ClCompile>
-    <ClCompile Include="F:\Study\CSC8508\4\CSC8508-TeamProject\CSC8503CoreClasses\GameClient.cpp">
+    <ClCompile Include="C:\Users\84251\Desktop\C++\TeamProject\TeamProject\CSC8503CoreClasses\GameClient.cpp">
       <Filter>Networking</Filter>
     </ClCompile>
-    <ClCompile Include="F:\Study\CSC8508\4\CSC8508-TeamProject\CSC8503CoreClasses\GameServer.h">
+    <ClCompile Include="C:\Users\84251\Desktop\C++\TeamProject\TeamProject\CSC8503CoreClasses\GameServer.h">
       <Filter>Networking</Filter>
     </ClCompile>
-    <ClCompile Include="F:\Study\CSC8508\4\CSC8508-TeamProject\CSC8503CoreClasses\GameServer.cpp">
+    <ClCompile Include="C:\Users\84251\Desktop\C++\TeamProject\TeamProject\CSC8503CoreClasses\GameServer.cpp">
       <Filter>Networking</Filter>
     </ClCompile>
-    <ClCompile Include="F:\Study\CSC8508\4\CSC8508-TeamProject\CSC8503CoreClasses\NetworkBase.h">
+    <ClCompile Include="C:\Users\84251\Desktop\C++\TeamProject\TeamProject\CSC8503CoreClasses\NetworkBase.h">
       <Filter>Networking</Filter>
     </ClCompile>
-    <ClCompile Include="F:\Study\CSC8508\4\CSC8508-TeamProject\CSC8503CoreClasses\NetworkBase.cpp">
+    <ClCompile Include="C:\Users\84251\Desktop\C++\TeamProject\TeamProject\CSC8503CoreClasses\NetworkBase.cpp">
       <Filter>Networking</Filter>
     </ClCompile>
-    <ClCompile Include="F:\Study\CSC8508\4\CSC8508-TeamProject\CSC8503CoreClasses\NetworkObject.h">
+    <ClCompile Include="C:\Users\84251\Desktop\C++\TeamProject\TeamProject\CSC8503CoreClasses\NetworkObject.h">
       <Filter>Networking</Filter>
     </ClCompile>
-    <ClCompile Include="F:\Study\CSC8508\4\CSC8508-TeamProject\CSC8503CoreClasses\NetworkObject.cpp">
+    <ClCompile Include="C:\Users\84251\Desktop\C++\TeamProject\TeamProject\CSC8503CoreClasses\NetworkObject.cpp">
       <Filter>Networking</Filter>
     </ClCompile>
-    <ClCompile Include="F:\Study\CSC8508\4\CSC8508-TeamProject\CSC8503CoreClasses\NetworkState.h">
+    <ClCompile Include="C:\Users\84251\Desktop\C++\TeamProject\TeamProject\CSC8503CoreClasses\NetworkState.h">
       <Filter>Networking</Filter>
     </ClCompile>
-    <ClCompile Include="F:\Study\CSC8508\4\CSC8508-TeamProject\CSC8503CoreClasses\NetworkState.cpp">
+    <ClCompile Include="C:\Users\84251\Desktop\C++\TeamProject\TeamProject\CSC8503CoreClasses\NetworkState.cpp">
       <Filter>Networking</Filter>
     </ClCompile>
-    <ClCompile Include="F:\Study\CSC8508\4\CSC8508-TeamProject\CSC8503CoreClasses\Constraint.h">
+    <ClCompile Include="C:\Users\84251\Desktop\C++\TeamProject\TeamProject\CSC8503CoreClasses\Constraint.h">
       <Filter>Physics</Filter>
     </ClCompile>
-    <ClCompile Include="F:\Study\CSC8508\4\CSC8508-TeamProject\CSC8503CoreClasses\PositionConstraint.cpp">
+    <ClCompile Include="C:\Users\84251\Desktop\C++\TeamProject\TeamProject\CSC8503CoreClasses\PositionConstraint.cpp">
       <Filter>Physics</Filter>
     </ClCompile>
-    <ClCompile Include="F:\Study\CSC8508\4\CSC8508-TeamProject\CSC8503CoreClasses\PositionConstraint.h">
+    <ClCompile Include="C:\Users\84251\Desktop\C++\TeamProject\TeamProject\CSC8503CoreClasses\PositionConstraint.h">
       <Filter>Physics</Filter>
     </ClCompile>
-    <ClCompile Include="F:\Study\CSC8508\4\CSC8508-TeamProject\CSC8503CoreClasses\OrientationConstraint.cpp">
+    <ClCompile Include="C:\Users\84251\Desktop\C++\TeamProject\TeamProject\CSC8503CoreClasses\OrientationConstraint.cpp">
       <Filter>Physics</Filter>
     </ClCompile>
-    <ClCompile Include="F:\Study\CSC8508\4\CSC8508-TeamProject\CSC8503CoreClasses\OrientationConstraint.h">
+    <ClCompile Include="C:\Users\84251\Desktop\C++\TeamProject\TeamProject\CSC8503CoreClasses\OrientationConstraint.h">
       <Filter>Physics</Filter>
     </ClCompile>
-    <ClCompile Include="F:\Study\CSC8508\4\CSC8508-TeamProject\CSC8503CoreClasses\PhysicsObject.cpp">
+    <ClCompile Include="C:\Users\84251\Desktop\C++\TeamProject\TeamProject\CSC8503CoreClasses\PhysicsObject.cpp">
       <Filter>Physics</Filter>
     </ClCompile>
-    <ClCompile Include="F:\Study\CSC8508\4\CSC8508-TeamProject\CSC8503CoreClasses\PhysicsObject.h">
+    <ClCompile Include="C:\Users\84251\Desktop\C++\TeamProject\TeamProject\CSC8503CoreClasses\PhysicsObject.h">
       <Filter>Physics</Filter>
     </ClCompile>
-    <ClCompile Include="F:\Study\CSC8508\4\CSC8508-TeamProject\CSC8503CoreClasses\PhysicsSystem.cpp">
+    <ClCompile Include="C:\Users\84251\Desktop\C++\TeamProject\TeamProject\CSC8503CoreClasses\PhysicsSystem.cpp">
       <Filter>Physics</Filter>
     </ClCompile>
-    <ClCompile Include="F:\Study\CSC8508\4\CSC8508-TeamProject\CSC8503CoreClasses\PhysicsSystem.h">
+    <ClCompile Include="C:\Users\84251\Desktop\C++\TeamProject\TeamProject\CSC8503CoreClasses\PhysicsSystem.h">
       <Filter>Physics</Filter>
     </ClCompile>
-    <ClCompile Include="F:\Study\CSC8508\4\CSC8508-TeamProject\CSC8503CoreClasses\enet\callbacks.c">
+    <ClCompile Include="C:\Users\84251\Desktop\C++\TeamProject\TeamProject\CSC8503CoreClasses\enet\callbacks.c">
       <Filter>eNet</Filter>
     </ClCompile>
-    <ClCompile Include="F:\Study\CSC8508\4\CSC8508-TeamProject\CSC8503CoreClasses\enet\list.h">
+    <ClCompile Include="C:\Users\84251\Desktop\C++\TeamProject\TeamProject\CSC8503CoreClasses\enet\list.h">
       <Filter>eNet</Filter>
     </ClCompile>
-    <ClCompile Include="F:\Study\CSC8508\4\CSC8508-TeamProject\CSC8503CoreClasses\enet\list.c">
+    <ClCompile Include="C:\Users\84251\Desktop\C++\TeamProject\TeamProject\CSC8503CoreClasses\enet\list.c">
       <Filter>eNet</Filter>
     </ClCompile>
-    <ClCompile Include="F:\Study\CSC8508\4\CSC8508-TeamProject\CSC8503CoreClasses\enet\protocol.h">
+    <ClCompile Include="C:\Users\84251\Desktop\C++\TeamProject\TeamProject\CSC8503CoreClasses\enet\protocol.h">
       <Filter>eNet</Filter>
     </ClCompile>
-    <ClCompile Include="F:\Study\CSC8508\4\CSC8508-TeamProject\CSC8503CoreClasses\enet\protocol.c">
+    <ClCompile Include="C:\Users\84251\Desktop\C++\TeamProject\TeamProject\CSC8503CoreClasses\enet\protocol.c">
       <Filter>eNet</Filter>
     </ClCompile>
-    <ClCompile Include="F:\Study\CSC8508\4\CSC8508-TeamProject\CSC8503CoreClasses\enet\win32.h">
+    <ClCompile Include="C:\Users\84251\Desktop\C++\TeamProject\TeamProject\CSC8503CoreClasses\enet\win32.h">
       <Filter>eNet</Filter>
     </ClCompile>
-    <ClCompile Include="F:\Study\CSC8508\4\CSC8508-TeamProject\CSC8503CoreClasses\enet\win32.c">
+    <ClCompile Include="C:\Users\84251\Desktop\C++\TeamProject\TeamProject\CSC8503CoreClasses\enet\win32.c">
       <Filter>eNet</Filter>
     </ClCompile>
-    <ClCompile Include="F:\Study\CSC8508\4\CSC8508-TeamProject\CSC8503CoreClasses\enet\enet.h">
+    <ClCompile Include="C:\Users\84251\Desktop\C++\TeamProject\TeamProject\CSC8503CoreClasses\enet\enet.h">
       <Filter>eNet</Filter>
     </ClCompile>
-    <ClCompile Include="F:\Study\CSC8508\4\CSC8508-TeamProject\CSC8503CoreClasses\enet\time.h">
+    <ClCompile Include="C:\Users\84251\Desktop\C++\TeamProject\TeamProject\CSC8503CoreClasses\enet\time.h">
       <Filter>eNet</Filter>
     </ClCompile>
-    <ClCompile Include="F:\Study\CSC8508\4\CSC8508-TeamProject\CSC8503CoreClasses\enet\types.h">
+    <ClCompile Include="C:\Users\84251\Desktop\C++\TeamProject\TeamProject\CSC8503CoreClasses\enet\types.h">
       <Filter>eNet</Filter>
     </ClCompile>
-    <ClCompile Include="F:\Study\CSC8508\4\CSC8508-TeamProject\CSC8503CoreClasses\enet\utility.h">
+    <ClCompile Include="C:\Users\84251\Desktop\C++\TeamProject\TeamProject\CSC8503CoreClasses\enet\utility.h">
       <Filter>eNet</Filter>
     </ClCompile>
-    <ClCompile Include="F:\Study\CSC8508\4\CSC8508-TeamProject\CSC8503CoreClasses\enet\compress.c">
+    <ClCompile Include="C:\Users\84251\Desktop\C++\TeamProject\TeamProject\CSC8503CoreClasses\enet\compress.c">
       <Filter>eNet</Filter>
     </ClCompile>
-    <ClCompile Include="F:\Study\CSC8508\4\CSC8508-TeamProject\CSC8503CoreClasses\enet\host.c">
+    <ClCompile Include="C:\Users\84251\Desktop\C++\TeamProject\TeamProject\CSC8503CoreClasses\enet\host.c">
       <Filter>eNet</Filter>
     </ClCompile>
-    <ClCompile Include="F:\Study\CSC8508\4\CSC8508-TeamProject\CSC8503CoreClasses\enet\packet.c">
+    <ClCompile Include="C:\Users\84251\Desktop\C++\TeamProject\TeamProject\CSC8503CoreClasses\enet\packet.c">
       <Filter>eNet</Filter>
     </ClCompile>
-    <ClCompile Include="F:\Study\CSC8508\4\CSC8508-TeamProject\CSC8503CoreClasses\enet\peer.c">
+    <ClCompile Include="C:\Users\84251\Desktop\C++\TeamProject\TeamProject\CSC8503CoreClasses\enet\peer.c">
       <Filter>eNet</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="F:\Study\CSC8508\4\CSC8508-TeamProject\CSC8503CoreClasses\CMakeFiles\CSC8503CoreClasses.dir\Debug\cmake_pch.hxx">
+    <ClInclude Include="C:\Users\84251\Desktop\C++\TeamProject\TeamProject\CSC8503CoreClasses\CMakeFiles\CSC8503CoreClasses.dir\Debug\cmake_pch.hxx">
       <Filter>Precompile Header File</Filter>
     </ClInclude>
-    <ClInclude Include="F:\Study\CSC8508\4\CSC8508-TeamProject\CSC8503CoreClasses\CMakeFiles\CSC8503CoreClasses.dir\Release\cmake_pch.hxx">
+    <ClInclude Include="C:\Users\84251\Desktop\C++\TeamProject\TeamProject\CSC8503CoreClasses\CMakeFiles\CSC8503CoreClasses.dir\Release\cmake_pch.hxx">
       <Filter>Precompile Header File</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <CustomBuild Include="F:\Study\CSC8508\4\CSC8508-TeamProject\CSC8503CoreClasses\CMakeLists.txt" />
+    <CustomBuild Include="C:\Users\84251\Desktop\C++\TeamProject\TeamProject\CSC8503CoreClasses\CMakeLists.txt" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="AI">
-      <UniqueIdentifier>{1053F37B-F618-3FBD-8A9B-978822F527E6}</UniqueIdentifier>
+      <UniqueIdentifier>{809A37B8-F528-3E5F-8850-3700CA6954CF}</UniqueIdentifier>
     </Filter>
     <Filter Include="AI\Behaviour Trees">
-      <UniqueIdentifier>{EFD072BE-A202-3976-AC66-ECCA1E77C930}</UniqueIdentifier>
+      <UniqueIdentifier>{3BF1577C-AE46-3D8E-BC8B-48B80B238764}</UniqueIdentifier>
     </Filter>
     <Filter Include="AI\Pathfinding">
-      <UniqueIdentifier>{A66653A4-A977-3BDA-9C95-AD935FE72686}</UniqueIdentifier>
+      <UniqueIdentifier>{4A8D4CD8-174B-3054-BCFB-F6F08C88C110}</UniqueIdentifier>
     </Filter>
     <Filter Include="AI\Pushdown Automata">
-      <UniqueIdentifier>{BFA7BE4B-C91C-3153-807E-B4FB1C1B77AD}</UniqueIdentifier>
+      <UniqueIdentifier>{B537671B-F735-3B7D-91A8-746564087965}</UniqueIdentifier>
     </Filter>
     <Filter Include="AI\State Machine">
-      <UniqueIdentifier>{D81A3AB4-4E71-3992-B47C-1D853BBDADC4}</UniqueIdentifier>
+      <UniqueIdentifier>{79D49A6B-781D-389C-8F39-8A17810BF0BE}</UniqueIdentifier>
     </Filter>
     <Filter Include="Collision Detection">
-      <UniqueIdentifier>{356838D7-665F-3789-84CF-C10CD80E93E3}</UniqueIdentifier>
+      <UniqueIdentifier>{2E4FA607-95EE-3441-8CB3-20E91AD04193}</UniqueIdentifier>
     </Filter>
     <Filter Include="Header Files">
-      <UniqueIdentifier>{BE106561-0079-3A57-89FA-099F3D8276A3}</UniqueIdentifier>
+      <UniqueIdentifier>{0128B169-43CC-3F22-BD5A-2F1D71FB596D}</UniqueIdentifier>
     </Filter>
     <Filter Include="Networking">
-      <UniqueIdentifier>{E148F6A5-7E74-378A-BD3D-A8009223ABFC}</UniqueIdentifier>
+      <UniqueIdentifier>{520B6520-CD0B-3C8A-B286-AD399E61D4D8}</UniqueIdentifier>
     </Filter>
     <Filter Include="Physics">
-      <UniqueIdentifier>{6F326EB3-77A0-3A98-91BA-26CF7B7CDD20}</UniqueIdentifier>
+      <UniqueIdentifier>{5BA72442-D222-371F-BC81-FF7ABF024903}</UniqueIdentifier>
     </Filter>
     <Filter Include="Precompile Header File">
-      <UniqueIdentifier>{49A54A81-B84E-35F6-AFEF-E92CE866A199}</UniqueIdentifier>
+      <UniqueIdentifier>{E1DFFE89-4C7C-327B-8CD1-16862AAFF55C}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files">
-      <UniqueIdentifier>{0E2D62F7-54A3-3608-A01E-C644CAD871CB}</UniqueIdentifier>
+      <UniqueIdentifier>{82FFFD53-AB10-38D4-B643-7114D3A60130}</UniqueIdentifier>
     </Filter>
     <Filter Include="eNet">
-      <UniqueIdentifier>{0E1FFDA8-F382-3B4B-B18E-D7BC55382AA4}</UniqueIdentifier>
+      <UniqueIdentifier>{C1F6A492-F0D6-37A4-8EF0-45ADCE79C634}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
