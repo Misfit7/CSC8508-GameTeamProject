@@ -10,24 +10,24 @@ https://research.ncl.ac.uk/game/
 #include "Plane.h"
 
 namespace NCL::Maths {
-	class Matrix4;
+    class Matrix4;
 
-	class Frustum {
-	public:
-		Frustum(void);
-		~Frustum(void) {};		
+    class Frustum {
+    public:
+        Frustum(void);
+        ~Frustum(void) {};
 
-		static Frustum FromViewProjMatrix(const Matrix4& mat, float ndcNear = -1.0f, float ndcFar = 1.0f);
+        static Frustum FromViewProjMatrix(const Matrix4& mat, float ndcNear = -1.0f, float ndcFar = 1.0f);
 
-		bool SphereInsideFrustum(const Vector3& position, float radius) const {
-			for (int p = 0; p < 6; ++p) {
-				if (!planes[p].SphereInPlane(position, radius)) {
-					return false;
-				}
-			}
-			return true;
-		}
-	protected:
-		Plane planes[6];
-	};
+        bool InsideFrustum(const Vector3& position, float radius) const {
+            for (int p = 0; p < 6; ++p) {
+                if (!planes[p].SphereInPlane(position, radius)) {
+                    return false;
+                }
+            }
+            return true;
+        }
+    protected:
+        Plane planes[6];
+    };
 }

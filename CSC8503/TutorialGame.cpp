@@ -152,7 +152,7 @@ void TutorialGame::UpdateGame(float dt) {
         //std::cout<<"debug"<<std::endl;
         testStateObject->Update(dt);
     }
-    if(trainObject){
+    if (trainObject) {
         trainObject->Update(dt);
     }
 
@@ -590,20 +590,20 @@ void TutorialGame::MoveSelectedObject() {
         }
     }
 
-    if (Window::GetKeyboard()->KeyHeld(NCL::KeyCodes::W)){
-        selectionObject->GetPhysicsObject()->AddForceAtPosition(Vector3(100,0,0),selectionObject->GetTransform().GetPosition());
+    if (Window::GetKeyboard()->KeyHeld(NCL::KeyCodes::W)) {
+        selectionObject->GetPhysicsObject()->AddForceAtPosition(Vector3(100, 0, 0), selectionObject->GetTransform().GetPosition());
     }
-    else if (Window::GetKeyboard()->KeyHeld(NCL::KeyCodes::A)){
-        selectionObject->GetPhysicsObject()->AddForceAtPosition(Vector3(0,0,100),selectionObject->GetTransform().GetPosition());
+    else if (Window::GetKeyboard()->KeyHeld(NCL::KeyCodes::A)) {
+        selectionObject->GetPhysicsObject()->AddForceAtPosition(Vector3(0, 0, 100), selectionObject->GetTransform().GetPosition());
     }
-    else if (Window::GetKeyboard()->KeyHeld(NCL::KeyCodes::S)){
-        selectionObject->GetPhysicsObject()->AddForceAtPosition(Vector3(-100,0,0),selectionObject->GetTransform().GetPosition());
+    else if (Window::GetKeyboard()->KeyHeld(NCL::KeyCodes::S)) {
+        selectionObject->GetPhysicsObject()->AddForceAtPosition(Vector3(-100, 0, 0), selectionObject->GetTransform().GetPosition());
     }
-    else if (Window::GetKeyboard()->KeyHeld(NCL::KeyCodes::D)){
-        selectionObject->GetPhysicsObject()->AddForceAtPosition(Vector3(0,0,-100),selectionObject->GetTransform().GetPosition());
+    else if (Window::GetKeyboard()->KeyHeld(NCL::KeyCodes::D)) {
+        selectionObject->GetPhysicsObject()->AddForceAtPosition(Vector3(0, 0, -100), selectionObject->GetTransform().GetPosition());
     }
     else {
-        selectionObject->GetPhysicsObject()->SetLinearVelocity(Vector3(0,0,0));
+        selectionObject->GetPhysicsObject()->SetLinearVelocity(Vector3(0, 0, 0));
     }
 
 }
