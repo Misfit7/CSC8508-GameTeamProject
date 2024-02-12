@@ -2,91 +2,123 @@
 #include "Transform.h"
 #include "CollisionVolume.h"
 
+#include "AABBVolume.h"
+#include "OBBVolume.h"
+#include "SphereVolume.h"
+#include "CapsuleVolume.h"
+
 using std::vector;
 
 namespace NCL::CSC8503 {
-	class NetworkObject;
-	class RenderObject;
-	class PhysicsObject;
+    class NetworkObject;
+    class RenderObject;
+    class PhysicsObject;
 
-	class GameObject	{
-	public:
-		GameObject(const std::string& name = "");
-		~GameObject();
+    class GameObject {
+    public:
+        GameObject(const std::string& name = "");
+        ~GameObject();
 
-		void SetBoundingVolume(CollisionVolume* vol) {
-			boundingVolume = vol;
-		}
+        void SetBoundingVolume(CollisionVolume* vol) {
+            boundingVolume = vol;
+            Vector3 a;
+            switch (boundingVolume->type)
+            {
+            case VolumeType::AABB:
+                a = ((AABBVolume&)*vol).GetHalfDimensions();
+                SetBoundingRadius(std::max(a.x, std::max(a.y, a.z)));
+                break;
+            case VolumeType::OBB:
+                a = ((OBBVolume&)*vol).GetHalfDimensions();
+                SetBoundingRadius(std::max(a.x, std::max(a.y, a.z)));
+                break;
+            case VolumeType::Sphere:
+                SetBoundingRadius(((SphereVolume&)*vol).GetRadius());
+                break;
+            case VolumeType::Capsule:
+                SetBoundingRadius(((CapsuleVolume&)*vol).GetHalfHeight());
+                break;
+            default:
+                a = ((AABBVolume&)*vol).GetHalfDimensions();
+                SetBoundingRadius(std::max(a.x, std::max(a.y, a.z)));
+                break;
+            }
+        }
 
-		const CollisionVolume* GetBoundingVolume() const {
-			return boundingVolume;
-		}
+        const CollisionVolume* GetBoundingVolume() const {
+            return boundingVolume;
+        }
 
-		bool IsActive() const {
-			return isActive;
-		}
+        float GetBoundingRadius() const { return boundingRadius; }
+        void SetBoundingRadius(float f) { boundingRadius = f; }
 
-		Transform& GetTransform() {
-			return transform;
-		}
+        bool IsActive() const {
+            return isActive;
+        }
 
-		RenderObject* GetRenderObject() const {
-			return renderObject;
-		}
+        Transform& GetTransform() {
+            return transform;
+        }
 
-		PhysicsObject* GetPhysicsObject() const {
-			return physicsObject;
-		}
+        RenderObject* GetRenderObject() const {
+            return renderObject;
+        }
 
-		NetworkObject* GetNetworkObject() const {
-			return networkObject;
-		}
+        PhysicsObject* GetPhysicsObject() const {
+            return physicsObject;
+        }
 
-		void SetRenderObject(RenderObject* newObject) {
-			renderObject = newObject;
-		}
+        NetworkObject* GetNetworkObject() const {
+            return networkObject;
+        }
 
-		void SetPhysicsObject(PhysicsObject* newObject) {
-			physicsObject = newObject;
-		}
+        void SetRenderObject(RenderObject* newObject) {
+            renderObject = newObject;
+        }
 
-		const std::string& GetName() const {
-			return name;
-		}
+        void SetPhysicsObject(PhysicsObject* newObject) {
+            physicsObject = newObject;
+        }
 
-		virtual void OnCollisionBegin(GameObject* otherObject) {
-			//std::cout << "OnCollisionBegin event occured!\n";
-		}
+        const std::string& GetName() const {
+            return name;
+        }
 
-		virtual void OnCollisionEnd(GameObject* otherObject) {
-			//std::cout << "OnCollisionEnd event occured!\n";
-		}
+        virtual void OnCollisionBegin(GameObject* otherObject) {
+            //std::cout << "OnCollisionBegin event occured!\n";
+        }
 
-		bool GetBroadphaseAABB(Vector3&outsize) const;
+        virtual void OnCollisionEnd(GameObject* otherObject) {
+            //std::cout << "OnCollisionEnd event occured!\n";
+        }
 
-		void UpdateBroadphaseAABB();
+        bool GetBroadphaseAABB(Vector3& outsize) const;
 
-		void SetWorldID(int newID) {
-			worldID = newID;
-		}
+        void UpdateBroadphaseAABB();
 
-		int		GetWorldID() const {
-			return worldID;
-		}
+        void SetWorldID(int newID) {
+            worldID = newID;
+        }
 
-	protected:
-		Transform			transform;
+        int		GetWorldID() const {
+            return worldID;
+        }
+        bool triggerDelete;
 
-		CollisionVolume*	boundingVolume;
-		PhysicsObject*		physicsObject;
-		RenderObject*		renderObject;
-		NetworkObject*		networkObject;
+    protected:
+        Transform			transform;
 
-		bool		isActive;
-		int			worldID;
-		std::string	name;
+        CollisionVolume* boundingVolume;
+        float boundingRadius = 1.0f;
+        PhysicsObject* physicsObject;
+        RenderObject* renderObject;
+        NetworkObject* networkObject;
 
-		Vector3 broadphaseAABB;
-	};
+        bool		isActive;
+        int			worldID;
+        std::string	name;
+
+        Vector3 broadphaseAABB;
+    };
 }
 
