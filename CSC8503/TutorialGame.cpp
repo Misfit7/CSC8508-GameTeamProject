@@ -61,6 +61,7 @@ void TutorialGame::InitialiseAssets() {
     creeperMesh = renderer->LoadOBJMesh("Creeper.obj");
 
     basicTex = renderer->LoadTexture("checkerboard.png");
+    floorTex = renderer->LoadTexture("wood.png");
     trainTex = renderer->LoadTexture("Train.jpg");
     basicShader = renderer->LoadShader("scene.vert", "scene.frag");
 
@@ -325,7 +326,7 @@ GameObject* TutorialGame::AddFloorToWorld(const Vector3& position) {
         .SetScale(floorSize * 2)
         .SetPosition(position);
 
-    floor->SetRenderObject(new RenderObject(&floor->GetTransform(), cubeMesh, basicTex, basicShader));
+    floor->SetRenderObject(new RenderObject(&floor->GetTransform(), cubeMesh, floorTex, basicShader));
     floor->SetPhysicsObject(new PhysicsObject(&floor->GetTransform(), floor->GetBoundingVolume()));
 
     floor->GetPhysicsObject()->SetInverseMass(0);
@@ -428,7 +429,7 @@ GameObject* TutorialGame::AddEnemyToWorld(const Vector3& position) {
 }
 
 TrainObject* TutorialGame::AddTrainToWorld(const Vector3& position) {
-    TrainObject* train = new TrainObject(world,trainMesh,basicShader);
+    TrainObject* train = new TrainObject(world, trainMesh, basicShader);
 
     SphereVolume* volume = new SphereVolume(0.5f);
     train->SetBoundingVolume((CollisionVolume*)volume);

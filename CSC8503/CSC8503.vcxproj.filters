@@ -28,6 +28,9 @@
     <ClCompile Include="C:\Users\84251\Desktop\C++\TeamProject\TeamProject\CSC8503\TrainObject.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="C:\Users\84251\Desktop\C++\TeamProject\TeamProject\CSC8503\TrainCarriage.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="C:\Users\84251\Desktop\C++\TeamProject\TeamProject\CSC8503\GameTechRenderer.h">
@@ -49,6 +52,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="C:\Users\84251\Desktop\C++\TeamProject\TeamProject\CSC8503\TrainObject.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\84251\Desktop\C++\TeamProject\TeamProject\CSC8503\TrainCarriage.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="C:\Users\84251\Desktop\C++\TeamProject\TeamProject\CSC8503\CMakeFiles\CSC8503.dir\Debug\cmake_pch.hxx">

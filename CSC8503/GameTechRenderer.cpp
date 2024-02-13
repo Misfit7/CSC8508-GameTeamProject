@@ -317,6 +317,7 @@ void GameTechRenderer::RenderCamera() {
             if (!(*i).IsOBJ()) {
                 if ((*i).GetDefaultTexture()) {
                     BindTextureToShader(*(OGLTexture*)(*i).GetDefaultTexture(), "mainTex", 0);
+                    //SetTextureRepeating((*(OGLTexture*)(*i).GetDefaultTexture()).GetObjectID(), true);
                 }
                 glUniform1i(hasTexLocation, (OGLTexture*)(*i).GetDefaultTexture() ? 1 : 0);
 
@@ -331,7 +332,9 @@ void GameTechRenderer::RenderCamera() {
             else {
                 if ((*i).GetOBJMesh()->GetOBJTexture()) {
                     BindOBJTextureToShader((*i).GetOBJMesh()->GetOBJTexture(), "mainTex", 0);
+                    //SetTextureRepeating((*i).GetOBJMesh()->GetOBJTexture(), true);
                 }
+
                 glUniform1i(hasTexLocation, (OGLTexture*)(*i).GetOBJMesh()->GetOBJTexture() ? 1 : 0);
 
                 glUniform1i(hasVColLocation, !(*i).GetOBJMesh()->GetColourData().empty());
