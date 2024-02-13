@@ -81,7 +81,7 @@ namespace NCL {
             StateGameObject* AddStateObjectToWorld(const Vector3& position);
             StateGameObject* testStateObject = nullptr;
 
-            
+
             void BridgeConstraintTest();
 
 #ifdef USEVULKAN
@@ -113,6 +113,7 @@ namespace NCL {
             Mesh* sphereMesh = nullptr;
 
             Texture* basicTex = nullptr;
+            Texture* floorTex = nullptr;
             Texture* trainTex = nullptr;
             Texture* lightTex = nullptr;
 
@@ -156,7 +157,7 @@ namespace NCL {
             NavigationGrid* navGrid;
             const int GRID_SIZE_X = 10;
             const int GRID_SIZE_Y = 10;
-            const float GRID_CENTER_X = 5.0f; 
+            const float GRID_CENTER_X = 5.0f;
             const float  GRID_CENTER_Y = 5.0f;
 
             double euclideanDistance(float x1, float y1, float x2, float y2) {

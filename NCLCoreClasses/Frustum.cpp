@@ -17,46 +17,43 @@ Frustum::Frustum(void) {
 
 };
 
-Frustum Frustum::FromViewProjMatrix(const Matrix4& viewProj, float ndcNear, float ndcFar) {
-	Frustum f;
+void Frustum::FromViewProjMatrix(const Matrix4& viewProj, float ndcNear, float ndcFar) {
+    Matrix4 invMatrix = viewProj.Inverse();
 
-	Matrix4 invMatrix		= viewProj.Inverse();
+    //Takes NDC coordinates, transforms them into into clip space using the inverse matrix
+    Vector4 topLeftFar = invMatrix * Vector4(-1.0f, 1.0f, ndcFar, 1.0f);
+    Vector4 topRightFar = invMatrix * Vector4(1.0f, 1.0f, ndcFar, 1.0f);
+    Vector4 bottomLeftFar = invMatrix * Vector4(-1.0f, 1.0f, ndcFar, 1.0f);
+    Vector4 bottomRightFar = invMatrix * Vector4(1.0f, 1.0f, ndcFar, 1.0f);
 
-	//Takes NDC coordinates, transforms them into into clip space using the inverse matrix
-	Vector4 topLeftFar		= invMatrix * Vector4(-1.0f, 1.0f, ndcFar, 1.0f);
-	Vector4 topRightFar		= invMatrix * Vector4( 1.0f, 1.0f, ndcFar, 1.0f);
-	Vector4 bottomLeftFar	= invMatrix * Vector4(-1.0f, 1.0f, ndcFar, 1.0f);
-	Vector4 bottomRightFar	= invMatrix * Vector4( 1.0f, 1.0f, ndcFar, 1.0f);
+    Vector4 topLeftNear = invMatrix * Vector4(-1.0f, 1.0f, ndcNear, 1.0f);
+    Vector4 topRightNear = invMatrix * Vector4(1.0f, 1.0f, ndcNear, 1.0f);
+    Vector4 bottomLeftNear = invMatrix * Vector4(-1.0f, 1.0f, ndcNear, 1.0f);
+    Vector4 bottomRightNear = invMatrix * Vector4(1.0f, 1.0f, ndcNear, 1.0f);
 
-	Vector4 topLeftNear		= invMatrix * Vector4(-1.0f, 1.0f, ndcNear, 1.0f);
-	Vector4 topRightNear	= invMatrix * Vector4( 1.0f, 1.0f, ndcNear, 1.0f);
-	Vector4 bottomLeftNear	= invMatrix * Vector4(-1.0f, 1.0f, ndcNear, 1.0f);
-	Vector4 bottomRightNear = invMatrix * Vector4( 1.0f, 1.0f, ndcNear, 1.0f);
+    //To bring them fully into 'world' coodinates, we must divide them by their w component
 
-	//To bring them fully into 'world' coodinates, we must divide them by their w component
+    topLeftFar /= topLeftFar.w;
+    topRightFar /= topRightFar.w;
+    bottomLeftFar /= bottomLeftFar.w;
+    bottomRightFar /= bottomRightFar.w;
 
-	topLeftFar		/= topLeftFar.w;
-	topRightFar		/= topRightFar.w;
-	bottomLeftFar	/= bottomLeftFar.w;
-	bottomRightFar	/= bottomRightFar.w;
+    topLeftNear /= topLeftNear.w;
+    topRightNear /= topRightNear.w;
+    bottomLeftNear /= bottomLeftNear.w;
+    bottomRightNear /= bottomRightNear.w;
 
-	topLeftNear		/= topLeftNear.w;
-	topRightNear	/= topRightNear.w;
-	bottomLeftNear	/= bottomLeftNear.w;
-	bottomRightNear /= bottomRightNear.w;
+    //Now they are in world space, we can form planes from them, 3 at a time
+    //Note that the order is important, to make sure that the positive half space of the plane
+    //is facing 'in' to the frustum - a point positive to all 6 planes is inside the frustum
 
-	//Now they are in world space, we can form planes from them, 3 at a time
-	//Note that the order is important, to make sure that the positive half space of the plane
-	//is facing 'in' to the frustum - a point positive to all 6 planes is inside the frustum
-	
-	f.planes[0] = Plane::PlaneFromTri(topLeftFar, bottomLeftFar, bottomLeftNear);	//left plane
-	f.planes[1] = Plane::PlaneFromTri(topRightFar, topRightNear, bottomRightNear);	//right plane
+    planes[0] = Plane::PlaneFromTri(topLeftFar, bottomLeftFar, bottomLeftNear);	//left plane
+    planes[1] = Plane::PlaneFromTri(topRightFar, topRightNear, bottomRightNear);	//right plane
 
-	f.planes[2] = Plane::PlaneFromTri(topLeftFar, topRightFar, topRightNear);			//top plane
-	f.planes[3] = Plane::PlaneFromTri(bottomLeftFar, bottomRightFar, bottomRightNear);	//bottom plane
+    planes[2] = Plane::PlaneFromTri(topLeftFar, topRightFar, topRightNear);			//top plane
+    planes[3] = Plane::PlaneFromTri(bottomLeftFar, bottomRightFar, bottomRightNear);	//bottom plane
 
-	f.planes[4] = Plane::PlaneFromTri(topLeftNear, topRightNear, bottomRightNear);	//near plane
-	f.planes[5] = Plane::PlaneFromTri(topLeftFar, topRightFar, bottomRightFar);		//far plane
+    planes[4] = Plane::PlaneFromTri(topLeftNear, topRightNear, bottomRightNear);	//near plane
+    planes[5] = Plane::PlaneFromTri(topLeftFar, topRightFar, bottomRightFar);		//far plane
 
-	return f;
 }

@@ -61,6 +61,7 @@ void TutorialGame::InitialiseAssets() {
     creeperMesh = renderer->LoadOBJMesh("Creeper.obj");
 
     basicTex = renderer->LoadTexture("checkerboard.png");
+    floorTex = renderer->LoadTexture("checkerboard.png");
     trainTex = renderer->LoadTexture("Train.jpg");
     lightTex = renderer->LoadTexture("redstone_lamp_on.png");
 
@@ -345,7 +346,7 @@ GameObject* TutorialGame::AddFloorToWorld(const Vector3& position) {
         .SetScale(floorSize * 2)
         .SetPosition(position);
 
-    floor->SetRenderObject(new RenderObject(&floor->GetTransform(), cubeMesh, basicTex, basicShader));
+    floor->SetRenderObject(new RenderObject(&floor->GetTransform(), cubeMesh, floorTex, basicShader));
     floor->SetPhysicsObject(new PhysicsObject(&floor->GetTransform(), floor->GetBoundingVolume()));
 
     floor->GetPhysicsObject()->SetInverseMass(0);
@@ -448,7 +449,7 @@ GameObject* TutorialGame::AddEnemyToWorld(const Vector3& position) {
 }
 
 TrainObject* TutorialGame::AddTrainToWorld(const Vector3& position) {
-    TrainObject* train = new TrainObject(world,trainMesh,basicShader);
+    TrainObject* train = new TrainObject(world, trainMesh, basicShader);
 
     SphereVolume* volume = new SphereVolume(0.5f);
     train->SetBoundingVolume((CollisionVolume*)volume);
@@ -523,9 +524,9 @@ void TutorialGame::InitGameExamples() {
     trainObject->AddCarriage();
     trainObject->AddCarriage();
     AddCreeperToWorld(Vector3(15, 5, 0));
-    AddTestingLightToWorld(Vector3(10, 20, 0), Vector4(1,1,1,1));
-    AddTestingLightToWorld(Vector3(30, 20, 40), Vector4(1,0,0,1));
-    AddTestingLightToWorld(Vector3(60, 20, 20), Vector4(0,1,0,1));
+    AddTestingLightToWorld(Vector3(10, 20, 0), Vector4(1, 1, 1, 0.7));
+    AddTestingLightToWorld(Vector3(30, 20, 40), Vector4(1, 0, 0, 0.7));
+    AddTestingLightToWorld(Vector3(60, 20, 20), Vector4(0, 1, 0, 0.7));
 }
 
 void TutorialGame::InitSphereGridWorld(int numRows, int numCols, float rowSpacing, float colSpacing, float radius) {

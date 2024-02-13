@@ -324,6 +324,9 @@ void GameTechRenderer::BuildObjectList() {
                     activeObjects.emplace_back(g);
                 }
             }
+            /*else {
+                std::cout << "1" << std::endl;
+            }*/
         }
     );
 }
@@ -430,6 +433,9 @@ void GameTechRenderer::RenderCamera() {
     Matrix4 viewMatrix = gameWorld.GetMainCamera().BuildViewMatrix();
     Matrix4 projMatrix = gameWorld.GetMainCamera().BuildProjectionMatrix(hostWindow.GetScreenAspect());
 
+    frameFrustum.FromViewProjMatrix(projMatrix * viewMatrix,
+        gameWorld.GetMainCamera().GetNearPlane(), gameWorld.GetMainCamera().GetFarPlane());
+
     OGLShader* activeShader = nullptr;
     int projLocation = 0;
     int viewLocation = 0;
@@ -459,7 +465,7 @@ void GameTechRenderer::RenderCamera() {
                 shadowLocation = glGetUniformLocation(shader->GetProgramID(), "shadowMatrix");
                 colourLocation = glGetUniformLocation(shader->GetProgramID(), "objectColour");
                 hasVColLocation = glGetUniformLocation(shader->GetProgramID(), "hasVertexColours");
-                hasTexLocation = glGetUniformLocation(shader->GetProgramID(), "hasTexture");          
+                hasTexLocation = glGetUniformLocation(shader->GetProgramID(), "hasTexture");
                 cameraLocation = glGetUniformLocation(shader->GetProgramID(), "cameraPos");
 
                 Vector3 camPos = gameWorld.GetMainCamera().GetPosition();
@@ -507,6 +513,7 @@ void GameTechRenderer::RenderCamera() {
                     BindOBJTextureToShader((*i).GetOBJMesh()->GetOBJTexture(), "mainTex", 0);
                     //BindOBJTextureToShader((*i).GetOBJMesh()->GetOBJBumpTexture(), "bumpTex", 2);
                 }
+
                 glUniform1i(hasTexLocation, (OGLTexture*)(*i).GetOBJMesh()->GetOBJTexture() ? 1 : 0);
 
                 glUniform1i(hasVColLocation, !(*i).GetOBJMesh()->GetColourData().empty());

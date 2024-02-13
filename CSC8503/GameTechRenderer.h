@@ -20,10 +20,10 @@ namespace NCL {
             GameTechRenderer(GameWorld& world);
             ~GameTechRenderer();
 
-            Mesh*      LoadMesh(const std::string& name);
-            OBJMesh*   LoadOBJMesh(const std::string& name);
-            Texture*   LoadTexture(const std::string& name);
-            Shader*    LoadShader(const std::string& vertex, const std::string& fragment);
+            Mesh* LoadMesh(const std::string& name);
+            OBJMesh* LoadOBJMesh(const std::string& name);
+            Texture* LoadTexture(const std::string& name);
+            Shader* LoadShader(const std::string& vertex, const std::string& fragment);
             void       ToggleNight();
 
         protected:
@@ -99,7 +99,7 @@ namespace NCL {
             GLuint      skyboxFBO;
 
             //shadow mapping things
-            OGLShader*  shadowShader;
+            OGLShader* shadowShader;
             GLuint		shadowTex;
             GLuint		shadowFBO;
             Matrix4     shadowMatrix;

@@ -21,34 +21,34 @@ License: MIT (see LICENSE file at the top of the source tree)
 #endif
 
 namespace NCL {
-	namespace Maths {
-		class Matrix4;
-	}
+    namespace Maths {
+        class Matrix4;
+    }
 
-	namespace Rendering {	
-		class Mesh;
-		class Shader;
-		class Texture;
+    namespace Rendering {
+        class Mesh;
+        class Shader;
+        class Texture;
 
-		class OGLMesh;
-		class OGLOBJMesh;
-		class OGLShader;
-		class OGLTexture;
+        class OGLMesh;
+        class OGLOBJMesh;
+        class OGLShader;
+        class OGLTexture;
 
-		class SimpleFont;
-		
-		class OGLRenderer : public RendererBase	{
-		public:
-			friend class OGLRenderer;
-			OGLRenderer(Window& w);
-			~OGLRenderer();
+        class SimpleFont;
 
-			void OnWindowResize(int w, int h)	override;
-			bool HasInitialised()				const override {
-				return initState;
-			}
+        class OGLRenderer : public RendererBase {
+        public:
+            friend class OGLRenderer;
+            OGLRenderer(Window& w);
+            ~OGLRenderer();
 
-			virtual bool SetVerticalSync(VerticalSyncState s);
+            void OnWindowResize(int w, int h)	override;
+            bool HasInitialised()				const override {
+                return initState;
+            }
+
+            virtual bool SetVerticalSync(VerticalSyncState s);
 
 		protected:	
 			int  width;
@@ -59,25 +59,26 @@ namespace NCL {
 			void EndFrame()		override;
 			void SwapBuffers()  override;
 
-			void BindShader(const OGLShader& s);
-			void BindTextureToShader(const OGLTexture& t, const std::string& uniform, int texUnit) const;
-			void BindOBJTextureToShader(const GLuint& t, const std::string& uniform, int texUnit) const;
-			void BindMesh(const OGLMesh& m);
-			void BindOBJMesh(const OGLOBJMesh& m);
-			void DrawBoundMesh(uint32_t subLayer = 0, uint32_t numInstances = 1);
-			void DrawBoundOBJMesh(uint32_t subLayer = 0, uint32_t numInstances = 1);
+            void BindShader(const OGLShader& s);
+            void BindTextureToShader(const OGLTexture& t, const std::string& uniform, int texUnit) const;
+            void BindOBJTextureToShader(const GLuint& t, const std::string& uniform, int texUnit) const;
+            void BindMesh(const OGLMesh& m);
+            void BindOBJMesh(const OGLOBJMesh& m);
+            void DrawBoundMesh(uint32_t subLayer = 0, uint32_t numInstances = 1);
+            void DrawBoundOBJMesh(uint32_t subLayer = 0, uint32_t numInstances = 1);
+            void SetTextureRepeating(GLuint texture, bool repeating);
 #ifdef _WIN32
-			void InitWithWin32(Window& w);
-			void DestroyWithWin32();
-			HDC		deviceContext;		//...Device context?
-			HGLRC	renderContext;		//Permanent Rendering Context		
+            void InitWithWin32(Window& w);
+            void DestroyWithWin32();
+            HDC		deviceContext;		//...Device context?
+            HGLRC	renderContext;		//Permanent Rendering Context		
 #endif
 
-			const OGLMesh*		boundMesh;
-			const OGLOBJMesh*   objBoundMesh;
-			const OGLShader*	activeShader;
-		private:
-			bool initState;
-		};
-	}
+            const OGLMesh* boundMesh;
+            const OGLOBJMesh* objBoundMesh;
+            const OGLShader* activeShader;
+        private:
+            bool initState;
+        };
+    }
 }
