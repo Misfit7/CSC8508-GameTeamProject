@@ -20,6 +20,7 @@ x64/
 build/
 [Dd]ebug
 
+*.sln
 *.vcxproj
 *.vcxproj.filters
 *.vcxproj.user
