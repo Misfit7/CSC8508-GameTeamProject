@@ -46,4 +46,24 @@ namespace NCL::Rendering {
 		std::string		shaderFiles[ShaderStages::MAX_SIZE];
 		uint32_t		assetID;
 	};
+
+	class ShaderGroup {
+	public:
+		ShaderGroup(Shader* day, Shader* night) {
+			dayShader = day;
+			nightShader = night;
+		}
+		~ShaderGroup() {}
+
+		Shader* GetDayShader() const {
+			return dayShader;
+		}
+		Shader* GetNightShader() const {
+			return nightShader;
+		}
+
+	protected:
+		Shader* dayShader;
+		Shader* nightShader;
+	};
 }

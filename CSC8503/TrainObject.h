@@ -21,7 +21,7 @@ class TrainObject : public GameObject {
 
 public:
     TrainObject();
-    TrainObject(GameWorld *w,OBJMesh* mesh,Shader* shader);
+    TrainObject(GameWorld *w,OBJMesh* mesh,ShaderGroup* shader);
     ~TrainObject();
 
     void OnCollisionBegin(GameObject *otherObject) override;
@@ -43,7 +43,7 @@ public:
     int trainIndex =0 ;
     GameWorld *world;
     OBJMesh* trainMesh = nullptr;
-    Shader* basicShader = nullptr;
+    ShaderGroup* basicShader = nullptr;
     OBJMesh* carriageMesh = nullptr;
     Shader* carriageShader = nullptr;
 };

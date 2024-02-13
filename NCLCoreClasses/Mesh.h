@@ -175,7 +175,7 @@ namespace NCL::Rendering {
 		const std::vector<Vector3>&		GetNormalData()			const { return normals;		}
 		const std::vector<Vector4>&		GetTangentData()		const { return tangents;	}
 		const std::vector<Vector4>&		GetSkinWeightData()		const { return skinWeights; }
-		const std::vector<Vector4i>&		GetSkinIndexData()		const { return skinIndices; }
+		const std::vector<Vector4i>&	GetSkinIndexData()		const { return skinIndices; }
 
 		const std::vector<int>& GetJointParents()	const {
 			return jointParents;

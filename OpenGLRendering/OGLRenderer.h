@@ -50,7 +50,10 @@ namespace NCL {
 
 			virtual bool SetVerticalSync(VerticalSyncState s);
 
-		protected:			
+		protected:	
+			int  width;
+			int  height;
+
 			void BeginFrame()	override;
 			void RenderFrame()	override;
 			void EndFrame()		override;

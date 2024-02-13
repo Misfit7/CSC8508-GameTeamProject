@@ -18,40 +18,20 @@ GameTechRenderer::GameTechRenderer(GameWorld& world) : OGLRenderer(*Window::GetW
 
     debugShader = new OGLShader("debug.vert", "debug.frag");
     shadowShader = new OGLShader("shadow.vert", "shadow.frag");
+    pointLightShader = new OGLShader("PointLight.vert", "PointLight.frag");
+    combineShader = new OGLShader("combine.vert", "combine.frag");
 
-    glGenTextures(1, &shadowTex);
-    glBindTexture(GL_TEXTURE_2D, shadowTex);
-    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    InitBuffers();
 
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT,
-        SHADOWSIZE, SHADOWSIZE, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
-
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_MODE, GL_COMPARE_R_TO_TEXTURE);
-    glBindTexture(GL_TEXTURE_2D, 0);
-
-    glGenFramebuffers(1, &shadowFBO);
-    glBindFramebuffer(GL_FRAMEBUFFER, shadowFBO);
-    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, shadowTex, 0);
-    glDrawBuffer(GL_NONE);
-    glBindFramebuffer(GL_FRAMEBUFFER, 0);
-
-    glClearColor(1, 1, 1, 1);
+    isNight = false;
 
     //Set up the light properties
-    lightColour = Vector4(0.8f, 0.8f, 0.5f, 1.0f);
-    lightRadius = 1000.0f;
-    lightPosition = Vector3(-200.0f, 60.0f, -200.0f);
-
-    //Skybox!
-    skyboxShader = new OGLShader("skybox.vert", "skybox.frag");
-    skyboxMesh = new OGLMesh();
-    skyboxMesh->SetVertexPositions({ Vector3(-1, 1,-1), Vector3(-1,-1,-1) , Vector3(1,-1,-1) , Vector3(1,1,-1) });
-    skyboxMesh->SetVertexIndices({ 0,1,2,2,3,0 });
-    skyboxMesh->UploadToGPU();
-
-    LoadSkybox();
+    sunLight = new Light(Vector3(-200.0f, 60.0f, -200.0f), Vector4(0.8f, 0.8f, 0.5f, 1.0f), 10000.0f);
+    redstoneLight1 = new Light(Vector3(10, 20, 0), Vector4(1, 1, 0, 1), 50.0f);
+    redstoneLight2 = new Light(Vector3(30, 20, 40), Vector4(1, 0, 0, 1), 30.0f);
+    redstoneLight3 = new Light(Vector3(60, 20, 20), Vector4(0, 1, 0, 1), 40.0f);
+    sphere = LoadMesh("sphere.msh");
+    quad = OGLMesh::GenerateQuad();
 
     glGenVertexArrays(1, &lineVAO);
     glGenVertexArrays(1, &textVAO);
@@ -72,7 +52,195 @@ GameTechRenderer::~GameTechRenderer() {
     glDeleteFramebuffers(1, &shadowFBO);
 }
 
+void GameTechRenderer::InitBuffers() {
+    glGenFramebuffers(1, &worldFBO);
+    glGenFramebuffers(1, &lightFBO);
+    glGenFramebuffers(1, &shadowFBO);
+    glGenFramebuffers(1, &skyboxFBO);
+    glGenFramebuffers(1, &combinedFBO);
+    glGenFramebuffers(1, &processFBO);
+
+    GLenum buffers[5] = {
+    GL_COLOR_ATTACHMENT0 ,
+    GL_COLOR_ATTACHMENT1 ,
+    GL_COLOR_ATTACHMENT2 ,
+    GL_COLOR_ATTACHMENT3 ,
+    GL_COLOR_ATTACHMENT4
+    };
+
+    LoadSkybox();
+    GenerateShadowTexture();
+    GenerateScreenTexture(skyboxBufferTex);
+    GenerateScreenTexture(worldDepthTex, true);
+    GenerateScreenTexture(worldColourTex);
+    GenerateScreenTexture(worldNormalTex);
+    GenerateScreenTexture(worldSpecTex);
+    GenerateScreenTexture(worldEmisTex);
+    GenerateScreenTexture(worldShadowTex);
+    GenerateScreenTexture(lightDiffuseTex);
+    GenerateScreenTexture(lightSpecularTex);
+    GenerateScreenTexture(processTex);
+    GenerateCombinedTexture();
+
+    //World FBO
+    glBindFramebuffer(GL_FRAMEBUFFER, worldFBO);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0,
+        GL_TEXTURE_2D, worldColourTex, 0);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1,
+        GL_TEXTURE_2D, worldNormalTex, 0);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT2,
+        GL_TEXTURE_2D, worldSpecTex, 0);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT3,
+        GL_TEXTURE_2D, worldEmisTex, 0);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT4,
+        GL_TEXTURE_2D, worldShadowTex, 0);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT,
+        GL_TEXTURE_2D, worldDepthTex, 0);
+    glDrawBuffers(5, buffers);
+    if (glCheckFramebufferStatus(GL_FRAMEBUFFER) !=
+        GL_FRAMEBUFFER_COMPLETE) {
+        std::cout << "bufferFBO Load Failed!!" << std::endl;
+        return;
+    }
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+    //Light FBO
+    glBindFramebuffer(GL_FRAMEBUFFER, lightFBO);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0,
+        GL_TEXTURE_2D, lightDiffuseTex, 0);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1,
+        GL_TEXTURE_2D, lightSpecularTex, 0);
+    glDrawBuffers(2, buffers);
+    if (glCheckFramebufferStatus(GL_FRAMEBUFFER) !=
+        GL_FRAMEBUFFER_COMPLETE) {
+        std::cout << "pointLightFBO Load Failed!!" << std::endl;
+        return;
+    }
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+    //Shadow FBO
+    glGenFramebuffers(1, &shadowFBO);
+    glBindFramebuffer(GL_FRAMEBUFFER, shadowFBO);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, shadowTex, 0);
+    glDrawBuffer(GL_NONE);
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+    //Skybox FBO
+    glBindFramebuffer(GL_FRAMEBUFFER, skyboxFBO);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0,
+        GL_TEXTURE_2D, skyboxBufferTex, 0);
+    glDrawBuffers(1, buffers);
+    if (glCheckFramebufferStatus(GL_FRAMEBUFFER) !=
+        GL_FRAMEBUFFER_COMPLETE) {
+        std::cout << "skyboxFBO Load Failed!!" << std::endl;
+        return;
+    }
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+    //Combined FBO
+    glBindFramebuffer(GL_FRAMEBUFFER, combinedFBO);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0,
+        GL_TEXTURE_2D, combinedTex, 0);
+    glDrawBuffers(1, buffers);
+    if (glCheckFramebufferStatus(GL_FRAMEBUFFER) !=
+        GL_FRAMEBUFFER_COMPLETE) {
+        std::cout << "correctionFBO Load Failed!!" << std::endl;
+        return;
+    }
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+    //Process FBO
+    glBindFramebuffer(GL_FRAMEBUFFER, processFBO);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0,
+        GL_TEXTURE_2D, processTex, 0);
+    glDrawBuffers(1, buffers);
+    if (glCheckFramebufferStatus(GL_FRAMEBUFFER) !=
+        GL_FRAMEBUFFER_COMPLETE) {
+        std::cout << "processFBO Load Failed!!" << std::endl;
+        return;
+    }
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+    glClearColor(1, 1, 1, 1);
+}
+
+void GameTechRenderer::GenerateShadowTexture() {
+    glGenTextures(1, &shadowTex);
+    glBindTexture(GL_TEXTURE_2D, shadowTex);
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT,
+        SHADOWSIZE, SHADOWSIZE, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
+
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_MODE, GL_COMPARE_R_TO_TEXTURE);
+    glBindTexture(GL_TEXTURE_2D, 0);
+}
+
+void GameTechRenderer::GenerateScreenTexture(GLuint& into, bool depth) {
+    glGenTextures(1, &into);
+    glBindTexture(GL_TEXTURE_2D, into);
+
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+
+    GLuint format1 = depth ? GL_DEPTH_COMPONENT24 : GL_RGBA8;
+    GLuint type = depth ? GL_DEPTH_COMPONENT : GL_RGBA;
+
+    glTexImage2D(GL_TEXTURE_2D, 0,
+        format1, width, height, 0, type, GL_UNSIGNED_BYTE, NULL);
+
+    glBindTexture(GL_TEXTURE_2D, 0);
+}
+
+void GameTechRenderer::GenerateCombinedTexture() {
+    glGenTextures(1, &combinedTex);
+    glBindTexture(GL_TEXTURE_2D, combinedTex);
+
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+
+    glTexImage2D(GL_TEXTURE_2D, 0,
+        GL_RGB16F, width, height, 0, GL_RGB, GL_FLOAT, NULL);
+
+    glBindTexture(GL_TEXTURE_2D, 0);
+}
+
+void GameTechRenderer::ClearAllBuffers() {
+    glBindFramebuffer(GL_FRAMEBUFFER, worldFBO);
+    glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+
+    glBindFramebuffer(GL_FRAMEBUFFER, shadowFBO);
+    glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+
+    glBindFramebuffer(GL_FRAMEBUFFER, skyboxFBO);
+    glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+
+    glBindFramebuffer(GL_FRAMEBUFFER, lightFBO);
+    glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+
+    glBindFramebuffer(GL_FRAMEBUFFER, combinedFBO);
+    glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+
+    glBindFramebuffer(GL_FRAMEBUFFER, processFBO);
+    glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+}
+
 void GameTechRenderer::LoadSkybox() {
+    skyboxShader = new OGLShader("skybox.vert", "skybox.frag");
+    skyboxMesh = new OGLMesh();
+    skyboxMesh->SetVertexPositions({ Vector3(-1, 1,-1), Vector3(-1,-1,-1) , Vector3(1,-1,-1) , Vector3(1,1,-1) });
+    skyboxMesh->SetVertexIndices({ 0,1,2,2,3,0 });
+    skyboxMesh->UploadToGPU();
+
     std::string name[6] = {
         "../Assets/Textures/Cubemap/skyrender0004.png",
         "../Assets/Textures/Cubemap/skyrender0001.png",
@@ -115,9 +283,14 @@ void GameTechRenderer::RenderFrame() {
     glClearColor(1, 1, 1, 1);
     BuildObjectList();
     SortObjectList();
+    ClearAllBuffers();
     RenderShadowMap();
     RenderSkybox();
     RenderCamera();
+    if (isNight) {
+        DrawLightBuffer();
+        CombineBuffers();
+    }
     glDisable(GL_CULL_FACE); //Todo - text indices are going the wrong way...
     glDisable(GL_BLEND);
     glDisable(GL_DEPTH_TEST);
@@ -173,7 +346,7 @@ void GameTechRenderer::RenderShadowMap() {
     BindShader(*shadowShader);
     int mvpLocation = glGetUniformLocation(shadowShader->GetProgramID(), "mvpMatrix");
 
-    Matrix4 shadowViewMatrix = Matrix4::BuildViewMatrix(lightPosition, Vector3(0, 0, 0), Vector3(0, 1, 0));
+    Matrix4 shadowViewMatrix = Matrix4::BuildViewMatrix(sunLight->GetPosition(), Vector3(0, 0, 0), Vector3(0, 1, 0));
     Matrix4 shadowProjMatrix = Matrix4::Perspective(100.0f, 500.0f, 1, 45.0f);
 
     Matrix4 mvMatrix = shadowProjMatrix * shadowViewMatrix;
@@ -217,6 +390,7 @@ void GameTechRenderer::RenderShadowMap() {
 }
 
 void GameTechRenderer::RenderSkybox() {
+    if (isNight)glBindFramebuffer(GL_FRAMEBUFFER, skyboxFBO);
     glEnable(GL_TEXTURE_CUBE_MAP_SEAMLESS);
     glDisable(GL_CULL_FACE);
     glDisable(GL_BLEND);
@@ -234,8 +408,8 @@ void GameTechRenderer::RenderSkybox() {
     glUniformMatrix4fv(projLocation, 1, false, (float*)&projMatrix);
     glUniformMatrix4fv(viewLocation, 1, false, (float*)&viewMatrix);
 
-    glUniform1i(texLocation, 0);
-    glActiveTexture(GL_TEXTURE0);
+    glUniform1i(texLocation, 6);
+    glActiveTexture(GL_TEXTURE6);
     glBindTexture(GL_TEXTURE_CUBE_MAP, skyboxTex);
 
     BindMesh(*skyboxMesh);
@@ -244,9 +418,15 @@ void GameTechRenderer::RenderSkybox() {
     glEnable(GL_CULL_FACE);
     glEnable(GL_BLEND);
     glEnable(GL_DEPTH_TEST);
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
 void GameTechRenderer::RenderCamera() {
+    if (isNight) {
+        glBindFramebuffer(GL_FRAMEBUFFER, worldFBO);
+        glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
+    }
+
     Matrix4 viewMatrix = gameWorld.GetMainCamera().BuildViewMatrix();
     Matrix4 projMatrix = gameWorld.GetMainCamera().BuildProjectionMatrix(hostWindow.GetScreenAspect());
 
@@ -258,11 +438,6 @@ void GameTechRenderer::RenderCamera() {
     int hasVColLocation = 0;
     int hasTexLocation = 0;
     int shadowLocation = 0;
-
-    int lightPosLocation = 0;
-    int lightColourLocation = 0;
-    int lightRadiusLocation = 0;
-
     int cameraLocation = 0;
 
     //TODO - PUT IN FUNCTION
@@ -271,7 +446,10 @@ void GameTechRenderer::RenderCamera() {
 
     auto DrawObject = [&](const auto& i)
         {
-            OGLShader* shader = (OGLShader*)(*i).GetShader();
+            ShaderGroup* shaderGroup = (*i).GetShaderGroup();
+            OGLShader* shader = nullptr;
+            if (!isNight) shader = (OGLShader*)shaderGroup->GetDayShader();
+            else shader = (OGLShader*)shaderGroup->GetNightShader();
             BindShader(*shader);
 
             if (activeShader != shader) {
@@ -281,12 +459,7 @@ void GameTechRenderer::RenderCamera() {
                 shadowLocation = glGetUniformLocation(shader->GetProgramID(), "shadowMatrix");
                 colourLocation = glGetUniformLocation(shader->GetProgramID(), "objectColour");
                 hasVColLocation = glGetUniformLocation(shader->GetProgramID(), "hasVertexColours");
-                hasTexLocation = glGetUniformLocation(shader->GetProgramID(), "hasTexture");
-
-                lightPosLocation = glGetUniformLocation(shader->GetProgramID(), "lightPos");
-                lightColourLocation = glGetUniformLocation(shader->GetProgramID(), "lightColour");
-                lightRadiusLocation = glGetUniformLocation(shader->GetProgramID(), "lightRadius");
-
+                hasTexLocation = glGetUniformLocation(shader->GetProgramID(), "hasTexture");          
                 cameraLocation = glGetUniformLocation(shader->GetProgramID(), "cameraPos");
 
                 Vector3 camPos = gameWorld.GetMainCamera().GetPosition();
@@ -295,9 +468,8 @@ void GameTechRenderer::RenderCamera() {
                 glUniformMatrix4fv(projLocation, 1, false, (float*)&projMatrix);
                 glUniformMatrix4fv(viewLocation, 1, false, (float*)&viewMatrix);
 
-                glUniform3fv(lightPosLocation, 1, (float*)&lightPosition);
-                glUniform4fv(lightColourLocation, 1, (float*)&lightColour);
-                glUniform1f(lightRadiusLocation, lightRadius);
+                if (!isNight)SetShaderLight(*sunLight);
+                else glUniform1i(glGetUniformLocation(shader->GetProgramID(), "emissive"), (*i).GetEmissive());
 
                 int shadowTexLocation = glGetUniformLocation(shader->GetProgramID(), "shadowTex");
                 glUniform1i(shadowTexLocation, 1);
@@ -317,6 +489,8 @@ void GameTechRenderer::RenderCamera() {
             if (!(*i).IsOBJ()) {
                 if ((*i).GetDefaultTexture()) {
                     BindTextureToShader(*(OGLTexture*)(*i).GetDefaultTexture(), "mainTex", 0);
+                    if ((*i).GetBumpTexture()) BindTextureToShader(*(OGLTexture*)(*i).GetBumpTexture(), "bumpTex", 2);
+                    if ((*i).GetSpecTexture()) BindTextureToShader(*(OGLTexture*)(*i).GetSpecTexture(), "specTex", 3);
                 }
                 glUniform1i(hasTexLocation, (OGLTexture*)(*i).GetDefaultTexture() ? 1 : 0);
 
@@ -331,6 +505,7 @@ void GameTechRenderer::RenderCamera() {
             else {
                 if ((*i).GetOBJMesh()->GetOBJTexture()) {
                     BindOBJTextureToShader((*i).GetOBJMesh()->GetOBJTexture(), "mainTex", 0);
+                    //BindOBJTextureToShader((*i).GetOBJMesh()->GetOBJBumpTexture(), "bumpTex", 2);
                 }
                 glUniform1i(hasTexLocation, (OGLTexture*)(*i).GetOBJMesh()->GetOBJTexture() ? 1 : 0);
 
@@ -351,6 +526,154 @@ void GameTechRenderer::RenderCamera() {
     for (const auto& i : transparentActiveObjects) {
         DrawObject(i);
     }
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+}
+
+void GameTechRenderer::DrawLightBuffer() {
+    glBindFramebuffer(GL_FRAMEBUFFER, lightFBO);
+    glClearColor(0, 0, 0, 1);
+    glClear(GL_COLOR_BUFFER_BIT);
+    glBlendFunc(GL_ONE, GL_ONE);
+    glCullFace(GL_FRONT);
+    glDepthFunc(GL_ALWAYS);
+    glDepthMask(GL_FALSE);
+
+    DrawPointLights();
+
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glCullFace(GL_BACK);
+    glDepthFunc(GL_LEQUAL);
+    glDepthMask(GL_TRUE);
+    glClearColor(0.2f, 0.2f, 0.2f, 1);
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+}
+
+void GameTechRenderer::DrawPointLights() {
+    BindShader(*pointLightShader);
+
+    glUniform1i(glGetUniformLocation(
+        activeShader->GetProgramID(), "depthTex"), 0);
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, worldDepthTex);
+
+    glUniform1i(glGetUniformLocation(
+        activeShader->GetProgramID(), "normTex"), 1);
+    glActiveTexture(GL_TEXTURE1);
+    glBindTexture(GL_TEXTURE_2D, worldNormalTex);
+
+    glUniform1i(glGetUniformLocation(
+        activeShader->GetProgramID(), "specTex"), 2);
+    glActiveTexture(GL_TEXTURE2);
+    glBindTexture(GL_TEXTURE_2D, worldSpecTex);
+
+    Matrix4 viewMatrix = gameWorld.GetMainCamera().BuildViewMatrix();
+    Matrix4 projMatrix = gameWorld.GetMainCamera().BuildProjectionMatrix(hostWindow.GetScreenAspect());
+    Vector3 camPos = gameWorld.GetMainCamera().GetPosition();
+
+    glUniform3fv(glGetUniformLocation(activeShader->GetProgramID(),
+        "cameraPos"), 1, (float*)&camPos);
+
+    glUniform2f(glGetUniformLocation(activeShader->GetProgramID(),
+        "pixelSize"), 1.0f / width, 1.0f / height);
+
+    Matrix4 invViewProj = (projMatrix * viewMatrix).Inverse();
+    glUniformMatrix4fv(glGetUniformLocation(
+        activeShader->GetProgramID(), "inverseProjView"),
+        1, false, (float*)&invViewProj);
+
+    int projLocation = glGetUniformLocation(activeShader->GetProgramID(), "projMatrix");
+    int viewLocation = glGetUniformLocation(activeShader->GetProgramID(), "viewMatrix");
+
+    glUniformMatrix4fv(projLocation, 1, false, (float*)&projMatrix);
+    glUniformMatrix4fv(viewLocation, 1, false, (float*)&viewMatrix);
+
+    SetShaderLight(*redstoneLight1);
+    Draw(sphere);
+
+    SetShaderLight(*redstoneLight2);
+    Draw(sphere);
+
+    SetShaderLight(*redstoneLight3);
+    Draw(sphere);
+}
+
+void GameTechRenderer::SetShaderLight(const Light& l) {
+    Vector3 lightPosition = l.GetPosition();
+    Vector4 lightColour = l.GetColour();
+
+    glUniform3fv(glGetUniformLocation(activeShader->GetProgramID(),
+        "lightPos"), 1, (float*)&lightPosition);
+
+    glUniform4fv(glGetUniformLocation(activeShader->GetProgramID(),
+        "lightColour"), 1, (float*)&lightColour);
+
+    glUniform1f(glGetUniformLocation(activeShader->GetProgramID(),
+        "lightRadius"), l.GetRadius());
+}
+
+void GameTechRenderer::CombineBuffers() {
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    BindShader(*combineShader);
+
+    glUniform1i(glGetUniformLocation(
+        combineShader->GetProgramID(), "diffuseTex"), 0);
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, worldColourTex);
+
+    glUniform1i(glGetUniformLocation(
+        combineShader->GetProgramID(), "diffuseLight"), 1);
+    glActiveTexture(GL_TEXTURE1);
+    glBindTexture(GL_TEXTURE_2D, lightDiffuseTex);
+
+    glUniform1i(glGetUniformLocation(
+        combineShader->GetProgramID(), "specularLight"), 2);
+    glActiveTexture(GL_TEXTURE2);
+    glBindTexture(GL_TEXTURE_2D, lightSpecularTex);
+
+    glUniform1i(glGetUniformLocation(
+        combineShader->GetProgramID(), "emissiveLight"), 3);
+    glActiveTexture(GL_TEXTURE3);
+    glBindTexture(GL_TEXTURE_2D, worldEmisTex);
+
+    glUniform1i(glGetUniformLocation(
+        combineShader->GetProgramID(), "skyboxTex"), 4);
+    glActiveTexture(GL_TEXTURE4);
+    glBindTexture(GL_TEXTURE_2D, skyboxBufferTex);
+
+    glUniform1i(glGetUniformLocation(
+        combineShader->GetProgramID(), "depthTex"), 5);
+    glActiveTexture(GL_TEXTURE5);
+    glBindTexture(GL_TEXTURE_2D, worldDepthTex);
+
+    int cameraLocation = glGetUniformLocation(activeShader->GetProgramID(), "cameraPos");
+    Vector3 camPos = gameWorld.GetMainCamera().GetPosition();
+    glUniform3fv(cameraLocation, 1, &camPos.x);
+
+    SetShaderLight(*sunLight);
+
+    BindMesh((OGLMesh&)*quad);
+    DrawBoundMesh();
+
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+}
+
+void GameTechRenderer::Draw(Mesh* mesh, bool multilayer) {
+    if (multilayer) {
+        BindMesh((OGLMesh&)*mesh);
+        size_t layerCount = mesh->GetSubMeshCount();
+        for (size_t i = 0; i < layerCount; ++i) {
+            DrawBoundMesh((uint32_t)i);
+        }
+    }
+    else {
+        BindMesh((OGLMesh&)*mesh);
+        DrawBoundMesh();
+    }
+}
+
+void GameTechRenderer::ToggleNight() {
+    isNight = !isNight;
 }
 
 Mesh* GameTechRenderer::LoadMesh(const std::string& name) {
