@@ -428,7 +428,7 @@ GameObject* TutorialGame::AddEnemyToWorld(const Vector3& position) {
 }
 
 TrainObject* TutorialGame::AddTrainToWorld(const Vector3& position) {
-    TrainObject* train = new TrainObject();
+    TrainObject* train = new TrainObject(world,trainMesh,basicShader);
 
     SphereVolume* volume = new SphereVolume(0.5f);
     train->SetBoundingVolume((CollisionVolume*)volume);
@@ -443,7 +443,6 @@ TrainObject* TutorialGame::AddTrainToWorld(const Vector3& position) {
     train->GetPhysicsObject()->InitSphereInertia();
 
     world->AddGameObject(train);
-
     return train;
 }
 
@@ -476,6 +475,8 @@ void TutorialGame::InitGameExamples() {
     AddPlayerToWorld(Vector3(0, 5, 0));
     AddEnemyToWorld(Vector3(5, 5, 0));
     trainObject = AddTrainToWorld(Vector3(10, 5, 0));
+    trainObject->AddCarriage();
+    trainObject->AddCarriage();
     AddCreeperToWorld(Vector3(15, 5, 0));
 }
 
@@ -673,10 +674,10 @@ CollectableObject* TutorialGame::CreateObject(int objectId)
         object->SetRenderObject(new RenderObject(&object->GetTransform(), sphereMesh, nullptr, basicShader));
         break;
     case 2:
-        //±ðµÄÎïÆ·
+        //ï¿½ï¿½ï¿½ï¿½ï¿½Æ·
         break;
     default:
-        //±ðµÄÎïÆ·
+        //ï¿½ï¿½ï¿½ï¿½ï¿½Æ·
         break;
     }
     world->AddGameObject(object);
