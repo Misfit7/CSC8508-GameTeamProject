@@ -20,9 +20,9 @@ x64/
 build/
 [Dd]ebug
 
-.vcxproj
-.vcxproj.filters
-.vcxproj.user
+*.vcxproj
+*.vcxproj.filters
+*.vcxproj.user
 
 # Compiled object files
 *.o
@@ -57,3 +57,5 @@ OpenGLRendering/CMakeFiles/OpenGLRendering.dir/cmake_pch.cxx.pch
 CSC8503CoreClasses/CMakeFiles/*
 NCLCoreClasses/CMakeFiles/*
 OpenGLRendering/CMakeFiles/*
+
+

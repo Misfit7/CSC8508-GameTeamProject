@@ -26,6 +26,7 @@ namespace NCL::Rendering {
 
 		void UploadToGPU(Rendering::RendererBase* renderer = nullptr) override;
 		void UpdateGPUBuffers(unsigned int startVertex, unsigned int vertexCount);
+		static OGLMesh* GenerateQuad();
 
 	protected:
 		GLuint	GetVAO()			const { return vao;			}
@@ -40,11 +41,11 @@ namespace NCL::Rendering {
 		string bump;
 		string diffuse;
 
-		//GLuint bumpNum;
+		GLuint bumpNum;
 		GLuint diffuseNum;
 
 		MTLInfo() {
-			//bumpNum = 0;
+			bumpNum = 0;
 			diffuseNum = 0;
 		}
 	};
@@ -56,11 +57,12 @@ namespace NCL::Rendering {
 		~OGLOBJMesh();
 
 		void RecalculateNormals();
+		void GenerateTangents();
+		Vector4 GenerateTangent(int a, int b, int c);
 
 		void UploadToGPU(Rendering::RendererBase* renderer = nullptr) override;
 		void UploadOBJMesh(Rendering::RendererBase* renderer, std::vector<OBJSubMesh*> inputSubMeshes, std::vector<Vector3>inputVertices, std::vector<Vector2>inputTexCoords, std::vector<Vector3>inputNormals);
 		void UpdateGPUBuffers(unsigned int startVertex, unsigned int vertexCount);
-
 	protected:
 		GLuint	GetVAO()			const { return vao; }
 		void	BindVertexAttribute(int attribSlot, int bufferID, int bindingID, int elementCount, int elementSize, int elementOffset);

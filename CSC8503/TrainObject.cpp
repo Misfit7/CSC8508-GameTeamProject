@@ -13,7 +13,7 @@ TrainObject::~TrainObject() {
 
 }
 
-TrainObject::TrainObject(GameWorld *w, OBJMesh *mesh, Shader *shader) {
+TrainObject::TrainObject(GameWorld *w, OBJMesh *mesh, ShaderGroup *shader) {
 
     path.push_back({Vector3(10, 5, 60), 4});
     path.push_back({Vector3(60, 0, 60), 1});

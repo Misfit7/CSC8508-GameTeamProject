@@ -66,7 +66,7 @@ namespace NCL::Rendering {
 #define MTLILLUM		"illum"
 #define MTLDIFFUSEMAP	"map_Kd"
 #define MTLBUMPMAP		"map_bump"
-#define MTLBUMPMAPALT	"bump"
+#define MTLBUMPMAPALT	"map_Ns"
 
 	/*
 	OBJSubMesh structs are used to temporarily keep the data loaded
@@ -110,9 +110,13 @@ namespace NCL::Rendering {
 		GLuint GetOBJTexture() const {
 			return OBJTexture;
 		};
+		GLuint GetOBJBumpTexture() const {
+			return OBJBumpTexture;
+		};
 
 	protected:
 		GLuint OBJTexture;
+		GLuint OBJBumpTexture;
 		std::vector<OBJSubMesh*> tempSubMeshes;
 		std::vector<Vector3> tempVertices;
 		std::vector<Vector3> tempNormals;

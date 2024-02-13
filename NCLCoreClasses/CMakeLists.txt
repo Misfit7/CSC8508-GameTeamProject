@@ -74,6 +74,8 @@ set(Rendering
     "Shader.h"
     "Texture.cpp"
     "Texture.h"
+
+    "Light.h"
 )
 source_group("Rendering" FILES ${Rendering})
 

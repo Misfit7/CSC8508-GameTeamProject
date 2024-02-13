@@ -47,8 +47,10 @@ OGLRenderer::~OGLRenderer() {
 #endif
 }
 
-void OGLRenderer::OnWindowResize(int w, int h) {
-    windowSize = Vector2i(w, h);
+void OGLRenderer::OnWindowResize(int w, int h)	 {
+	windowSize = Vector2i(w, h);
+	width = windowSize.x;
+	height = windowSize.y;
 
     glViewport(0, 0, windowSize.x, windowSize.y);
 }

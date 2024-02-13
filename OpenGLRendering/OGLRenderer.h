@@ -50,11 +50,14 @@ namespace NCL {
 
             virtual bool SetVerticalSync(VerticalSyncState s);
 
-        protected:
-            void BeginFrame()	override;
-            void RenderFrame()	override;
-            void EndFrame()		override;
-            void SwapBuffers()  override;
+		protected:	
+			int  width;
+			int  height;
+
+			void BeginFrame()	override;
+			void RenderFrame()	override;
+			void EndFrame()		override;
+			void SwapBuffers()  override;
 
             void BindShader(const OGLShader& s);
             void BindTextureToShader(const OGLTexture& t, const std::string& uniform, int texUnit) const;
