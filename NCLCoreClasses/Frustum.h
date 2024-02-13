@@ -17,7 +17,7 @@ namespace NCL::Maths {
         Frustum(void);
         ~Frustum(void) {};
 
-        static Frustum FromViewProjMatrix(const Matrix4& mat, float ndcNear = -1.0f, float ndcFar = 1.0f);
+        void FromViewProjMatrix(const Matrix4& mat, float ndcNear = -1.0f, float ndcFar = 1.0f);
 
         bool InsideFrustum(const Vector3& position, float radius) const {
             for (int p = 0; p < 6; ++p) {

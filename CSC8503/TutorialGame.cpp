@@ -61,7 +61,7 @@ void TutorialGame::InitialiseAssets() {
     creeperMesh = renderer->LoadOBJMesh("Creeper.obj");
 
     basicTex = renderer->LoadTexture("checkerboard.png");
-    floorTex = renderer->LoadTexture("wood.png");
+    floorTex = renderer->LoadTexture("checkerboard.png");
     trainTex = renderer->LoadTexture("Train.jpg");
     lightTex = renderer->LoadTexture("redstone_lamp_on.png");
 
@@ -524,9 +524,9 @@ void TutorialGame::InitGameExamples() {
     trainObject->AddCarriage();
     trainObject->AddCarriage();
     AddCreeperToWorld(Vector3(15, 5, 0));
-    AddTestingLightToWorld(Vector3(10, 20, 0), Vector4(1,1,1,1));
-    AddTestingLightToWorld(Vector3(30, 20, 40), Vector4(1,0,0,1));
-    AddTestingLightToWorld(Vector3(60, 20, 20), Vector4(0,1,0,1));
+    AddTestingLightToWorld(Vector3(10, 20, 0), Vector4(1, 1, 1, 0.7));
+    AddTestingLightToWorld(Vector3(30, 20, 40), Vector4(1, 0, 0, 0.7));
+    AddTestingLightToWorld(Vector3(60, 20, 20), Vector4(0, 1, 0, 0.7));
 }
 
 void TutorialGame::InitSphereGridWorld(int numRows, int numCols, float rowSpacing, float colSpacing, float radius) {

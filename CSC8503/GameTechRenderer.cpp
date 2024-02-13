@@ -26,7 +26,7 @@ GameTechRenderer::GameTechRenderer(GameWorld& world) : OGLRenderer(*Window::GetW
     isNight = false;
 
     //Set up the light properties
-    sunLight = new Light(Vector3(0.0f, 80.0f, 0.0f), Vector4(0.8f, 0.8f, 0.5f, 1.0f), 10000.0f);
+    sunLight = new Light(Vector3(-200.0f, 60.0f, -200.0f), Vector4(0.8f, 0.8f, 0.5f, 1.0f), 10000.0f);
     redstoneLight1 = new Light(Vector3(10, 20, 0), Vector4(1, 1, 0, 1), 50.0f);
     redstoneLight2 = new Light(Vector3(30, 20, 40), Vector4(1, 0, 0, 1), 30.0f);
     redstoneLight3 = new Light(Vector3(60, 20, 20), Vector4(0, 1, 0, 1), 40.0f);
@@ -324,6 +324,9 @@ void GameTechRenderer::BuildObjectList() {
                     activeObjects.emplace_back(g);
                 }
             }
+            /*else {
+                std::cout << "1" << std::endl;
+            }*/
         }
     );
 }
@@ -429,6 +432,9 @@ void GameTechRenderer::RenderCamera() {
 
     Matrix4 viewMatrix = gameWorld.GetMainCamera().BuildViewMatrix();
     Matrix4 projMatrix = gameWorld.GetMainCamera().BuildProjectionMatrix(hostWindow.GetScreenAspect());
+
+    frameFrustum.FromViewProjMatrix(projMatrix * viewMatrix,
+        gameWorld.GetMainCamera().GetNearPlane(), gameWorld.GetMainCamera().GetFarPlane());
 
     OGLShader* activeShader = nullptr;
     int projLocation = 0;
