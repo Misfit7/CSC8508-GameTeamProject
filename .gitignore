@@ -20,9 +20,9 @@ x64/
 build/
 [Dd]ebug
 
-.vcxproj
-.vcxproj.filters
-.vcxproj.user
+*.vcxproj
+*.vcxproj.filters
+*.vcxproj.user
 
 # Compiled object files
 *.o
