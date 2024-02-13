@@ -1,0 +1,81 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="F:\Study\CSC8508\CSC8508-TeamProject\2\CSC8508-TeamProject\CSC8503\CMakeFiles\CSC8503.dir\cmake_pch.cxx">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Study\CSC8508\CSC8508-TeamProject\2\CSC8508-TeamProject\CSC8503\GameTechRenderer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Study\CSC8508\CSC8508-TeamProject\2\CSC8508-TeamProject\CSC8503\Main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Study\CSC8508\CSC8508-TeamProject\2\CSC8508-TeamProject\CSC8503\NetworkedGame.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Study\CSC8508\CSC8508-TeamProject\2\CSC8508-TeamProject\CSC8503\NetworkPlayer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Study\CSC8508\CSC8508-TeamProject\2\CSC8508-TeamProject\CSC8503\StateGameObject.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Study\CSC8508\CSC8508-TeamProject\2\CSC8508-TeamProject\CSC8503\TutorialGame.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Study\CSC8508\CSC8508-TeamProject\2\CSC8508-TeamProject\CSC8503\Audio.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Study\CSC8508\CSC8508-TeamProject\2\CSC8508-TeamProject\CSC8503\TrainObject.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="F:\Study\CSC8508\CSC8508-TeamProject\2\CSC8508-TeamProject\CSC8503\TrainCarriage.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="F:\Study\CSC8508\CSC8508-TeamProject\2\CSC8508-TeamProject\CSC8503\GameTechRenderer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Study\CSC8508\CSC8508-TeamProject\2\CSC8508-TeamProject\CSC8503\NetworkedGame.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Study\CSC8508\CSC8508-TeamProject\2\CSC8508-TeamProject\CSC8503\NetworkPlayer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Study\CSC8508\CSC8508-TeamProject\2\CSC8508-TeamProject\CSC8503\StateGameObject.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Study\CSC8508\CSC8508-TeamProject\2\CSC8508-TeamProject\CSC8503\TutorialGame.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Study\CSC8508\CSC8508-TeamProject\2\CSC8508-TeamProject\CSC8503\Audio.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Study\CSC8508\CSC8508-TeamProject\2\CSC8508-TeamProject\CSC8503\TrainObject.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Study\CSC8508\CSC8508-TeamProject\2\CSC8508-TeamProject\CSC8503\TrainCarriage.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Study\CSC8508\CSC8508-TeamProject\2\CSC8508-TeamProject\CSC8503\CMakeFiles\CSC8503.dir\Debug\cmake_pch.hxx">
+      <Filter>Precompile Header File</Filter>
+    </ClInclude>
+    <ClInclude Include="F:\Study\CSC8508\CSC8508-TeamProject\2\CSC8508-TeamProject\CSC8503\CMakeFiles\CSC8503.dir\Release\cmake_pch.hxx">
+      <Filter>Precompile Header File</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="F:\Study\CSC8508\CSC8508-TeamProject\2\CSC8508-TeamProject\CSC8503\CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{6979FA68-548B-3A25-96A8-F7474B3322EF}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Precompile Header File">
+      <UniqueIdentifier>{12EB14BC-D1E3-3DB8-9EF5-BD4EFD5DD539}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{DD907E39-4745-331F-9157-31948C3BCFCD}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

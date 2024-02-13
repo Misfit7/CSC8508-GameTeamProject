@@ -162,6 +162,30 @@ void OGLMesh::RecalculateNormals() {
 	}
 }
 
+OGLMesh* OGLMesh::GenerateQuad() {
+	OGLMesh* m = new OGLMesh();
+	m->primType = GeometryPrimitive::TriangleStrip;
+
+	m->positions.push_back(Vector3(-1.0f, 1.0f, 0.0f));
+	m->positions.push_back(Vector3(-1.0f, -1.0f, 0.0f));
+	m->positions.push_back(Vector3(1.0f, 1.0f, 0.0f));
+	m->positions.push_back(Vector3(1.0f, -1.0f, 0.0f));
+
+	m->texCoords.push_back(Vector2(0.0f, 1.0f));
+	m->texCoords.push_back(Vector2(0.0f, 0.0f));
+	m->texCoords.push_back(Vector2(1.0f, 1.0f));
+	m->texCoords.push_back(Vector2(1.0f, 0.0f));
+
+	for (int i = 0; i < 4; ++i) {
+		m->colours.push_back(Vector4(1.0f, 1.0f, 1.0f, 1.0f));
+		m->normals.push_back(Vector3(0.0f, 0.0f, -1.0f));
+		m->tangents.push_back(Vector4(1.0f, 0.0f, 0.0f, 1.0f));
+	}
+
+	m->UploadToGPU();
+	return m;
+}
+
 OGLOBJMesh::OGLOBJMesh() {
 	vao = 0;
 
@@ -280,7 +304,7 @@ void OGLOBJMesh::UploadOBJMesh(Rendering::RendererBase* renderer, std::vector<OB
 				}
 			}
 
-			//m->GenerateTangents();
+			m->GenerateTangents();
 
 			m->UploadToGPU();
 
@@ -305,9 +329,9 @@ void OGLOBJMesh::SetTexturesFromMTL(string& mtlFile, string& mtlType) {
 			OBJTexture = i->second.diffuseNum;
 		}
 
-		//if (!i->second.bump.empty()) {
-		//	bumpTexture = i->second.bumpNum;
-		//}
+		if (!i->second.bump.empty()) {
+			OBJBumpTexture = i->second.bumpNum;
+		}
 
 		return;
 	}
@@ -354,22 +378,22 @@ void OGLOBJMesh::SetTexturesFromMTL(string& mtlFile, string& mtlType) {
 				currentMTL.diffuseNum = SOIL_load_OGL_texture(string(Assets::TEXTUREDIR + currentMTL.diffuse).c_str(), SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_INVERT_Y | SOIL_FLAG_TEXTURE_REPEATS);
 			}
 		}
-		//else if (currentLine == MTLBUMPMAP || currentLine == MTLBUMPMAPALT) {
-		//	f >> currentMTL.bump;
-		//
-		//	if (currentMTL.bump.find_last_of('/') != string::npos) {
-		//		int at = currentMTL.bump.find_last_of('/');
-		//		currentMTL.bump = currentMTL.bump.substr(at + 1);
-		//	}
-		//	else if (currentMTL.bump.find_last_of('\\') != string::npos) {
-		//		int at = currentMTL.bump.find_last_of('\\');
-		//		currentMTL.bump = currentMTL.bump.substr(at + 1);
-		//	}
-		//
-		//	if (!currentMTL.bump.empty()) {
-		//		currentMTL.bumpNum = SOIL_load_OGL_texture(string(TEXTUREDIR + currentMTL.bump).c_str(), SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_INVERT_Y | SOIL_FLAG_TEXTURE_REPEATS);
-		//	}
-		//}
+		else if (currentLine == MTLBUMPMAP || currentLine == MTLBUMPMAPALT) {
+			f >> currentMTL.bump;
+		
+			if (currentMTL.bump.find_last_of('/') != string::npos) {
+				int at = currentMTL.bump.find_last_of('/');
+				currentMTL.bump = currentMTL.bump.substr(at + 1);
+			}
+			else if (currentMTL.bump.find_last_of('\\') != string::npos) {
+				int at = currentMTL.bump.find_last_of('\\');
+				currentMTL.bump = currentMTL.bump.substr(at + 1);
+			}
+		
+			if (!currentMTL.bump.empty()) {
+				currentMTL.bumpNum = SOIL_load_OGL_texture(string(Assets::TEXTUREDIR + currentMTL.bump).c_str(), SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_INVERT_Y | SOIL_FLAG_TEXTURE_REPEATS);
+			}
+		}
 		else {
 			std::cout << "OBJMesh::LoadOBJMesh Unknown file data:" << currentLine << std::endl;
 		}
@@ -445,4 +469,57 @@ void OGLOBJMesh::RecalculateNormals() {
 	else {
 
 	}
+}
+
+void OGLOBJMesh::GenerateTangents() {
+	if (texCoords.empty()) {
+		return;
+	}
+
+	for (size_t i = 0; i < positions.size(); i++) {
+		tangents.emplace_back(Vector3());
+	}
+
+	for (int i = 0; i < positions.size(); i += 3) {
+		unsigned int a = i;
+		unsigned int b = i + 1;
+		unsigned int c = i + 2;
+		Vector4 tangent = GenerateTangent(a, b, c);
+		tangents[a] += tangent;
+		tangents[b] += tangent;
+		tangents[c] += tangent;
+	}
+	for (GLuint i = 0; i < positions.size(); ++i) {
+		float headedness = tangents[i].w > 0.0f ? 1.0f : -1.0f;
+		tangents[i].w = 0.0f;
+		tangents[i].Normalise();
+		tangents[i].w = headedness;
+	}
+}
+
+Vector4 OGLOBJMesh::GenerateTangent(int a, int b, int c) {
+	Vector3 ba = positions[b] - positions[a];
+	Vector3 ca = positions[c] - positions[a];
+
+	Vector2 tba = texCoords[b] - texCoords[a];
+	Vector2 tca = texCoords[c] - texCoords[a];
+
+	Matrix2 texMatrix = Matrix2(tba, tca);
+	texMatrix.Invert();
+
+	Vector3 tangent;
+	Vector3 binormal;
+
+	tangent = ba * texMatrix.array[0][0] + ca * texMatrix.array[0][1];
+	binormal = ba * texMatrix.array[1][0] + ca * texMatrix.array[1][1];
+
+	Vector3 normal = Vector3::Cross(ba, ca);
+	Vector3 biCross = Vector3::Cross(tangent, normal);
+
+	float headedness = 1.0f;
+	if (Vector3::Dot(biCross, binormal) < 0.0f) {
+		headedness = -1.0f;
+	}
+
+	return Vector4(tangent.x, tangent.y, tangent.z, headedness);
 }
