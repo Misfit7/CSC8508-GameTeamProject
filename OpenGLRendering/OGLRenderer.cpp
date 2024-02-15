@@ -215,6 +215,54 @@ void OGLRenderer::DrawBoundOBJMesh(uint32_t subLayer, uint32_t numInstances) {
     }
 }
 
+void OGLRenderer::DrawSubMesh(int i, uint32_t numInstances) {
+    if (!boundMesh) {
+        std::cout << __FUNCTION__ << " has been called without a bound mesh!\n";
+        return;
+    }
+    if (!activeShader) {
+        std::cout << __FUNCTION__ << " has been called without a bound shader!\n";
+        return;
+    }
+    if (i < 0 || i >= boundMesh->GetSubMeshCount()) {
+        return;
+    }
+    GLuint	mode = 0;
+    int		count = 0;
+    int		offset = 0;
+
+
+        const SubMesh* m = boundMesh->GetSubMesh(i);
+        offset = m->start;
+        count = m->count;
+
+    switch (boundMesh->GetPrimitiveType()) {
+    case GeometryPrimitive::Triangles:		mode = GL_TRIANGLES;		break;
+    case GeometryPrimitive::Points:			mode = GL_POINTS;			break;
+    case GeometryPrimitive::Lines:			mode = GL_LINES;			break;
+    case GeometryPrimitive::TriangleFan:	mode = GL_TRIANGLE_FAN;		break;
+    case GeometryPrimitive::TriangleStrip:	mode = GL_TRIANGLE_STRIP;	break;
+    case GeometryPrimitive::Patches:		mode = GL_PATCHES;			break;
+    }
+
+    if (numInstances > 1) {
+        if (boundMesh->GetIndexCount() > 0) {
+            glDrawElementsInstanced(mode, count, GL_UNSIGNED_INT, (const GLvoid*)(offset * sizeof(unsigned int)), numInstances);
+        }
+        else {
+            glDrawArraysInstanced(mode, 0, count, numInstances);
+        }
+    }
+    else {
+        if (boundMesh->GetIndexCount() > 0) {
+            glDrawElements(mode, count, GL_UNSIGNED_INT, (const GLvoid*)(offset * sizeof(unsigned int)));
+        }
+        else {
+            glDrawArrays(mode, 0, count);
+        }
+    }
+}
+
 void OGLRenderer::BindTextureToShader(const OGLTexture& t, const std::string& uniform, int texUnit) const {
     GLint texID = t.GetObjectID();
 
@@ -236,7 +284,7 @@ void OGLRenderer::BindTextureToShader(const OGLTexture& t, const std::string& un
     glUniform1i(slot, texUnit);
 }
 
-void OGLRenderer::BindOBJTextureToShader(const GLuint& texture, const std::string& uniform, int texUnit) const {
+void OGLRenderer::BindGLuintTextureToShader(const GLuint& texture, const std::string& uniform, int texUnit) const {
     if (!activeShader) {
         std::cout << __FUNCTION__ << " has been called without a bound shader!\n";
         return;//Debug message time!

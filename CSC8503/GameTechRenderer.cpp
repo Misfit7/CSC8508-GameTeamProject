@@ -18,6 +18,7 @@ GameTechRenderer::GameTechRenderer(GameWorld& world) : OGLRenderer(*Window::GetW
 
     debugShader = new OGLShader("debug.vert", "debug.frag");
     shadowShader = new OGLShader("shadow.vert", "shadow.frag");
+    skinningShadowShader = new OGLShader("SkinningShadow.vert", "shadow.frag");
     pointLightShader = new OGLShader("PointLight.vert", "PointLight.frag");
     combineShader = new OGLShader("combine.vert", "combine.frag");
 
@@ -346,34 +347,74 @@ void GameTechRenderer::RenderShadowMap() {
 
     glCullFace(GL_FRONT);
 
-    BindShader(*shadowShader);
-    int mvpLocation = glGetUniformLocation(shadowShader->GetProgramID(), "mvpMatrix");
-
-    Matrix4 shadowViewMatrix = Matrix4::BuildViewMatrix(sunLight->GetPosition(), Vector3(0, 0, 0), Vector3(0, 1, 0));
-    Matrix4 shadowProjMatrix = Matrix4::Perspective(100.0f, 500.0f, 1, 45.0f);
-
-    Matrix4 mvMatrix = shadowProjMatrix * shadowViewMatrix;
-
-    shadowMatrix = biasMatrix * mvMatrix; //we'll use this one later on
-
     auto DrawShadowMap = [&](const auto& i)
         {
-            Matrix4 modelMatrix = (*i).GetTransform()->GetMatrix();
-            Matrix4 mvpMatrix = mvMatrix * modelMatrix;
-            glUniformMatrix4fv(mvpLocation, 1, false, (float*)&mvpMatrix);
-            if (!(*i).IsOBJ()) {
-                BindMesh((OGLMesh&)*(*i).GetMesh());
-                size_t layerCount = (*i).GetMesh()->GetSubMeshCount();
-                for (size_t i = 0; i < layerCount; ++i) {
-                    DrawBoundMesh((uint32_t)i);
+            if ((*i).GetDrawMode() != 3) {
+                BindShader(*shadowShader);
+                int mvpLocation = glGetUniformLocation(shadowShader->GetProgramID(), "mvpMatrix");
+
+                Matrix4 shadowViewMatrix = Matrix4::BuildViewMatrix(sunLight->GetPosition(), Vector3(0, 0, 0), Vector3(0, 1, 0));
+                Matrix4 shadowProjMatrix = Matrix4::Perspective(100.0f, 500.0f, 1, 45.0f);
+
+                Matrix4 mvMatrix = shadowProjMatrix * shadowViewMatrix;
+
+                shadowMatrix = biasMatrix * mvMatrix; //we'll use this one later on
+
+                Matrix4 modelMatrix = (*i).GetTransform()->GetMatrix();
+                Matrix4 mvpMatrix = mvMatrix * modelMatrix;
+                glUniformMatrix4fv(mvpLocation, 1, false, (float*)&mvpMatrix);
+                if ((*i).GetDrawMode() == 1) {
+                    BindMesh((OGLMesh&)*(*i).GetMesh());
+                    size_t layerCount = (*i).GetMesh()->GetSubMeshCount();
+                    for (size_t i = 0; i < layerCount; ++i) {
+                        DrawBoundMesh((uint32_t)i);
+                    }
+                }
+                else if ((*i).GetDrawMode() == 2) {
+                    BindOBJMesh((OGLOBJMesh&)*(*i).GetOBJMesh());
+                    DrawBoundOBJMesh();
+                    for (unsigned int j = 0; j < (*i).GetOBJMesh()->GetChildrenList().size(); ++j) {
+                        BindOBJMesh((OGLOBJMesh&)*(*i).GetOBJMesh()->GetChildrenList().at(j));
+                        DrawBoundOBJMesh();
+                    }
                 }
             }
             else {
-                BindOBJMesh((OGLOBJMesh&)*(*i).GetOBJMesh());
-                DrawBoundOBJMesh();
-                for (unsigned int j = 0; j < (*i).GetOBJMesh()->GetChildrenList().size(); ++j) {
-                    BindOBJMesh((OGLOBJMesh&)*(*i).GetOBJMesh()->GetChildrenList().at(j));
-                    DrawBoundOBJMesh();
+                BindShader(*skinningShadowShader);
+
+                int projLocation = glGetUniformLocation(skinningShadowShader->GetProgramID(), "projMatrix");
+                int viewLocation = glGetUniformLocation(skinningShadowShader->GetProgramID(), "viewMatrix");
+                int modelLocation = glGetUniformLocation(skinningShadowShader->GetProgramID(), "modelMatrix");
+
+                Matrix4 shadowViewMatrix = Matrix4::BuildViewMatrix(sunLight->GetPosition(), Vector3(0, 0, 0), Vector3(0, 1, 0));
+                Matrix4 shadowProjMatrix = Matrix4::Perspective(100.0f, 500.0f, 1, 45.0f);
+
+                Matrix4 mvMatrix = shadowProjMatrix * shadowViewMatrix;
+
+                shadowMatrix = biasMatrix * mvMatrix;
+
+                Matrix4 modelMatrix = (*i).GetTransform()->GetMatrix();
+
+                glUniformMatrix4fv(modelLocation, 1, false, (float*)&modelMatrix);
+                glUniformMatrix4fv(viewLocation, 1, false, (float*)&shadowViewMatrix);
+                glUniformMatrix4fv(projLocation, 1, false, (float*)&shadowProjMatrix);
+
+                vector<Matrix4> frameMatrices;
+
+                const vector<Matrix4> invBindPose = (*i).GetMesh()->GetInverseBindPose();
+                const Matrix4* frameData = (*i).GetAnim()->GetJointData((*i).GetCurrentFrame());
+
+                for (unsigned int j = 0; j < (*i).GetMesh()->GetJointCount(); ++j) {
+                    frameMatrices.emplace_back(frameData[j] * invBindPose[j]);
+                }
+
+                int j = glGetUniformLocation(skinningShadowShader->GetProgramID(), "joints");
+                glUniformMatrix4fv(j, frameMatrices.size(), false,
+                    (float*)frameMatrices.data());
+
+                BindMesh((OGLMesh&)*(*i).GetMesh());
+                for (int j = 0; j < (*i).GetMesh()->GetSubMeshCount(); ++j) {                                
+                    DrawSubMesh(j);
                 }
             }
         };
@@ -492,7 +533,7 @@ void GameTechRenderer::RenderCamera() {
             Vector4 colour = i->GetColour();
             glUniform4fv(colourLocation, 1, &colour.x);
 
-            if (!(*i).IsOBJ()) {
+            if ((*i).GetDrawMode() == 1) {
                 if ((*i).GetDefaultTexture()) {
                     BindTextureToShader(*(OGLTexture*)(*i).GetDefaultTexture(), "mainTex", 0);
                     if ((*i).GetBumpTexture()) BindTextureToShader(*(OGLTexture*)(*i).GetBumpTexture(), "bumpTex", 2);
@@ -508,10 +549,9 @@ void GameTechRenderer::RenderCamera() {
                     DrawBoundMesh((uint32_t)i);
                 }
             }
-            else {
+            else if ((*i).GetDrawMode() == 2) {
                 if ((*i).GetOBJMesh()->GetOBJTexture()) {
-                    BindOBJTextureToShader((*i).GetOBJMesh()->GetOBJTexture(), "mainTex", 0);
-                    //BindOBJTextureToShader((*i).GetOBJMesh()->GetOBJBumpTexture(), "bumpTex", 2);
+                    BindGLuintTextureToShader((*i).GetOBJMesh()->GetOBJTexture(), "mainTex", 0);
                 }
 
                 glUniform1i(hasTexLocation, (OGLTexture*)(*i).GetOBJMesh()->GetOBJTexture() ? 1 : 0);
@@ -523,6 +563,28 @@ void GameTechRenderer::RenderCamera() {
                 for (unsigned int j = 0; j < (*i).GetOBJMesh()->GetChildrenList().size(); ++j) {
                     BindOBJMesh((OGLOBJMesh&)*(*i).GetOBJMesh()->GetChildrenList().at(j));
                     DrawBoundOBJMesh();
+                }
+            }
+            else if ((*i).GetDrawMode() == 3) {
+                vector<Matrix4> frameMatrices;
+
+                const vector<Matrix4> invBindPose = (*i).GetMesh()->GetInverseBindPose();
+                const Matrix4* frameData = (*i).GetAnim()->GetJointData((*i).GetCurrentFrame());
+
+                for (unsigned int j = 0; j < (*i).GetMesh()->GetJointCount(); ++j) {
+                    frameMatrices.emplace_back(frameData[j] * invBindPose[j]);
+                }
+
+                int j = glGetUniformLocation(activeShader->GetProgramID(), "joints");
+                glUniformMatrix4fv(j, frameMatrices.size(), false,
+                    (float*)frameMatrices.data());
+                BindMesh((OGLMesh&)*(*i).GetMesh());
+
+                for (int j = 0; j < (*i).GetMesh()->GetSubMeshCount(); ++j) {
+                    BindGLuintTextureToShader((*i).GetLayerTexture(j), "mainTex", 0);
+                    glUniform1i(hasTexLocation, 1);
+                    glUniform1i(hasVColLocation, !(*i).GetMesh()->GetColourData().empty());
+                    DrawSubMesh(j);
                 }
             }
         };

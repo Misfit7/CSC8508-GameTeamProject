@@ -9,13 +9,13 @@ using namespace Maths;
 MeshAnimation::MeshAnimation() {
 	jointCount	= 0;
 	frameCount	= 0;
-	frameTime	= 0.0f;
+	frameRate	= 0.0f;
 }
 
 MeshAnimation::MeshAnimation(size_t jointCount, size_t frameCount, float frameRate, std::vector<Matrix4>& frames) {
 	this->jointCount = jointCount;
 	this->frameCount = frameCount;
-	this->frameTime  = frameRate;
+	this->frameRate  = frameRate;
 	this->allJoints  = frames;
 }
 
@@ -34,7 +34,7 @@ MeshAnimation::MeshAnimation(const std::string& filename) : MeshAnimation() {
 	file >> fileVersion;
 	file >> frameCount;
 	file >> jointCount;
-	file >> frameTime;
+	file >> frameRate;
 
 	allJoints.reserve((size_t)frameCount * jointCount);
 

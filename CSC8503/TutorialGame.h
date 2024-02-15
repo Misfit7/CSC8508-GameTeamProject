@@ -10,6 +10,7 @@
 #include "Audio.h"
 #include "StateGameObject.h"
 #include "TrainObject.h"
+#include "SoldierObject.h"
 #include <cmath>
 #include <limits>
 class CollectableObject : public GameObject {
@@ -75,6 +76,7 @@ namespace NCL {
             TrainObject* AddTrainToWorld(const Vector3& position);
             GameObject* AddCreeperToWorld(const Vector3& position);
             GameObject* AddTestingLightToWorld(const Vector3& position, const Vector4& colour);
+            SoldierObject* AddSoldierToWorld(const Vector3& position);
 
             CollectableObject* CreateObject(int ID);
 
@@ -124,22 +126,29 @@ namespace NCL {
             Shader* basicDayShader = nullptr;
             Shader* bumpDayShader = nullptr;
             Shader* specDayShader = nullptr;
+            Shader* skinningDayShader = nullptr;
 
             Shader* basicNightShader = nullptr;
             Shader* bumpNightShader = nullptr;
             Shader* specNightShader = nullptr;
+            Shader* skinningNightShader = nullptr;
 
             ShaderGroup* basicShader;
             ShaderGroup* bumpShader;
             ShaderGroup* specShader;
+            ShaderGroup* skinningShader;
 
             //Coursework Meshes
             Mesh* charMesh = nullptr;
             Mesh* enemyMesh = nullptr;
             Mesh* bonusMesh = nullptr;
+            Mesh* soldierMesh = nullptr;
 
             OBJMesh* trainMesh = nullptr;
             OBJMesh* creeperMesh = nullptr;
+
+            MeshMaterial* soldierMat = nullptr;
+            MeshAnimation* soldierAnim = nullptr;
 
             //Coursework Additional functionality	
             GameObject* lockedObject = nullptr;

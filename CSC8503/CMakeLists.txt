@@ -10,8 +10,6 @@ set(Header_Files
         "StateGameObject.h"
         "TutorialGame.h"
         "Audio.h"
-        "TrainObject.h"
-        "TrainCarriage.h"
 )
 source_group("Header Files" FILES ${Header_Files})
 
@@ -23,6 +21,13 @@ set(Source_Files
         "StateGameObject.cpp"
         "TutorialGame.cpp"
         "Audio.cpp"
+)
+
+set(GameObjects
+        "TrainObject.h"
+        "TrainCarriage.h"
+        "SoldierObject.h"
+        "SoldierObject.cpp"
         "TrainObject.cpp"
         "TrainCarriage.cpp"
 )
@@ -37,16 +42,19 @@ if (USE_VULKAN)
 endif ()
 
 source_group("Source Files" FILES ${Source_Files})
+source_group("GameObjects" FILES ${GameObjects})
 
 set(ALL_FILES
         ${Header_Files}
         ${Source_Files}
+        ${GameObjects}
 )
 
 if (USE_VULKAN)
     set(ALL_FILES
             ${Header_Files}
             ${Source_Files}
+            ${GameObjects}
             ${SHADER_FILES}
     )
 

@@ -3,6 +3,8 @@
 #include "Shader.h"
 #include "Mesh.h"
 #include "OBJMesh.h"
+#include "MeshMaterial.h"
+#include "MeshAnimation.h"
 
 namespace NCL {
     using namespace NCL::Rendering;
@@ -14,8 +16,8 @@ namespace NCL {
         class RenderObject
         {
         public:
-            RenderObject(Transform* parentTransform, Mesh* mesh, Texture* tex, ShaderGroup* shaderGroup, bool isOBJ = false);
-            RenderObject(Transform* parentTransform, OBJMesh* mesh, Texture* tex, ShaderGroup* shaderGroup, bool isOBJ = true);
+            RenderObject(Transform* parentTransform, Mesh* mesh, Texture* tex, ShaderGroup* shaderGroup, int drawMode = 1);
+            RenderObject(Transform* parentTransform, OBJMesh* mesh, Texture* tex, ShaderGroup* shaderGroup, int drawMode = 2);
             ~RenderObject();
 
             void SetDefaultTexture(Texture* t) {
@@ -48,8 +50,8 @@ namespace NCL {
                 return objMesh;
             }
 
-            bool IsOBJ() const {
-                return isOBJ;
+            int GetDrawMode() const {
+                return drawMode;
             }
 
             Transform* GetTransform() const {
@@ -58,6 +60,24 @@ namespace NCL {
 
             ShaderGroup* GetShaderGroup() const {
                 return shaderGroup;
+            }
+
+            MeshAnimation* GetAnim() const {
+                return animation;
+            }
+            void SetAnim(MeshAnimation* a) {
+                animation = a;
+            }
+
+            void SetTextures(GLuint t) {
+                textures.emplace_back(t);
+            }
+
+            GLuint GetLayerTexture(int i) const {
+                if (i < 0 || i > textures.size()) {
+                    return 0;
+                }
+                return textures[i];
             }
 
             void SetColour(const Vector4& c) {
@@ -78,19 +98,28 @@ namespace NCL {
             float GetCameraDistance() const { return distanceFromCamera; }
             void SetCameraDistance(float f) { distanceFromCamera = f; }
 
-        protected:
-            Mesh*         mesh;
-            OBJMesh*      objMesh;
-            Texture*      texture;
-            Texture*      bumpTexture;
-            Texture*      specTexture;
-            ShaderGroup*  shaderGroup;
-            Transform*    transform;
-            Vector4	      colour;
-            bool          isOBJ;
-            bool          emissive;
-            float         distanceFromCamera = 0.0f;
+            int GetCurrentFrame() const { return currentFrame; }
+            void SetCurrentFrame(int f) { currentFrame = f; }
 
+            float GetFrameTime() const { return frameTime; }
+            void SetFrameTime(float f) { frameTime = f; }
+
+        protected:
+            Mesh*           mesh;
+            OBJMesh*        objMesh;
+            Texture*        texture;
+            Texture*        bumpTexture;
+            Texture*        specTexture;
+            ShaderGroup*    shaderGroup;
+            vector<GLuint>  textures;
+            MeshAnimation*  animation;
+            Transform*      transform;
+            Vector4	        colour;
+            int             drawMode;
+            bool            emissive;
+            float           distanceFromCamera = 0.0f;
+            float           currentFrame = 0;
+            float           frameTime = 0.0f;
         };
     }
 }

@@ -4,7 +4,7 @@
 using namespace NCL::CSC8503;
 using namespace NCL;
 
-RenderObject::RenderObject(Transform* parentTransform, Mesh* mesh, Texture* tex, ShaderGroup* shader, bool isObj) {
+RenderObject::RenderObject(Transform* parentTransform, Mesh* mesh, Texture* tex, ShaderGroup* shader, int mode) {
 	if (!tex) {
 		bool a = true;
 	}
@@ -12,12 +12,13 @@ RenderObject::RenderObject(Transform* parentTransform, Mesh* mesh, Texture* tex,
 	this->mesh = mesh;
 	this->texture = tex;
 	this->shaderGroup = shader;
+	this->animation = nullptr;
 	this->colour = Vector4(1.0f, 1.0f, 1.0f, 1.0f);
-	this->isOBJ = isObj;
+	this->drawMode = mode;
 	this->emissive = false;
 }
 
-RenderObject::RenderObject(Transform* parentTransform, OBJMesh* mesh, Texture* tex, ShaderGroup* shader, bool isObj) {
+RenderObject::RenderObject(Transform* parentTransform, OBJMesh* mesh, Texture* tex, ShaderGroup* shader, int mode) {
 	if (!tex) {
 		bool a = true;
 	}
@@ -26,7 +27,7 @@ RenderObject::RenderObject(Transform* parentTransform, OBJMesh* mesh, Texture* t
 	this->texture = tex;
 	this->shaderGroup = shader;
 	this->colour = Vector4(1.0f, 1.0f, 1.0f, 1.0f);
-	this->isOBJ = isObj;
+	this->drawMode = mode;
 	this->emissive = false;
 }
 
