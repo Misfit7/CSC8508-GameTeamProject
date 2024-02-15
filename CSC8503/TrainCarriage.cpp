@@ -18,51 +18,37 @@ void TrainCarriage::OnCollisionBegin(GameObject *otherObject) {
 void TrainCarriage::OnCollisionEnd(GameObject *otherObject) {
 
 }
-Quaternion RotateBetweenVectors2(const Vector3& from, const Vector3& to) {
-    // 首先，计算两个向量的标准化版本
-    Vector3 source = from.Normalised();
+
+Quaternion RotateBetweenVectors2(const Vector3 &from, const Vector3 &to) {
+    Vector3 source = from.Normalised(); // 首先，计算两个向量的标准化版本
     Vector3 target = to.Normalised();
-
-    // 计算两个向量之间的点积
-    float dotProduct = Vector3::Dot(source, target);
-
-    // 如果点积接近于-1，表示两个向量相反
-    if (dotProduct < -0.999f) {
-        // 选择任意垂直于 source 向量的向量作为旋转轴
-        Vector3 axis = Vector3::Cross(Vector3(1.0f, 0.0f, 0.0f), source);
+    float dotProduct = Vector3::Dot(source, target);// 计算两个向量之间的点积
+    if (dotProduct < -0.999f) { // 如果点积接近于-1，表示两个向量相反
+        Vector3 axis = Vector3::Cross(Vector3(1.0f, 0.0f, 0.0f), source);  // 选择任意垂直于 source 向量的向量作为旋转轴
         if (axis.LengthSquared() < 0.01f) {
             axis = Vector3::Cross(Vector3(0.0f, 1.0f, 0.0f), source);
         }
         axis.Normalise();
-
-        // 返回一个绕选择的轴旋转 180 度的四元数
-        return Quaternion(axis, 0.0f);
+        return Quaternion(axis, 0.0f);  // 返回一个绕选择的轴旋转 180 度的四元数
     }
-
-    // 计算旋转轴
-    Vector3 rotationAxis = Vector3::Cross(source, target);
+    Vector3 rotationAxis = Vector3::Cross(source, target);// 计算旋转轴
     rotationAxis.Normalise();
-
-    // 计算旋转角度
-    float rotationAngle = std::acos(dotProduct);
-
-    // 构建旋转四元数
-    return Quaternion(rotationAxis, rotationAngle);
+    float rotationAngle = std::acos(dotProduct);// 计算旋转角度
+    return Quaternion(rotationAxis, rotationAngle);// 构建旋转四元数
 }
 
 void TrainCarriage::Update(float dt) {
-    if(path.size()==0) return ;
+    if (path.size() == 0) return;
     auto it = path.begin();
     auto itt = it->first;
     int flag = it->second;
-    if(flag<=1){
+    if (flag <= 1) {
         Vector3 newDirection(0.0f, 0.0f, 1.0f);
         Vector3 currentDirection = this->GetTransform().GetMatrix() * Vector3(0.0f, 0.0f, 1.0f);
         Quaternion rotation = RotateBetweenVectors2(currentDirection, newDirection);
         this->GetTransform().SetOrientation(rotation);
 
-    }
-    else{
+    } else {
         Vector3 newDirection(1.0f, 0.0f, 0.0f);
         Vector3 currentDirection = this->GetTransform().GetMatrix() * Vector3(0.0f, 0.0f, 1.0f);
         Quaternion rotation = RotateBetweenVectors2(currentDirection, newDirection);
