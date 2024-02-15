@@ -56,9 +56,13 @@ void TutorialGame::InitialiseAssets() {
     enemyMesh = renderer->LoadMesh("Keeper.msh");
     bonusMesh = renderer->LoadMesh("apple.msh");
     capsuleMesh = renderer->LoadMesh("capsule.msh");
+    soldierMesh = renderer->LoadMesh("Role_T.msh");
 
     trainMesh = renderer->LoadOBJMesh("Train.obj");
     creeperMesh = renderer->LoadOBJMesh("Creeper.obj");
+
+    soldierMat = new MeshMaterial("Role_T.mat");
+    soldierAnim = new MeshAnimation("Role_T.anm");
 
     basicTex = renderer->LoadTexture("checkerboard.png");
     floorTex = renderer->LoadTexture("checkerboard.png");
@@ -72,14 +76,17 @@ void TutorialGame::InitialiseAssets() {
     basicDayShader = renderer->LoadShader("PerPixel.vert", "PerPixelScene.frag");
     bumpDayShader = renderer->LoadShader("Bump.vert", "BumpScene.frag");
     specDayShader = renderer->LoadShader("Bump.vert", "SpecScene.frag");
+    skinningDayShader = renderer->LoadShader("Skinning.vert", "PerPixelScene.frag");
 
     basicNightShader = renderer->LoadShader("PerPixel.vert", "PerPixelBuffer.frag");
     bumpNightShader = renderer->LoadShader("Bump.vert", "BumpBuffer.frag");
     specNightShader = renderer->LoadShader("Bump.vert", "SpecBuffer.frag");
+    skinningNightShader = renderer->LoadShader("Skinning.vert", "PerPixelBuffer.frag");
 
     basicShader = new ShaderGroup(basicDayShader, basicNightShader);
     bumpShader = new ShaderGroup(bumpDayShader, bumpNightShader);
     specShader = new ShaderGroup(specDayShader, specNightShader);
+    skinningShader = new ShaderGroup(skinningDayShader, skinningNightShader);
 
     InitCamera();
     InitWorld();
@@ -513,6 +520,41 @@ GameObject* TutorialGame::AddTestingLightToWorld(const Vector3& position, const 
     return cube;
 }
 
+SoldierObject* TutorialGame::AddSoldierToWorld(const Vector3& position) {
+    SoldierObject* soldier = new SoldierObject();
+
+    AABBVolume* volume = new AABBVolume(Vector3(0.5, 0.5, 0.5));
+    soldier->SetBoundingVolume((CollisionVolume*)volume);
+
+    soldier->GetTransform()
+        .SetPosition(position)
+        .SetScale(Vector3(1, 1, 1));
+
+    soldier->SetRenderObject(new RenderObject(&soldier->GetTransform(), soldierMesh, nullptr, skinningShader, 3));
+    soldier->GetRenderObject()->SetColour(Vector4(1, 1, 1, 1));
+    soldier->GetRenderObject()->SetAnim(soldierAnim);
+    for (int i = 0; i < soldierMesh->GetSubMeshCount(); ++i) {
+        const MeshMaterialEntry* matEntry =
+            soldierMat->GetMaterialForLayer(i);
+
+        const string* filename = nullptr;
+        matEntry->GetEntry("Diffuse", &filename);
+        string path = Assets::TEXTUREDIR + *filename;
+        GLuint texID = SOIL_load_OGL_texture(path.c_str(), SOIL_LOAD_AUTO,
+            SOIL_CREATE_NEW_ID, SOIL_FLAG_MIPMAPS | SOIL_FLAG_INVERT_Y);
+        soldier->GetRenderObject()->SetTextures(texID);
+    }
+
+    soldier->SetPhysicsObject(new PhysicsObject(&soldier->GetTransform(), soldier->GetBoundingVolume()));
+
+    soldier->GetPhysicsObject()->SetInverseMass(1);
+    soldier->GetPhysicsObject()->InitCubeInertia();
+
+    world->AddGameObject(soldier);
+
+    return soldier;
+}
+
 void TutorialGame::InitDefaultFloor() {
     AddFloorToWorld(Vector3(0, 0, 0));
 }
@@ -527,6 +569,7 @@ void TutorialGame::InitGameExamples() {
     AddTestingLightToWorld(Vector3(10, 20, 0), Vector4(1, 1, 1, 0.7));
     AddTestingLightToWorld(Vector3(30, 20, 40), Vector4(1, 0, 0, 0.7));
     AddTestingLightToWorld(Vector3(60, 20, 20), Vector4(0, 1, 0, 0.7));
+    AddSoldierToWorld(Vector3(20, 5, 0));
 }
 
 void TutorialGame::InitSphereGridWorld(int numRows, int numCols, float rowSpacing, float colSpacing, float radius) {

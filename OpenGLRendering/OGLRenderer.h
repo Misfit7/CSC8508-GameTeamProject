@@ -61,11 +61,12 @@ namespace NCL {
 
             void BindShader(const OGLShader& s);
             void BindTextureToShader(const OGLTexture& t, const std::string& uniform, int texUnit) const;
-            void BindOBJTextureToShader(const GLuint& t, const std::string& uniform, int texUnit) const;
+            void BindGLuintTextureToShader(const GLuint& t, const std::string& uniform, int texUnit) const;
             void BindMesh(const OGLMesh& m);
             void BindOBJMesh(const OGLOBJMesh& m);
             void DrawBoundMesh(uint32_t subLayer = 0, uint32_t numInstances = 1);
             void DrawBoundOBJMesh(uint32_t subLayer = 0, uint32_t numInstances = 1);
+            void DrawSubMesh(int i, uint32_t numInstances = 1);
             void SetTextureRepeating(GLuint texture, bool repeating);
 #ifdef _WIN32
             void InitWithWin32(Window& w);
