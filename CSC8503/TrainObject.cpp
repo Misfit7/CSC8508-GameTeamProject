@@ -16,7 +16,7 @@ TrainObject::~TrainObject() {
 TrainObject::TrainObject(GameWorld *w, OBJMesh *mesh, ShaderGroup *shader) {
 
     path.push_back({Vector3(10, 5, 60), 4});
-    path.push_back({Vector3(60, 0, 60), 1});
+    path.push_back({Vector3(60, 5, 60), 1});
     world = w;
     trainMesh = mesh;
     basicShader = shader;
@@ -31,27 +31,67 @@ void TrainObject::OnCollisionBegin(GameObject *otherObject) {
 void TrainObject::OnCollisionEnd(GameObject *otherObject) {
 
 }
+  Quaternion RotateBetweenVectors(const Vector3& from, const Vector3& to) {
+    // 首先，计算两个向量的标准化版本
+    Vector3 source = from.Normalised();
+    Vector3 target = to.Normalised();
+
+    // 计算两个向量之间的点积
+    float dotProduct = Vector3::Dot(source, target);
+
+    // 如果点积接近于-1，表示两个向量相反
+    if (dotProduct < -0.999f) {
+        // 选择任意垂直于 source 向量的向量作为旋转轴
+        Vector3 axis = Vector3::Cross(Vector3(1.0f, 0.0f, 0.0f), source);
+        if (axis.LengthSquared() < 0.01f) {
+            axis = Vector3::Cross(Vector3(0.0f, 1.0f, 0.0f), source);
+        }
+        axis.Normalise();
+
+        // 返回一个绕选择的轴旋转 180 度的四元数
+        return Quaternion(axis, 0.0f);
+    }
+
+    // 计算旋转轴
+    Vector3 rotationAxis = Vector3::Cross(source, target);
+    rotationAxis.Normalise();
+
+    // 计算旋转角度
+    float rotationAngle = std::acos(dotProduct);
+
+    // 构建旋转四元数
+    return Quaternion(rotationAxis, rotationAngle);
+}
 
 void TrainObject::Update(float dt) {
+    if(path.size()==0) return ;
     auto it = path.begin();
     auto itt = it->first;
     int flag = it->second;
     if(flag<=1){
-//        float angle = 90.0f; // 旋转角度，单位为度
-//        Vector3 rotationAxis(0, 1, 0); // 旋转轴，例如绕Y轴旋转
-//        GetTransform().SetOrientation(Quaternion(rotationAxis,angle));
+        Vector3 newDirection(0.0f, 0.0f, 1.0f);
+        Vector3 currentDirection = this->GetTransform().GetMatrix() * Vector3(0.0f, 0.0f, 1.0f);
+        Quaternion rotation = RotateBetweenVectors(currentDirection, newDirection);
+        this->GetTransform().SetOrientation(rotation);
+
     }
     else{
-//        float angle = 90.0f; // 旋转角度，单位为度
-//        Vector3 rotationAxis(0, 1, 0); // 旋转轴，例如绕Y轴旋转
-//        GetTransform().SetOrientation(Quaternion(rotationAxis,angle));
+        Vector3 newDirection(1.0f, 0.0f, 0.0f);
+        Vector3 currentDirection = this->GetTransform().GetMatrix() * Vector3(0.0f, 0.0f, 1.0f);
+        Quaternion rotation = RotateBetweenVectors(currentDirection, newDirection);
+        this->GetTransform().SetOrientation(rotation);
+
     }
     Vector3 target = itt;
     Vector3 dir = (target - this->GetTransform().GetPosition());
     dir = Vector3(dir.x, 0, dir.z);
     GetPhysicsObject()->SetLinearVelocity(dir.Normalised() * 1000.0f * dt);
-    if (this->GetTransform().GetPosition() == target)
+    float mm = (this->GetTransform().GetPosition()-  target).Length();
+
+    if (mm<0.5)
+    {
         path.erase(it);
+    }
     for(int i = 1; i<=trainIndex ;i ++ )
         trainCarriage[i].Update(dt);
 }
@@ -79,9 +119,8 @@ void TrainObject::AddCarriage() {
         nextPos.z-=3;
 
     }
-    std::cout<<nowPos<<std::endl;
-
-    std::cout<<nextPos<<std::endl;
+//    std::cout<<nowPos<<std::endl;
+//    std::cout<<nextPos<<std::endl;
 
     TrainCarriage *carriage = new TrainCarriage;
     carriage->path = path;
@@ -98,7 +137,6 @@ void TrainObject::AddCarriage() {
     carriage->GetPhysicsObject()->InitSphereInertia();
 
     trainCarriage[++trainIndex] = *carriage;
-
     world->AddGameObject(carriage);
 
 //    if(trainIndex==1){
