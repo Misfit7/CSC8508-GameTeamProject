@@ -195,7 +195,11 @@ void TutorialGame::UpdateKeys() {
     }
 
     if (Window::GetKeyboard()->KeyPressed(KeyCodes::NUM1)) {
-        renderer->ToggleNight(); //F2 will reset the camera to a specific default place
+        renderer->ToggleNight();
+    }
+
+    if (Window::GetKeyboard()->KeyPressed(KeyCodes::NUM3)) {
+        renderer->ToggleProcess();
     }
 
     if (Window::GetKeyboard()->KeyPressed(KeyCodes::G)) {

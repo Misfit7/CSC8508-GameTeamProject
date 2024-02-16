@@ -25,6 +25,7 @@ namespace NCL {
             Texture* LoadTexture(const std::string& name);
             Shader* LoadShader(const std::string& vertex, const std::string& fragment);
             void       ToggleNight();
+            void       ToggleProcess();
 
         protected:
             void NewRenderLines();
@@ -49,9 +50,11 @@ namespace NCL {
             void RenderCamera();
             void RenderSkybox();
             void DrawLightBuffer();
-
             void SetShaderLight(const Light& l);
             void DrawPointLights();
+
+            void DrawProcess();
+            void ProcessCombine();
 
             void CombineBuffers();
 
@@ -88,7 +91,7 @@ namespace NCL {
 
             //Process Buffer
             GLuint processFBO;
-            GLuint processTex;
+            GLuint processColourTex[2];
 
             //Skybox Buffer
             OGLShader* debugShader;
@@ -114,6 +117,9 @@ namespace NCL {
             Mesh* sphere;
             Mesh* quad;
 
+            OGLShader* processShader;
+            OGLShader* processCombineShader;
+
             OGLShader* combineShader;
 
             //Debug data storage things
@@ -134,6 +140,7 @@ namespace NCL {
             size_t textCount;
 
             bool   isNight;
+            bool isProcess;
         };
     }
 }

@@ -10,6 +10,7 @@ using namespace Rendering;
 using namespace CSC8503;
 
 #define SHADOWSIZE 4096
+#define POST_PASSES 5
 
 Matrix4 biasMatrix = Matrix4::Translation(Vector3(0.5f, 0.5f, 0.5f)) * Matrix4::Scale(Vector3(0.5f, 0.5f, 0.5f));
 
@@ -20,11 +21,14 @@ GameTechRenderer::GameTechRenderer(GameWorld& world) : OGLRenderer(*Window::GetW
     shadowShader = new OGLShader("shadow.vert", "shadow.frag");
     skinningShadowShader = new OGLShader("SkinningShadow.vert", "shadow.frag");
     pointLightShader = new OGLShader("PointLight.vert", "PointLight.frag");
+    processShader = new OGLShader("process.vert", "process.frag");
+    processCombineShader = new OGLShader("processCombine.vert", "processCombine.frag");
     combineShader = new OGLShader("combine.vert", "combine.frag");
 
     InitBuffers();
 
     isNight = false;
+    isProcess = false;
 
     //Set up the light properties
     sunLight = new Light(Vector3(-200.0f, 60.0f, -200.0f), Vector4(0.8f, 0.8f, 0.5f, 1.0f), 10000.0f);
@@ -62,11 +66,11 @@ void GameTechRenderer::InitBuffers() {
     glGenFramebuffers(1, &processFBO);
 
     GLenum buffers[5] = {
-    GL_COLOR_ATTACHMENT0 ,
-    GL_COLOR_ATTACHMENT1 ,
-    GL_COLOR_ATTACHMENT2 ,
-    GL_COLOR_ATTACHMENT3 ,
-    GL_COLOR_ATTACHMENT4
+        GL_COLOR_ATTACHMENT0 ,
+        GL_COLOR_ATTACHMENT1 ,
+        GL_COLOR_ATTACHMENT2 ,
+        GL_COLOR_ATTACHMENT3 ,
+        GL_COLOR_ATTACHMENT4
     };
 
     LoadSkybox();
@@ -80,7 +84,9 @@ void GameTechRenderer::InitBuffers() {
     GenerateScreenTexture(worldShadowTex);
     GenerateScreenTexture(lightDiffuseTex);
     GenerateScreenTexture(lightSpecularTex);
-    GenerateScreenTexture(processTex);
+    for (int i = 0; i < 2; ++i) {
+        GenerateScreenTexture(processColourTex[i]);
+    }
     GenerateCombinedTexture();
 
     //World FBO
@@ -95,8 +101,9 @@ void GameTechRenderer::InitBuffers() {
         GL_TEXTURE_2D, worldEmisTex, 0);
     glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT4,
         GL_TEXTURE_2D, worldShadowTex, 0);
-    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT,
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT,
         GL_TEXTURE_2D, worldDepthTex, 0);
+    processColourTex[0] = worldColourTex;
     glDrawBuffers(5, buffers);
     if (glCheckFramebufferStatus(GL_FRAMEBUFFER) !=
         GL_FRAMEBUFFER_COMPLETE) {
@@ -153,10 +160,10 @@ void GameTechRenderer::InitBuffers() {
     //Process FBO
     glBindFramebuffer(GL_FRAMEBUFFER, processFBO);
     glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0,
-        GL_TEXTURE_2D, processTex, 0);
+        GL_TEXTURE_2D, processColourTex[1], 0);
     glDrawBuffers(1, buffers);
     if (glCheckFramebufferStatus(GL_FRAMEBUFFER) !=
-        GL_FRAMEBUFFER_COMPLETE) {
+        GL_FRAMEBUFFER_COMPLETE || !processColourTex[1]) {
         std::cout << "processFBO Load Failed!!" << std::endl;
         return;
     }
@@ -188,11 +195,12 @@ void GameTechRenderer::GenerateScreenTexture(GLuint& into, bool depth) {
     glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
     glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 
-    GLuint format1 = depth ? GL_DEPTH_COMPONENT24 : GL_RGBA8;
-    GLuint type = depth ? GL_DEPTH_COMPONENT : GL_RGBA;
+    GLuint format1 = depth ? GL_DEPTH24_STENCIL8 : GL_RGBA8;
+    GLuint type = depth ? GL_DEPTH_STENCIL : GL_RGBA;
+    GLuint byte = depth ? GL_UNSIGNED_INT_24_8 : GL_UNSIGNED_BYTE;
 
     glTexImage2D(GL_TEXTURE_2D, 0,
-        format1, width, height, 0, type, GL_UNSIGNED_BYTE, NULL);
+        format1, width, height, 0, type, byte, NULL);
 
     glBindTexture(GL_TEXTURE_2D, 0);
 }
@@ -217,22 +225,22 @@ void GameTechRenderer::ClearAllBuffers() {
     glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
     glBindFramebuffer(GL_FRAMEBUFFER, shadowFBO);
-    glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+    glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
 
     glBindFramebuffer(GL_FRAMEBUFFER, skyboxFBO);
-    glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+    glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
 
     glBindFramebuffer(GL_FRAMEBUFFER, lightFBO);
-    glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+    glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
 
     glBindFramebuffer(GL_FRAMEBUFFER, combinedFBO);
-    glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+    glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
 
     glBindFramebuffer(GL_FRAMEBUFFER, processFBO);
-    glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+    glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
 
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
-    glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+    glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
 }
 
 void GameTechRenderer::LoadSkybox() {
@@ -288,9 +296,15 @@ void GameTechRenderer::RenderFrame() {
     RenderShadowMap();
     RenderSkybox();
     RenderCamera();
+
     if (isNight) {
         DrawLightBuffer();
         CombineBuffers();
+    }
+    else if (isProcess)
+    {
+        DrawProcess();
+        ProcessCombine();
     }
     glDisable(GL_CULL_FACE); //Todo - text indices are going the wrong way...
     glDisable(GL_BLEND);
@@ -413,7 +427,7 @@ void GameTechRenderer::RenderShadowMap() {
                     (float*)frameMatrices.data());
 
                 BindMesh((OGLMesh&)*(*i).GetMesh());
-                for (int j = 0; j < (*i).GetMesh()->GetSubMeshCount(); ++j) {                                
+                for (int j = 0; j < (*i).GetMesh()->GetSubMeshCount(); ++j) {
                     DrawSubMesh(j);
                 }
             }
@@ -434,7 +448,10 @@ void GameTechRenderer::RenderShadowMap() {
 }
 
 void GameTechRenderer::RenderSkybox() {
-    if (isNight)glBindFramebuffer(GL_FRAMEBUFFER, skyboxFBO);
+    if (isNight || isProcess) {
+        glBindFramebuffer(GL_FRAMEBUFFER, skyboxFBO);
+    }
+
     glEnable(GL_TEXTURE_CUBE_MAP_SEAMLESS);
     glDisable(GL_CULL_FACE);
     glDisable(GL_BLEND);
@@ -466,9 +483,8 @@ void GameTechRenderer::RenderSkybox() {
 }
 
 void GameTechRenderer::RenderCamera() {
-    if (isNight) {
+    if (isNight || isProcess) {
         glBindFramebuffer(GL_FRAMEBUFFER, worldFBO);
-        glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
     }
 
     Matrix4 viewMatrix = gameWorld.GetMainCamera().BuildViewMatrix();
@@ -495,8 +511,8 @@ void GameTechRenderer::RenderCamera() {
         {
             ShaderGroup* shaderGroup = (*i).GetShaderGroup();
             OGLShader* shader = nullptr;
-            if (!isNight) shader = (OGLShader*)shaderGroup->GetDayShader();
-            else shader = (OGLShader*)shaderGroup->GetNightShader();
+            if (isNight) shader = (OGLShader*)shaderGroup->GetNightShader();
+            else shader = (OGLShader*)shaderGroup->GetDayShader();
             BindShader(*shader);
 
             if (activeShader != shader) {
@@ -680,6 +696,57 @@ void GameTechRenderer::SetShaderLight(const Light& l) {
         "lightRadius"), l.GetRadius());
 }
 
+void GameTechRenderer::DrawProcess() {
+    glBindFramebuffer(GL_FRAMEBUFFER, processFBO);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, processColourTex[1], 0);
+    glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
+
+    glDisable(GL_DEPTH_TEST);
+    BindMesh((OGLMesh&)*quad);
+
+    BindShader(*processShader);
+
+    glActiveTexture(GL_TEXTURE1);
+    glUniform1i(glGetUniformLocation(activeShader->GetProgramID(), "skyboxTex"), 1);
+    glBindTexture(GL_TEXTURE_2D, skyboxBufferTex);
+    glActiveTexture(GL_TEXTURE2);
+    glUniform1i(glGetUniformLocation(activeShader->GetProgramID(), "depthTex"), 2);
+    glBindTexture(GL_TEXTURE_2D, worldDepthTex);
+
+    glActiveTexture(GL_TEXTURE0);
+    glUniform1i(glGetUniformLocation(activeShader->GetProgramID(), "sceneTex"), 0);
+
+    for (int i = 0; i < POST_PASSES; ++i) {
+        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, processColourTex[1], 0);
+        glUniform1i(glGetUniformLocation(activeShader->GetProgramID(), "isVertical"), 0);
+        glBindTexture(GL_TEXTURE_2D, processColourTex[0]);
+        DrawBoundMesh();
+
+        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, processColourTex[0], 0);
+        glUniform1i(glGetUniformLocation(activeShader->GetProgramID(), "isVertical"), 1);
+        glBindTexture(GL_TEXTURE_2D, processColourTex[1]);
+        DrawBoundMesh();
+    }
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+    glEnable(GL_DEPTH_TEST);
+}
+
+void GameTechRenderer::ProcessCombine() {
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    BindShader(*processCombineShader);
+
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, processColourTex[0]);
+    glUniform1i(glGetUniformLocation(activeShader->GetProgramID(), "diffuseTex"), 0);
+    SetShaderLight(*sunLight);
+
+    BindMesh((OGLMesh&)*quad);
+    DrawBoundMesh();
+
+}
+
 void GameTechRenderer::CombineBuffers() {
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -743,6 +810,10 @@ void GameTechRenderer::Draw(Mesh* mesh, bool multilayer) {
 
 void GameTechRenderer::ToggleNight() {
     isNight = !isNight;
+}
+
+void GameTechRenderer::ToggleProcess() {
+    isProcess = !isProcess;
 }
 
 Mesh* GameTechRenderer::LoadMesh(const std::string& name) {

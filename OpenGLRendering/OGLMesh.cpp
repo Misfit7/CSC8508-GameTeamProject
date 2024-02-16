@@ -14,512 +14,512 @@ using namespace NCL::Rendering;
 using namespace NCL::Maths;
 
 OGLMesh::OGLMesh() {
-	vao			= 0;
+    vao = 0;
 
-	for (int i = 0; i < VertexAttribute::MAX_ATTRIBUTES; ++i) {
-		attributeBuffers[i] = 0;
-	}
-	indexBuffer = 0;
+    for (int i = 0; i < VertexAttribute::MAX_ATTRIBUTES; ++i) {
+        attributeBuffers[i] = 0;
+    }
+    indexBuffer = 0;
 }
 
-OGLMesh::~OGLMesh()	{
-	glDeleteVertexArrays(1, &vao);			//Delete our VAO
-	glDeleteBuffers(VertexAttribute::MAX_ATTRIBUTES, attributeBuffers);	//Delete our VBOs
-	glDeleteBuffers(1, &indexBuffer);	//Delete our indices
+OGLMesh::~OGLMesh() {
+    glDeleteVertexArrays(1, &vao);			//Delete our VAO
+    glDeleteBuffers(VertexAttribute::MAX_ATTRIBUTES, attributeBuffers);	//Delete our VBOs
+    glDeleteBuffers(1, &indexBuffer);	//Delete our indices
 }
 
 void CreateVertexBuffer(GLuint& buffer, int byteCount, char* data) {
-	glGenBuffers(1, &buffer);
-	glBindBuffer(GL_ARRAY_BUFFER, buffer);
-	glBufferData(GL_ARRAY_BUFFER, byteCount, data, GL_STATIC_DRAW);
+    glGenBuffers(1, &buffer);
+    glBindBuffer(GL_ARRAY_BUFFER, buffer);
+    glBufferData(GL_ARRAY_BUFFER, byteCount, data, GL_STATIC_DRAW);
 }
 
 void OGLMesh::BindVertexAttribute(int attribSlot, int buffer, int bindingID, int elementCount, int elementSize, int elementOffset) {
-	glEnableVertexAttribArray(attribSlot);
-	glVertexAttribFormat(attribSlot, elementCount, GL_FLOAT, false, 0);
-	glVertexAttribBinding(attribSlot, bindingID);
+    glEnableVertexAttribArray(attribSlot);
+    glVertexAttribFormat(attribSlot, elementCount, GL_FLOAT, false, 0);
+    glVertexAttribBinding(attribSlot, bindingID);
 
-	glBindVertexBuffer(bindingID, buffer, elementOffset, elementSize);
+    glBindVertexBuffer(bindingID, buffer, elementOffset, elementSize);
 }
 
 void OGLMesh::UploadToGPU(Rendering::RendererBase* renderer) {
-	if (!ValidateMeshData()) {
-		return;
-	}
-	glGenVertexArrays(1, &vao);
-	glBindVertexArray(vao);
+    if (!ValidateMeshData()) {
+        return;
+    }
+    glGenVertexArrays(1, &vao);
+    glBindVertexArray(vao);
 
-	int numVertices = GetVertexCount();
-	int numIndices	= GetIndexCount();
+    int numVertices = GetVertexCount();
+    int numIndices = GetIndexCount();
 
-	if (!GetPositionData().empty()) {
-		CreateVertexBuffer(attributeBuffers[VertexAttribute::Positions], numVertices * sizeof(Vector3), (char*)GetPositionData().data());
-		BindVertexAttribute(VertexAttribute::Positions, attributeBuffers[VertexAttribute::Positions], VertexAttribute::Positions, 3, sizeof(Vector3), 0);
-	}
+    if (!GetPositionData().empty()) {
+        CreateVertexBuffer(attributeBuffers[VertexAttribute::Positions], numVertices * sizeof(Vector3), (char*)GetPositionData().data());
+        BindVertexAttribute(VertexAttribute::Positions, attributeBuffers[VertexAttribute::Positions], VertexAttribute::Positions, 3, sizeof(Vector3), 0);
+    }
 
-	if (!GetColourData().empty()) {	//buffer colour data
-		CreateVertexBuffer(attributeBuffers[VertexAttribute::Colours], numVertices * sizeof(Vector4), (char*)GetColourData().data());
-		BindVertexAttribute(VertexAttribute::Colours, attributeBuffers[VertexAttribute::Colours], VertexAttribute::Colours, 4, sizeof(Vector4), 0);
-	}
-	if (!GetTextureCoordData().empty()) {	//Buffer texture data
-		CreateVertexBuffer(attributeBuffers[VertexAttribute::TextureCoords], numVertices * sizeof(Vector2), (char*)GetTextureCoordData().data());
-		BindVertexAttribute(VertexAttribute::TextureCoords, attributeBuffers[VertexAttribute::TextureCoords], VertexAttribute::TextureCoords, 2, sizeof(Vector2), 0);
-	}
+    if (!GetColourData().empty()) {	//buffer colour data
+        CreateVertexBuffer(attributeBuffers[VertexAttribute::Colours], numVertices * sizeof(Vector4), (char*)GetColourData().data());
+        BindVertexAttribute(VertexAttribute::Colours, attributeBuffers[VertexAttribute::Colours], VertexAttribute::Colours, 4, sizeof(Vector4), 0);
+    }
+    if (!GetTextureCoordData().empty()) {	//Buffer texture data
+        CreateVertexBuffer(attributeBuffers[VertexAttribute::TextureCoords], numVertices * sizeof(Vector2), (char*)GetTextureCoordData().data());
+        BindVertexAttribute(VertexAttribute::TextureCoords, attributeBuffers[VertexAttribute::TextureCoords], VertexAttribute::TextureCoords, 2, sizeof(Vector2), 0);
+    }
 
-	if (!GetNormalData().empty()) {	//Buffer normal data
-		CreateVertexBuffer(attributeBuffers[VertexAttribute::Normals], numVertices * sizeof(Vector3), (char*)GetNormalData().data());
-		BindVertexAttribute(VertexAttribute::Normals, attributeBuffers[VertexAttribute::Normals], VertexAttribute::Normals, 3, sizeof(Vector3), 0);
-	}
+    if (!GetNormalData().empty()) {	//Buffer normal data
+        CreateVertexBuffer(attributeBuffers[VertexAttribute::Normals], numVertices * sizeof(Vector3), (char*)GetNormalData().data());
+        BindVertexAttribute(VertexAttribute::Normals, attributeBuffers[VertexAttribute::Normals], VertexAttribute::Normals, 3, sizeof(Vector3), 0);
+    }
 
-	if (!GetTangentData().empty()) {	//Buffer tangent data
-		CreateVertexBuffer(attributeBuffers[VertexAttribute::Tangents], numVertices * sizeof(Vector4), (char*)GetTangentData().data());
-		BindVertexAttribute(VertexAttribute::Tangents, attributeBuffers[VertexAttribute::Tangents], VertexAttribute::Tangents, 4, sizeof(Vector4), 0);
-	}
+    if (!GetTangentData().empty()) {	//Buffer tangent data
+        CreateVertexBuffer(attributeBuffers[VertexAttribute::Tangents], numVertices * sizeof(Vector4), (char*)GetTangentData().data());
+        BindVertexAttribute(VertexAttribute::Tangents, attributeBuffers[VertexAttribute::Tangents], VertexAttribute::Tangents, 4, sizeof(Vector4), 0);
+    }
 
-	if (!GetSkinWeightData().empty()) {	//Skeleton weights
-		CreateVertexBuffer(attributeBuffers[VertexAttribute::JointWeights], numVertices * sizeof(Vector4), (char*)GetSkinWeightData().data());
-		BindVertexAttribute(VertexAttribute::JointWeights, attributeBuffers[VertexAttribute::JointWeights], VertexAttribute::JointWeights, 4, sizeof(Vector4), 0);
-	}
+    if (!GetSkinWeightData().empty()) {	//Skeleton weights
+        CreateVertexBuffer(attributeBuffers[VertexAttribute::JointWeights], numVertices * sizeof(Vector4), (char*)GetSkinWeightData().data());
+        BindVertexAttribute(VertexAttribute::JointWeights, attributeBuffers[VertexAttribute::JointWeights], VertexAttribute::JointWeights, 4, sizeof(Vector4), 0);
+    }
 
-	if (!GetSkinIndexData().empty()) {	//Skeleton joint indices
-		CreateVertexBuffer(attributeBuffers[VertexAttribute::JointIndices], numVertices * sizeof(Vector4), (char*)GetSkinIndexData().data());
-		BindVertexAttribute(VertexAttribute::JointIndices, attributeBuffers[VertexAttribute::JointIndices], VertexAttribute::JointIndices, 4, sizeof(Vector4), 0);
-	}
+    if (!GetSkinIndexData().empty()) {	//Skeleton joint indices
+        CreateVertexBuffer(attributeBuffers[VertexAttribute::JointIndices], numVertices * sizeof(Vector4), (char*)GetSkinIndexData().data());
+        BindVertexAttribute(VertexAttribute::JointIndices, attributeBuffers[VertexAttribute::JointIndices], VertexAttribute::JointIndices, 4, sizeof(Vector4), 0);
+    }
 
-	if (!GetIndexData().empty()) {		//buffer index data
-		glGenBuffers(1, &attributeBuffers[VertexAttribute::MAX_ATTRIBUTES]);
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, attributeBuffers[VertexAttribute::MAX_ATTRIBUTES]);
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, numIndices * sizeof(GLuint), (int*)GetIndexData().data(), GL_STATIC_DRAW);
-	}
+    if (!GetIndexData().empty()) {		//buffer index data
+        glGenBuffers(1, &attributeBuffers[VertexAttribute::MAX_ATTRIBUTES]);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, attributeBuffers[VertexAttribute::MAX_ATTRIBUTES]);
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, numIndices * sizeof(GLuint), (int*)GetIndexData().data(), GL_STATIC_DRAW);
+    }
 
-	glBindVertexArray(0);
+    glBindVertexArray(0);
 }
 
 void OGLMesh::UpdateGPUBuffers(unsigned int startVertex, unsigned int vertexCount) {
-	if (!GetPositionData().empty()) {
-		glBindBuffer(GL_ARRAY_BUFFER, attributeBuffers[VertexAttribute::Positions]);
-		glBufferSubData(GL_ARRAY_BUFFER, startVertex * sizeof(Vector3), vertexCount * sizeof(Vector3), (char*)&GetPositionData()[startVertex]);
-	}
+    if (!GetPositionData().empty()) {
+        glBindBuffer(GL_ARRAY_BUFFER, attributeBuffers[VertexAttribute::Positions]);
+        glBufferSubData(GL_ARRAY_BUFFER, startVertex * sizeof(Vector3), vertexCount * sizeof(Vector3), (char*)&GetPositionData()[startVertex]);
+    }
 
-	if (!GetColourData().empty()) {	//buffer colour data
-		glBindBuffer(GL_ARRAY_BUFFER, attributeBuffers[VertexAttribute::Colours]);
-		glBufferSubData(GL_ARRAY_BUFFER, startVertex * sizeof(Vector4), vertexCount * sizeof(Vector4), (char*)&GetColourData()[startVertex]);
-	}
-	if (!GetTextureCoordData().empty()) {	//Buffer texture data
-		glBindBuffer(GL_ARRAY_BUFFER, attributeBuffers[VertexAttribute::TextureCoords]);
-		glBufferSubData(GL_ARRAY_BUFFER, startVertex * sizeof(Vector2), vertexCount * sizeof(Vector2), (char*)&GetTextureCoordData()[startVertex]);
-	}
+    if (!GetColourData().empty()) {	//buffer colour data
+        glBindBuffer(GL_ARRAY_BUFFER, attributeBuffers[VertexAttribute::Colours]);
+        glBufferSubData(GL_ARRAY_BUFFER, startVertex * sizeof(Vector4), vertexCount * sizeof(Vector4), (char*)&GetColourData()[startVertex]);
+    }
+    if (!GetTextureCoordData().empty()) {	//Buffer texture data
+        glBindBuffer(GL_ARRAY_BUFFER, attributeBuffers[VertexAttribute::TextureCoords]);
+        glBufferSubData(GL_ARRAY_BUFFER, startVertex * sizeof(Vector2), vertexCount * sizeof(Vector2), (char*)&GetTextureCoordData()[startVertex]);
+    }
 
-	if (!GetNormalData().empty()) {	//Buffer normal data
-		glBindBuffer(GL_ARRAY_BUFFER, attributeBuffers[VertexAttribute::Normals]);
-		glBufferSubData(GL_ARRAY_BUFFER, startVertex * sizeof(Vector3), vertexCount * sizeof(Vector3), (char*)&GetNormalData()[startVertex]);
-	}
+    if (!GetNormalData().empty()) {	//Buffer normal data
+        glBindBuffer(GL_ARRAY_BUFFER, attributeBuffers[VertexAttribute::Normals]);
+        glBufferSubData(GL_ARRAY_BUFFER, startVertex * sizeof(Vector3), vertexCount * sizeof(Vector3), (char*)&GetNormalData()[startVertex]);
+    }
 
-	if (!GetTangentData().empty()) {	//Buffer tangent data
-		glBindBuffer(GL_ARRAY_BUFFER, attributeBuffers[VertexAttribute::Tangents]);
-		glBufferSubData(GL_ARRAY_BUFFER, startVertex * sizeof(Vector4), vertexCount * sizeof(Vector4), (char*)&GetTangentData()[startVertex]);
-	}
+    if (!GetTangentData().empty()) {	//Buffer tangent data
+        glBindBuffer(GL_ARRAY_BUFFER, attributeBuffers[VertexAttribute::Tangents]);
+        glBufferSubData(GL_ARRAY_BUFFER, startVertex * sizeof(Vector4), vertexCount * sizeof(Vector4), (char*)&GetTangentData()[startVertex]);
+    }
 
-	if (!GetSkinWeightData().empty()) {	//Skeleton weights
-		glBindBuffer(GL_ARRAY_BUFFER, attributeBuffers[VertexAttribute::JointWeights]);
-		glBufferSubData(GL_ARRAY_BUFFER, startVertex * sizeof(Vector4), vertexCount * sizeof(Vector4), (char*)&GetSkinWeightData()[startVertex]);
-	}
+    if (!GetSkinWeightData().empty()) {	//Skeleton weights
+        glBindBuffer(GL_ARRAY_BUFFER, attributeBuffers[VertexAttribute::JointWeights]);
+        glBufferSubData(GL_ARRAY_BUFFER, startVertex * sizeof(Vector4), vertexCount * sizeof(Vector4), (char*)&GetSkinWeightData()[startVertex]);
+    }
 
-	if (!GetSkinIndexData().empty()) {	//Skeleton joint indices
-		glBindBuffer(GL_ARRAY_BUFFER, attributeBuffers[VertexAttribute::TextureCoords]);
-		glBufferSubData(GL_ARRAY_BUFFER, startVertex * sizeof(Vector4i), vertexCount * sizeof(Vector4i), (char*)&GetSkinIndexData()[startVertex]);
-	}
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
+    if (!GetSkinIndexData().empty()) {	//Skeleton joint indices
+        glBindBuffer(GL_ARRAY_BUFFER, attributeBuffers[VertexAttribute::TextureCoords]);
+        glBufferSubData(GL_ARRAY_BUFFER, startVertex * sizeof(Vector4i), vertexCount * sizeof(Vector4i), (char*)&GetSkinIndexData()[startVertex]);
+    }
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
 
 void OGLMesh::RecalculateNormals() {
-	normals.clear();
+    normals.clear();
 
-	if (indices.size() > 0) {
-		for (size_t i = 0; i < positions.size(); i++) {
-			normals.emplace_back(Vector3());
-		}
+    if (indices.size() > 0) {
+        for (size_t i = 0; i < positions.size(); i++) {
+            normals.emplace_back(Vector3());
+        }
 
-		for (size_t i = 0; i < indices.size(); i += 3) {
-			Vector3& a = positions[indices[i+0]];
-			Vector3& b = positions[indices[i+1]];
-			Vector3& c = positions[indices[i+2]];
+        for (size_t i = 0; i < indices.size(); i += 3) {
+            Vector3& a = positions[indices[i + 0]];
+            Vector3& b = positions[indices[i + 1]];
+            Vector3& c = positions[indices[i + 2]];
 
-			Vector3 normal = Vector3::Cross(b - a, c - a);
-			normal.Normalise();
+            Vector3 normal = Vector3::Cross(b - a, c - a);
+            normal.Normalise();
 
-			normals[indices[i + 0]] += normal;
-			normals[indices[i + 1]] += normal;
-			normals[indices[i + 2]] += normal;
-		}
-		for (size_t i = 0; i < normals.size(); ++i) {
-			normals[i].Normalise();
-		}
-	}
-	else {
+            normals[indices[i + 0]] += normal;
+            normals[indices[i + 1]] += normal;
+            normals[indices[i + 2]] += normal;
+        }
+        for (size_t i = 0; i < normals.size(); ++i) {
+            normals[i].Normalise();
+        }
+    }
+    else {
 
-	}
+    }
 }
 
 OGLMesh* OGLMesh::GenerateQuad() {
-	OGLMesh* m = new OGLMesh();
-	m->primType = GeometryPrimitive::TriangleStrip;
+    OGLMesh* m = new OGLMesh();
+    m->primType = GeometryPrimitive::TriangleStrip;
 
-	m->positions.push_back(Vector3(-1.0f, 1.0f, 0.0f));
-	m->positions.push_back(Vector3(-1.0f, -1.0f, 0.0f));
-	m->positions.push_back(Vector3(1.0f, 1.0f, 0.0f));
-	m->positions.push_back(Vector3(1.0f, -1.0f, 0.0f));
+    m->positions.push_back(Vector3(-1.0f, 1.0f, 0.0f));
+    m->positions.push_back(Vector3(-1.0f, -1.0f, 0.0f));
+    m->positions.push_back(Vector3(1.0f, 1.0f, 0.0f));
+    m->positions.push_back(Vector3(1.0f, -1.0f, 0.0f));
 
-	m->texCoords.push_back(Vector2(0.0f, 1.0f));
-	m->texCoords.push_back(Vector2(0.0f, 0.0f));
-	m->texCoords.push_back(Vector2(1.0f, 1.0f));
-	m->texCoords.push_back(Vector2(1.0f, 0.0f));
+    m->texCoords.push_back(Vector2(0.0f, 1.0f));
+    m->texCoords.push_back(Vector2(0.0f, 0.0f));
+    m->texCoords.push_back(Vector2(1.0f, 1.0f));
+    m->texCoords.push_back(Vector2(1.0f, 0.0f));
 
-	for (int i = 0; i < 4; ++i) {
-		m->colours.push_back(Vector4(1.0f, 1.0f, 1.0f, 1.0f));
-		m->normals.push_back(Vector3(0.0f, 0.0f, -1.0f));
-		m->tangents.push_back(Vector4(1.0f, 0.0f, 0.0f, 1.0f));
-	}
+    for (int i = 0; i < 4; ++i) {
+        m->colours.push_back(Vector4(1.0f, 1.0f, 1.0f, 1.0f));
+        m->normals.push_back(Vector3(0.0f, 0.0f, -1.0f));
+        m->tangents.push_back(Vector4(1.0f, 0.0f, 0.0f, 1.0f));
+    }
 
-	m->UploadToGPU();
-	return m;
+    m->UploadToGPU();
+    return m;
 }
 
 OGLOBJMesh::OGLOBJMesh() {
-	vao = 0;
+    vao = 0;
 
-	for (int i = 0; i < VertexAttribute::MAX_ATTRIBUTES; ++i) {
-		attributeBuffers[i] = 0;
-	}
-	indexBuffer = 0;
+    for (int i = 0; i < VertexAttribute::MAX_ATTRIBUTES; ++i) {
+        attributeBuffers[i] = 0;
+    }
+    indexBuffer = 0;
 }
 
 OGLOBJMesh::~OGLOBJMesh() {
-	glDeleteVertexArrays(1, &vao);			//Delete our VAO
-	glDeleteBuffers(VertexAttribute::MAX_ATTRIBUTES, attributeBuffers);	//Delete our VBOs
-	glDeleteBuffers(1, &indexBuffer);	//Delete our indices
+    glDeleteVertexArrays(1, &vao);			//Delete our VAO
+    glDeleteBuffers(VertexAttribute::MAX_ATTRIBUTES, attributeBuffers);	//Delete our VBOs
+    glDeleteBuffers(1, &indexBuffer);	//Delete our indices
 }
 
 void OGLOBJMesh::BindVertexAttribute(int attribSlot, int buffer, int bindingID, int elementCount, int elementSize, int elementOffset) {
-	glEnableVertexAttribArray(attribSlot);
-	glVertexAttribFormat(attribSlot, elementCount, GL_FLOAT, false, 0);
-	glVertexAttribBinding(attribSlot, bindingID);
+    glEnableVertexAttribArray(attribSlot);
+    glVertexAttribFormat(attribSlot, elementCount, GL_FLOAT, false, 0);
+    glVertexAttribBinding(attribSlot, bindingID);
 
-	glBindVertexBuffer(bindingID, buffer, elementOffset, elementSize);
+    glBindVertexBuffer(bindingID, buffer, elementOffset, elementSize);
 }
 
 void OGLOBJMesh::UploadToGPU(Rendering::RendererBase* renderer) {
-	if (!ValidateMeshData()) {
-		return;
-	}
-	glGenVertexArrays(1, &vao);
-	glBindVertexArray(vao);
+    if (!ValidateMeshData()) {
+        return;
+    }
+    glGenVertexArrays(1, &vao);
+    glBindVertexArray(vao);
 
-	int numVertices = GetVertexCount();
-	int numIndices = GetIndexCount();
+    int numVertices = GetVertexCount();
+    int numIndices = GetIndexCount();
 
-	if (!GetPositionData().empty()) {
-		CreateVertexBuffer(attributeBuffers[VertexAttribute::Positions], numVertices * sizeof(Vector3), (char*)GetPositionData().data());
-		BindVertexAttribute(VertexAttribute::Positions, attributeBuffers[VertexAttribute::Positions], VertexAttribute::Positions, 3, sizeof(Vector3), 0);
-	}
+    if (!GetPositionData().empty()) {
+        CreateVertexBuffer(attributeBuffers[VertexAttribute::Positions], numVertices * sizeof(Vector3), (char*)GetPositionData().data());
+        BindVertexAttribute(VertexAttribute::Positions, attributeBuffers[VertexAttribute::Positions], VertexAttribute::Positions, 3, sizeof(Vector3), 0);
+    }
 
-	if (!GetColourData().empty()) {	//buffer colour data
-		CreateVertexBuffer(attributeBuffers[VertexAttribute::Colours], numVertices * sizeof(Vector4), (char*)GetColourData().data());
-		BindVertexAttribute(VertexAttribute::Colours, attributeBuffers[VertexAttribute::Colours], VertexAttribute::Colours, 4, sizeof(Vector4), 0);
-	}
-	if (!GetTextureCoordData().empty()) {	//Buffer texture data
-		CreateVertexBuffer(attributeBuffers[VertexAttribute::TextureCoords], numVertices * sizeof(Vector2), (char*)GetTextureCoordData().data());
-		BindVertexAttribute(VertexAttribute::TextureCoords, attributeBuffers[VertexAttribute::TextureCoords], VertexAttribute::TextureCoords, 2, sizeof(Vector2), 0);
-	}
+    if (!GetColourData().empty()) {	//buffer colour data
+        CreateVertexBuffer(attributeBuffers[VertexAttribute::Colours], numVertices * sizeof(Vector4), (char*)GetColourData().data());
+        BindVertexAttribute(VertexAttribute::Colours, attributeBuffers[VertexAttribute::Colours], VertexAttribute::Colours, 4, sizeof(Vector4), 0);
+    }
+    if (!GetTextureCoordData().empty()) {	//Buffer texture data
+        CreateVertexBuffer(attributeBuffers[VertexAttribute::TextureCoords], numVertices * sizeof(Vector2), (char*)GetTextureCoordData().data());
+        BindVertexAttribute(VertexAttribute::TextureCoords, attributeBuffers[VertexAttribute::TextureCoords], VertexAttribute::TextureCoords, 2, sizeof(Vector2), 0);
+    }
 
-	if (!GetNormalData().empty()) {	//Buffer normal data
-		CreateVertexBuffer(attributeBuffers[VertexAttribute::Normals], numVertices * sizeof(Vector3), (char*)GetNormalData().data());
-		BindVertexAttribute(VertexAttribute::Normals, attributeBuffers[VertexAttribute::Normals], VertexAttribute::Normals, 3, sizeof(Vector3), 0);
-	}
+    if (!GetNormalData().empty()) {	//Buffer normal data
+        CreateVertexBuffer(attributeBuffers[VertexAttribute::Normals], numVertices * sizeof(Vector3), (char*)GetNormalData().data());
+        BindVertexAttribute(VertexAttribute::Normals, attributeBuffers[VertexAttribute::Normals], VertexAttribute::Normals, 3, sizeof(Vector3), 0);
+    }
 
-	if (!GetTangentData().empty()) {	//Buffer tangent data
-		CreateVertexBuffer(attributeBuffers[VertexAttribute::Tangents], numVertices * sizeof(Vector4), (char*)GetTangentData().data());
-		BindVertexAttribute(VertexAttribute::Tangents, attributeBuffers[VertexAttribute::Tangents], VertexAttribute::Tangents, 4, sizeof(Vector4), 0);
-	}
+    if (!GetTangentData().empty()) {	//Buffer tangent data
+        CreateVertexBuffer(attributeBuffers[VertexAttribute::Tangents], numVertices * sizeof(Vector4), (char*)GetTangentData().data());
+        BindVertexAttribute(VertexAttribute::Tangents, attributeBuffers[VertexAttribute::Tangents], VertexAttribute::Tangents, 4, sizeof(Vector4), 0);
+    }
 
-	if (!GetSkinWeightData().empty()) {	//Skeleton weights
-		CreateVertexBuffer(attributeBuffers[VertexAttribute::JointWeights], numVertices * sizeof(Vector4), (char*)GetSkinWeightData().data());
-		BindVertexAttribute(VertexAttribute::JointWeights, attributeBuffers[VertexAttribute::JointWeights], VertexAttribute::JointWeights, 4, sizeof(Vector4), 0);
-	}
+    if (!GetSkinWeightData().empty()) {	//Skeleton weights
+        CreateVertexBuffer(attributeBuffers[VertexAttribute::JointWeights], numVertices * sizeof(Vector4), (char*)GetSkinWeightData().data());
+        BindVertexAttribute(VertexAttribute::JointWeights, attributeBuffers[VertexAttribute::JointWeights], VertexAttribute::JointWeights, 4, sizeof(Vector4), 0);
+    }
 
-	if (!GetSkinIndexData().empty()) {	//Skeleton joint indices
-		CreateVertexBuffer(attributeBuffers[VertexAttribute::JointIndices], numVertices * sizeof(Vector4), (char*)GetSkinIndexData().data());
-		BindVertexAttribute(VertexAttribute::JointIndices, attributeBuffers[VertexAttribute::JointIndices], VertexAttribute::JointIndices, 4, sizeof(Vector4), 0);
-	}
+    if (!GetSkinIndexData().empty()) {	//Skeleton joint indices
+        CreateVertexBuffer(attributeBuffers[VertexAttribute::JointIndices], numVertices * sizeof(Vector4), (char*)GetSkinIndexData().data());
+        BindVertexAttribute(VertexAttribute::JointIndices, attributeBuffers[VertexAttribute::JointIndices], VertexAttribute::JointIndices, 4, sizeof(Vector4), 0);
+    }
 
-	if (!GetIndexData().empty()) {		//buffer index data
-		glGenBuffers(1, &attributeBuffers[VertexAttribute::MAX_ATTRIBUTES]);
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, attributeBuffers[VertexAttribute::MAX_ATTRIBUTES]);
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, numIndices * sizeof(GLuint), (int*)GetIndexData().data(), GL_STATIC_DRAW);
-	}
+    if (!GetIndexData().empty()) {		//buffer index data
+        glGenBuffers(1, &attributeBuffers[VertexAttribute::MAX_ATTRIBUTES]);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, attributeBuffers[VertexAttribute::MAX_ATTRIBUTES]);
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, numIndices * sizeof(GLuint), (int*)GetIndexData().data(), GL_STATIC_DRAW);
+    }
 
-	glBindVertexArray(0);
+    glBindVertexArray(0);
 }
 
 void OGLOBJMesh::UploadOBJMesh(Rendering::RendererBase* renderer, std::vector<OBJSubMesh*> inputSubMeshes, std::vector<Vector3>inputVertices, std::vector<Vector2>inputTexCoords, std::vector<Vector3>inputNormals) {
-	//We now have all our mesh data loaded in... Now to convert it into OpenGL vertex buffers!
-	for (unsigned int i = 0; i < inputSubMeshes.size(); ) {
-		OBJSubMesh* sm = inputSubMeshes[i];
+    //We now have all our mesh data loaded in... Now to convert it into OpenGL vertex buffers!
+    for (unsigned int i = 0; i < inputSubMeshes.size(); ) {
+        OBJSubMesh* sm = inputSubMeshes[i];
 
-		/*
-		We're going to be lazy and turn the indices into an absolute list
-		of vertex attributes (it makes handling the submesh list easier)
-		*/
-		if (sm->vertIndices.empty()) {
-			delete sm;
-			inputSubMeshes.erase(inputSubMeshes.begin() + i);
-			continue;
-		}
-		else {
-			OGLOBJMesh* m;
+        /*
+        We're going to be lazy and turn the indices into an absolute list
+        of vertex attributes (it makes handling the submesh list easier)
+        */
+        if (sm->vertIndices.empty()) {
+            delete sm;
+            inputSubMeshes.erase(inputSubMeshes.begin() + i);
+            continue;
+        }
+        else {
+            OGLOBJMesh* m;
 
-			if (i == 0) {
-				m = this;
-			}
-			else {
-				m = new OGLOBJMesh();
-			}
+            if (i == 0) {
+                m = this;
+            }
+            else {
+                m = new OGLOBJMesh();
+            }
 
-			m->SetTexturesFromMTL(sm->mtlSrc, sm->mtlType);
+            m->SetTexturesFromMTL(sm->mtlSrc, sm->mtlType);
 
-			for (unsigned int j = 0; j < sm->vertIndices.size(); ++j) {
-				m->positions.push_back(inputVertices[sm->vertIndices[j] - 1]);
-			}
+            for (unsigned int j = 0; j < sm->vertIndices.size(); ++j) {
+                m->positions.push_back(inputVertices[sm->vertIndices[j] - 1]);
+            }
 
-			if (!sm->texIndices.empty()) {
-				for (unsigned int j = 0; j < sm->texIndices.size(); ++j) {
-					m->texCoords.push_back(inputTexCoords[sm->texIndices[j] - 1]);
-				}
-			}
+            if (!sm->texIndices.empty()) {
+                for (unsigned int j = 0; j < sm->texIndices.size(); ++j) {
+                    m->texCoords.push_back(inputTexCoords[sm->texIndices[j] - 1]);
+                }
+            }
 
-			if (!sm->normIndices.empty()) {
-				for (unsigned int j = 0; j < sm->normIndices.size(); ++j) {
-					m->normals.push_back(inputNormals[sm->normIndices[j] - 1]);
-				}
-			}
+            if (!sm->normIndices.empty()) {
+                for (unsigned int j = 0; j < sm->normIndices.size(); ++j) {
+                    m->normals.push_back(inputNormals[sm->normIndices[j] - 1]);
+                }
+            }
 
-			m->GenerateTangents();
+            m->GenerateTangents();
 
-			m->UploadToGPU();
+            m->UploadToGPU();
 
-			if (i != 0) {
-				OBJAddChild(m);
-			}
-		}
-		delete inputSubMeshes[i];
-		++i;
-	}
+            if (i != 0) {
+                OBJAddChild(m);
+            }
+        }
+        delete inputSubMeshes[i];
+        ++i;
+    }
 }
 
 void OGLOBJMesh::SetTexturesFromMTL(string& mtlFile, string& mtlType) {
-	if (mtlType.empty() || mtlFile.empty()) {
-		return;
-	}
+    if (mtlType.empty() || mtlFile.empty()) {
+        return;
+    }
 
-	map <string, MTLInfo>::iterator i = materials.find(mtlType);
+    map <string, MTLInfo>::iterator i = materials.find(mtlType);
 
-	if (i != materials.end()) {
-		if (!i->second.diffuse.empty()) {
-			OBJTexture = i->second.diffuseNum;
-		}
+    if (i != materials.end()) {
+        if (!i->second.diffuse.empty()) {
+            OBJTexture = i->second.diffuseNum;
+        }
 
-		if (!i->second.bump.empty()) {
-			OBJBumpTexture = i->second.bumpNum;
-		}
+        if (!i->second.bump.empty()) {
+            OBJBumpTexture = i->second.bumpNum;
+        }
 
-		return;
-	}
+        return;
+    }
 
-	std::ifstream f(string(Assets::MESHDIR + mtlFile).c_str(), std::ios::in);
+    std::ifstream f(string(Assets::MESHDIR + mtlFile).c_str(), std::ios::in);
 
-	if (!f) {//Oh dear, it can't find the file :(
-		return;
-	}
+    if (!f) {//Oh dear, it can't find the file :(
+        return;
+    }
 
-	MTLInfo currentMTL;
-	string  currentMTLName;
+    MTLInfo currentMTL;
+    string  currentMTLName;
 
-	int mtlCount = 0;
+    int mtlCount = 0;
 
-	while (!f.eof()) {
-		std::string currentLine;
-		f >> currentLine;
+    while (!f.eof()) {
+        std::string currentLine;
+        f >> currentLine;
 
-		if (currentLine == MTLNEW) {
-			if (mtlCount > 0) {
-				materials.insert(std::make_pair(currentMTLName, currentMTL));
-			}
-			currentMTL.diffuse = "";
-			currentMTL.bump = "";
+        if (currentLine == MTLNEW) {
+            if (mtlCount > 0) {
+                materials.insert(std::make_pair(currentMTLName, currentMTL));
+            }
+            currentMTL.diffuse = "";
+            currentMTL.bump = "";
 
-			f >> currentMTLName;
+            f >> currentMTLName;
 
-			mtlCount++;
-		}
-		else if (currentLine == MTLDIFFUSEMAP) {
-			f >> currentMTL.diffuse;
+            mtlCount++;
+        }
+        else if (currentLine == MTLDIFFUSEMAP) {
+            f >> currentMTL.diffuse;
 
-			if (currentMTL.diffuse.find_last_of('/') != string::npos) {
-				int at = currentMTL.diffuse.find_last_of('/');
-				currentMTL.diffuse = currentMTL.diffuse.substr(at + 1);
-			}
-			else if (currentMTL.diffuse.find_last_of('\\') != string::npos) {
-				int at = currentMTL.diffuse.find_last_of('\\');
-				currentMTL.diffuse = currentMTL.diffuse.substr(at + 1);
-			}
+            if (currentMTL.diffuse.find_last_of('/') != string::npos) {
+                int at = currentMTL.diffuse.find_last_of('/');
+                currentMTL.diffuse = currentMTL.diffuse.substr(at + 1);
+            }
+            else if (currentMTL.diffuse.find_last_of('\\') != string::npos) {
+                int at = currentMTL.diffuse.find_last_of('\\');
+                currentMTL.diffuse = currentMTL.diffuse.substr(at + 1);
+            }
 
-			if (!currentMTL.diffuse.empty()) {
-				currentMTL.diffuseNum = SOIL_load_OGL_texture(string(Assets::TEXTUREDIR + currentMTL.diffuse).c_str(), SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_INVERT_Y | SOIL_FLAG_TEXTURE_REPEATS);
-			}
-		}
-		else if (currentLine == MTLBUMPMAP || currentLine == MTLBUMPMAPALT) {
-			f >> currentMTL.bump;
-		
-			if (currentMTL.bump.find_last_of('/') != string::npos) {
-				int at = currentMTL.bump.find_last_of('/');
-				currentMTL.bump = currentMTL.bump.substr(at + 1);
-			}
-			else if (currentMTL.bump.find_last_of('\\') != string::npos) {
-				int at = currentMTL.bump.find_last_of('\\');
-				currentMTL.bump = currentMTL.bump.substr(at + 1);
-			}
-		
-			if (!currentMTL.bump.empty()) {
-				currentMTL.bumpNum = SOIL_load_OGL_texture(string(Assets::TEXTUREDIR + currentMTL.bump).c_str(), SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_INVERT_Y | SOIL_FLAG_TEXTURE_REPEATS);
-			}
-		}
-		else {
-			std::cout << "OBJMesh::LoadOBJMesh Unknown file data:" << currentLine << std::endl;
-		}
-	}
+            if (!currentMTL.diffuse.empty()) {
+                currentMTL.diffuseNum = SOIL_load_OGL_texture(string(Assets::TEXTUREDIR + currentMTL.diffuse).c_str(), SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_INVERT_Y | SOIL_FLAG_TEXTURE_REPEATS);
+            }
+        }
+        else if (currentLine == MTLBUMPMAP || currentLine == MTLBUMPMAPALT) {
+            f >> currentMTL.bump;
 
-	materials.insert(std::make_pair(currentMTLName, currentMTL));
+            if (currentMTL.bump.find_last_of('/') != string::npos) {
+                int at = currentMTL.bump.find_last_of('/');
+                currentMTL.bump = currentMTL.bump.substr(at + 1);
+            }
+            else if (currentMTL.bump.find_last_of('\\') != string::npos) {
+                int at = currentMTL.bump.find_last_of('\\');
+                currentMTL.bump = currentMTL.bump.substr(at + 1);
+            }
 
-	SetTexturesFromMTL(mtlFile, mtlType);
+            if (!currentMTL.bump.empty()) {
+                currentMTL.bumpNum = SOIL_load_OGL_texture(string(Assets::TEXTUREDIR + currentMTL.bump).c_str(), SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_INVERT_Y | SOIL_FLAG_TEXTURE_REPEATS);
+            }
+        }
+        else {
+            std::cout << "OBJMesh::LoadOBJMesh Unknown file data:" << currentLine << std::endl;
+        }
+    }
+
+    materials.insert(std::make_pair(currentMTLName, currentMTL));
+
+    SetTexturesFromMTL(mtlFile, mtlType);
 }
 
 void OGLOBJMesh::UpdateGPUBuffers(unsigned int startVertex, unsigned int vertexCount) {
-	if (!GetPositionData().empty()) {
-		glBindBuffer(GL_ARRAY_BUFFER, attributeBuffers[VertexAttribute::Positions]);
-		glBufferSubData(GL_ARRAY_BUFFER, startVertex * sizeof(Vector3), vertexCount * sizeof(Vector3), (char*)&GetPositionData()[startVertex]);
-	}
+    if (!GetPositionData().empty()) {
+        glBindBuffer(GL_ARRAY_BUFFER, attributeBuffers[VertexAttribute::Positions]);
+        glBufferSubData(GL_ARRAY_BUFFER, startVertex * sizeof(Vector3), vertexCount * sizeof(Vector3), (char*)&GetPositionData()[startVertex]);
+    }
 
-	if (!GetColourData().empty()) {	//buffer colour data
-		glBindBuffer(GL_ARRAY_BUFFER, attributeBuffers[VertexAttribute::Colours]);
-		glBufferSubData(GL_ARRAY_BUFFER, startVertex * sizeof(Vector4), vertexCount * sizeof(Vector4), (char*)&GetColourData()[startVertex]);
-	}
-	if (!GetTextureCoordData().empty()) {	//Buffer texture data
-		glBindBuffer(GL_ARRAY_BUFFER, attributeBuffers[VertexAttribute::TextureCoords]);
-		glBufferSubData(GL_ARRAY_BUFFER, startVertex * sizeof(Vector2), vertexCount * sizeof(Vector2), (char*)&GetTextureCoordData()[startVertex]);
-	}
+    if (!GetColourData().empty()) {	//buffer colour data
+        glBindBuffer(GL_ARRAY_BUFFER, attributeBuffers[VertexAttribute::Colours]);
+        glBufferSubData(GL_ARRAY_BUFFER, startVertex * sizeof(Vector4), vertexCount * sizeof(Vector4), (char*)&GetColourData()[startVertex]);
+    }
+    if (!GetTextureCoordData().empty()) {	//Buffer texture data
+        glBindBuffer(GL_ARRAY_BUFFER, attributeBuffers[VertexAttribute::TextureCoords]);
+        glBufferSubData(GL_ARRAY_BUFFER, startVertex * sizeof(Vector2), vertexCount * sizeof(Vector2), (char*)&GetTextureCoordData()[startVertex]);
+    }
 
-	if (!GetNormalData().empty()) {	//Buffer normal data
-		glBindBuffer(GL_ARRAY_BUFFER, attributeBuffers[VertexAttribute::Normals]);
-		glBufferSubData(GL_ARRAY_BUFFER, startVertex * sizeof(Vector3), vertexCount * sizeof(Vector3), (char*)&GetNormalData()[startVertex]);
-	}
+    if (!GetNormalData().empty()) {	//Buffer normal data
+        glBindBuffer(GL_ARRAY_BUFFER, attributeBuffers[VertexAttribute::Normals]);
+        glBufferSubData(GL_ARRAY_BUFFER, startVertex * sizeof(Vector3), vertexCount * sizeof(Vector3), (char*)&GetNormalData()[startVertex]);
+    }
 
-	if (!GetTangentData().empty()) {	//Buffer tangent data
-		glBindBuffer(GL_ARRAY_BUFFER, attributeBuffers[VertexAttribute::Tangents]);
-		glBufferSubData(GL_ARRAY_BUFFER, startVertex * sizeof(Vector4), vertexCount * sizeof(Vector4), (char*)&GetTangentData()[startVertex]);
-	}
+    if (!GetTangentData().empty()) {	//Buffer tangent data
+        glBindBuffer(GL_ARRAY_BUFFER, attributeBuffers[VertexAttribute::Tangents]);
+        glBufferSubData(GL_ARRAY_BUFFER, startVertex * sizeof(Vector4), vertexCount * sizeof(Vector4), (char*)&GetTangentData()[startVertex]);
+    }
 
-	if (!GetSkinWeightData().empty()) {	//Skeleton weights
-		glBindBuffer(GL_ARRAY_BUFFER, attributeBuffers[VertexAttribute::JointWeights]);
-		glBufferSubData(GL_ARRAY_BUFFER, startVertex * sizeof(Vector4), vertexCount * sizeof(Vector4), (char*)&GetSkinWeightData()[startVertex]);
-	}
+    if (!GetSkinWeightData().empty()) {	//Skeleton weights
+        glBindBuffer(GL_ARRAY_BUFFER, attributeBuffers[VertexAttribute::JointWeights]);
+        glBufferSubData(GL_ARRAY_BUFFER, startVertex * sizeof(Vector4), vertexCount * sizeof(Vector4), (char*)&GetSkinWeightData()[startVertex]);
+    }
 
-	if (!GetSkinIndexData().empty()) {	//Skeleton joint indices
-		glBindBuffer(GL_ARRAY_BUFFER, attributeBuffers[VertexAttribute::TextureCoords]);
-		glBufferSubData(GL_ARRAY_BUFFER, startVertex * sizeof(Vector4i), vertexCount * sizeof(Vector4i), (char*)&GetSkinIndexData()[startVertex]);
-	}
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
+    if (!GetSkinIndexData().empty()) {	//Skeleton joint indices
+        glBindBuffer(GL_ARRAY_BUFFER, attributeBuffers[VertexAttribute::TextureCoords]);
+        glBufferSubData(GL_ARRAY_BUFFER, startVertex * sizeof(Vector4i), vertexCount * sizeof(Vector4i), (char*)&GetSkinIndexData()[startVertex]);
+    }
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
 
 void OGLOBJMesh::RecalculateNormals() {
-	normals.clear();
+    normals.clear();
 
-	if (indices.size() > 0) {
-		for (size_t i = 0; i < positions.size(); i++) {
-			normals.emplace_back(Vector3());
-		}
+    if (indices.size() > 0) {
+        for (size_t i = 0; i < positions.size(); i++) {
+            normals.emplace_back(Vector3());
+        }
 
-		for (size_t i = 0; i < indices.size(); i += 3) {
-			Vector3& a = positions[indices[i + 0]];
-			Vector3& b = positions[indices[i + 1]];
-			Vector3& c = positions[indices[i + 2]];
+        for (size_t i = 0; i < indices.size(); i += 3) {
+            Vector3& a = positions[indices[i + 0]];
+            Vector3& b = positions[indices[i + 1]];
+            Vector3& c = positions[indices[i + 2]];
 
-			Vector3 normal = Vector3::Cross(b - a, c - a);
-			normal.Normalise();
+            Vector3 normal = Vector3::Cross(b - a, c - a);
+            normal.Normalise();
 
-			normals[indices[i + 0]] += normal;
-			normals[indices[i + 1]] += normal;
-			normals[indices[i + 2]] += normal;
-		}
-		for (size_t i = 0; i < normals.size(); ++i) {
-			normals[i].Normalise();
-		}
-	}
-	else {
+            normals[indices[i + 0]] += normal;
+            normals[indices[i + 1]] += normal;
+            normals[indices[i + 2]] += normal;
+        }
+        for (size_t i = 0; i < normals.size(); ++i) {
+            normals[i].Normalise();
+        }
+    }
+    else {
 
-	}
+    }
 }
 
 void OGLOBJMesh::GenerateTangents() {
-	if (texCoords.empty()) {
-		return;
-	}
+    if (texCoords.empty()) {
+        return;
+    }
 
-	for (size_t i = 0; i < positions.size(); i++) {
-		tangents.emplace_back(Vector3());
-	}
+    for (size_t i = 0; i < positions.size(); i++) {
+        tangents.emplace_back(Vector3());
+    }
 
-	for (int i = 0; i < positions.size(); i += 3) {
-		unsigned int a = i;
-		unsigned int b = i + 1;
-		unsigned int c = i + 2;
-		Vector4 tangent = GenerateTangent(a, b, c);
-		tangents[a] += tangent;
-		tangents[b] += tangent;
-		tangents[c] += tangent;
-	}
-	for (GLuint i = 0; i < positions.size(); ++i) {
-		float headedness = tangents[i].w > 0.0f ? 1.0f : -1.0f;
-		tangents[i].w = 0.0f;
-		tangents[i].Normalise();
-		tangents[i].w = headedness;
-	}
+    for (int i = 0; i < positions.size(); i += 3) {
+        unsigned int a = i;
+        unsigned int b = i + 1;
+        unsigned int c = i + 2;
+        Vector4 tangent = GenerateTangent(a, b, c);
+        tangents[a] += tangent;
+        tangents[b] += tangent;
+        tangents[c] += tangent;
+    }
+    for (GLuint i = 0; i < positions.size(); ++i) {
+        float headedness = tangents[i].w > 0.0f ? 1.0f : -1.0f;
+        tangents[i].w = 0.0f;
+        tangents[i].Normalise();
+        tangents[i].w = headedness;
+    }
 }
 
 Vector4 OGLOBJMesh::GenerateTangent(int a, int b, int c) {
-	Vector3 ba = positions[b] - positions[a];
-	Vector3 ca = positions[c] - positions[a];
+    Vector3 ba = positions[b] - positions[a];
+    Vector3 ca = positions[c] - positions[a];
 
-	Vector2 tba = texCoords[b] - texCoords[a];
-	Vector2 tca = texCoords[c] - texCoords[a];
+    Vector2 tba = texCoords[b] - texCoords[a];
+    Vector2 tca = texCoords[c] - texCoords[a];
 
-	Matrix2 texMatrix = Matrix2(tba, tca);
-	texMatrix.Invert();
+    Matrix2 texMatrix = Matrix2(tba, tca);
+    texMatrix.Invert();
 
-	Vector3 tangent;
-	Vector3 binormal;
+    Vector3 tangent;
+    Vector3 binormal;
 
-	tangent = ba * texMatrix.array[0][0] + ca * texMatrix.array[0][1];
-	binormal = ba * texMatrix.array[1][0] + ca * texMatrix.array[1][1];
+    tangent = ba * texMatrix.array[0][0] + ca * texMatrix.array[0][1];
+    binormal = ba * texMatrix.array[1][0] + ca * texMatrix.array[1][1];
 
-	Vector3 normal = Vector3::Cross(ba, ca);
-	Vector3 biCross = Vector3::Cross(tangent, normal);
+    Vector3 normal = Vector3::Cross(ba, ca);
+    Vector3 biCross = Vector3::Cross(tangent, normal);
 
-	float headedness = 1.0f;
-	if (Vector3::Dot(biCross, binormal) < 0.0f) {
-		headedness = -1.0f;
-	}
+    float headedness = 1.0f;
+    if (Vector3::Dot(biCross, binormal) < 0.0f) {
+        headedness = -1.0f;
+    }
 
-	return Vector4(tangent.x, tangent.y, tangent.z, headedness);
+    return Vector4(tangent.x, tangent.y, tangent.z, headedness);
 }
