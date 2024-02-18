@@ -12,10 +12,10 @@ RenderObject::RenderObject(Transform* parentTransform, Mesh* mesh, Texture* tex,
 	this->mesh = mesh;
 	this->texture = tex;
 	this->shaderGroup = shader;
-	this->animation = nullptr;
 	this->colour = Vector4(1.0f, 1.0f, 1.0f, 1.0f);
 	this->drawMode = mode;
 	this->emissive = false;
+	this->animationObject = nullptr;
 }
 
 RenderObject::RenderObject(Transform* parentTransform, OBJMesh* mesh, Texture* tex, ShaderGroup* shader, int mode) {
@@ -29,6 +29,7 @@ RenderObject::RenderObject(Transform* parentTransform, OBJMesh* mesh, Texture* t
 	this->colour = Vector4(1.0f, 1.0f, 1.0f, 1.0f);
 	this->drawMode = mode;
 	this->emissive = false;
+	this->animationObject = nullptr;
 }
 
 RenderObject::~RenderObject() {

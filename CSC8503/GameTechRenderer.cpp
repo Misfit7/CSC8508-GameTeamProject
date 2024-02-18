@@ -50,6 +50,11 @@ GameTechRenderer::GameTechRenderer(GameWorld& world) : OGLRenderer(*Window::GetW
 
     SetDebugStringBufferSizes(10000);
     SetDebugLineBufferSizes(1000);
+
+    glEnable(GL_DEPTH_TEST);
+    glEnable(GL_BLEND);
+    glEnable(GL_CULL_FACE);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }
 
 GameTechRenderer::~GameTechRenderer() {
@@ -416,7 +421,7 @@ void GameTechRenderer::RenderShadowMap() {
                 vector<Matrix4> frameMatrices;
 
                 const vector<Matrix4> invBindPose = (*i).GetMesh()->GetInverseBindPose();
-                const Matrix4* frameData = (*i).GetAnim()->GetJointData((*i).GetCurrentFrame());
+                const Matrix4* frameData = (*i).GetAnimationObject()->GetActiveAnim()->GetJointData((*i).GetAnimationObject()->GetCurrentFrame());
 
                 for (unsigned int j = 0; j < (*i).GetMesh()->GetJointCount(); ++j) {
                     frameMatrices.emplace_back(frameData[j] * invBindPose[j]);
@@ -567,7 +572,7 @@ void GameTechRenderer::RenderCamera() {
             }
             else if ((*i).GetDrawMode() == 2) {
                 if ((*i).GetOBJMesh()->GetOBJTexture()) {
-                    BindGLuintTextureToShader((*i).GetOBJMesh()->GetOBJTexture(), "mainTex", 0);
+                    BindGLuintTextureToShader((*i).GetOBJMesh()->GetOBJTexture(), "mainTex", 0);                
                 }
 
                 glUniform1i(hasTexLocation, (OGLTexture*)(*i).GetOBJMesh()->GetOBJTexture() ? 1 : 0);
@@ -585,7 +590,7 @@ void GameTechRenderer::RenderCamera() {
                 vector<Matrix4> frameMatrices;
 
                 const vector<Matrix4> invBindPose = (*i).GetMesh()->GetInverseBindPose();
-                const Matrix4* frameData = (*i).GetAnim()->GetJointData((*i).GetCurrentFrame());
+                const Matrix4* frameData = (*i).GetAnimationObject()->GetActiveAnim()->GetJointData((*i).GetAnimationObject()->GetCurrentFrame());
 
                 for (unsigned int j = 0; j < (*i).GetMesh()->GetJointCount(); ++j) {
                     frameMatrices.emplace_back(frameData[j] * invBindPose[j]);

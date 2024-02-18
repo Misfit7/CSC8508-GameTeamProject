@@ -7,10 +7,11 @@
 #endif
 #include "PhysicsSystem.h"
 #include "NavigationGrid.h"
+#include "MeshMaterial.h"
 #include "Audio.h"
 #include "StateGameObject.h"
 #include "TrainObject.h"
-#include "SoldierObject.h"
+#include "PlayerObject.h"
 #include <cmath>
 #include <limits>
 class CollectableObject : public GameObject {
@@ -38,9 +39,15 @@ namespace NCL {
 
             virtual void UpdateGame(float dt);
 
+            static TutorialGame* GetGame() {
+                return instance;
+            };           
+
         protected:
             void InitialiseAssets();
 
+            void InitMaterials();
+            void InitAnimations();
             void InitCamera();
             void UpdateKeys();
 
@@ -71,12 +78,11 @@ namespace NCL {
             GameObject* AddSphereToWorld(const Vector3& position, float radius, float inverseMass = 10.0f);
             GameObject* AddCubeToWorld(const Vector3& position, Vector3 dimensions, float inverseMass = 10.0f);
 
-            GameObject* AddPlayerToWorld(const Vector3& position);
+            GameObject* AddPlayer0ToWorld(const Vector3& position);
             GameObject* AddEnemyToWorld(const Vector3& position);
             TrainObject* AddTrainToWorld(const Vector3& position);
-            GameObject* AddCreeperToWorld(const Vector3& position);
             GameObject* AddTestingLightToWorld(const Vector3& position, const Vector4& colour);
-            SoldierObject* AddSoldierToWorld(const Vector3& position);
+            PlayerObject* AddPlayerToWorld(const Vector3& position);
 
             CollectableObject* CreateObject(int ID);
 
@@ -142,13 +148,35 @@ namespace NCL {
             Mesh* charMesh = nullptr;
             Mesh* enemyMesh = nullptr;
             Mesh* bonusMesh = nullptr;
-            Mesh* soldierMesh = nullptr;
+
+            Mesh* maleMesh = nullptr;
+            Mesh* femaleMesh = nullptr;
+            Mesh* assassinMesh = nullptr;
+            Mesh* girlMesh = nullptr;
 
             OBJMesh* trainMesh = nullptr;
             OBJMesh* creeperMesh = nullptr;
 
-            MeshMaterial* soldierMat = nullptr;
-            MeshAnimation* soldierAnim = nullptr;
+            MeshMaterial* maleMaterial = nullptr;
+            MeshMaterial* femaleMaterial = nullptr;
+            MeshMaterial* assassinMaterial = nullptr;
+            MeshMaterial* girlMaterial = nullptr;
+
+            vector<GLuint> maleTextures;
+            vector<GLuint> femaleTextures;
+            vector<GLuint> assassinTextures;
+            vector<GLuint> girlTextures;
+
+            AnimationObject* maleAnimation = nullptr;
+            AnimationObject* femaleAnimation = nullptr;
+            AnimationObject* assassinAnimation = nullptr;
+            AnimationObject* girlAnimation = nullptr;
+
+            vector<Mesh*> meshes;
+            vector<vector<GLuint>> textures;
+            vector<AnimationObject*> animations;
+
+            PlayerObject* player;
 
             //Coursework Additional functionality	
             GameObject* lockedObject = nullptr;
@@ -199,6 +227,8 @@ namespace NCL {
                 _nearestGridCenter.z = 5;
                 return _nearestGridCenter;
             }
+
+            static TutorialGame* instance;
         };
     }
 }
