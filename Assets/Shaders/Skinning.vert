@@ -43,7 +43,8 @@ void main(void){
   mat3 normalMatrix = transpose ( inverse ( mat3 ( modelMatrix )));
 	
   OUT.texCoord	= texCoord;
-  OUT.colour		= objectColour;
+  OUT.colour.xyz	= objectColour.xyz;
+  OUT.colour.a = 1;
  
   OUT.normal = normalize(normalMatrix * normalize(normal)); 
  

@@ -20,7 +20,7 @@ MeshAnimation::MeshAnimation(size_t jointCount, size_t frameCount, float frameRa
 }
 
 MeshAnimation::MeshAnimation(const std::string& filename) : MeshAnimation() {
-	std::ifstream file(Assets::MESHDIR + filename);
+	std::ifstream file(Assets::ANIMDIR + filename);
 
 	std::string filetype;
 	int fileVersion;

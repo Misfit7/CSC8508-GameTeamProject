@@ -2,6 +2,7 @@
 #include "GameWorld.h"
 #include "PhysicsObject.h"
 #include "RenderObject.h"
+#include "AnimationObject.h"
 #include "TextureLoader.h"
 
 #include "PositionConstraint.h"
@@ -12,6 +13,8 @@
 #include <fstream>
 using namespace NCL;
 using namespace CSC8503;
+
+TutorialGame* TutorialGame::instance = nullptr;
 
 TutorialGame::TutorialGame() : controller(*Window::GetWindow()->GetKeyboard(), *Window::GetWindow()->GetMouse()) {
     world = new GameWorld();
@@ -40,6 +43,8 @@ TutorialGame::TutorialGame() : controller(*Window::GetWindow()->GetKeyboard(), *
 
     InitialiseAssets();
     BridgeConstraintTest();
+
+    instance = this;
 }
 
 /*
@@ -56,13 +61,17 @@ void TutorialGame::InitialiseAssets() {
     enemyMesh = renderer->LoadMesh("Keeper.msh");
     bonusMesh = renderer->LoadMesh("apple.msh");
     capsuleMesh = renderer->LoadMesh("capsule.msh");
-    soldierMesh = renderer->LoadMesh("Role_T.msh");
-
     trainMesh = renderer->LoadOBJMesh("Train.obj");
     creeperMesh = renderer->LoadOBJMesh("Creeper.obj");
+    maleMesh = renderer->LoadMesh("Male_Guard.msh");
+    femaleMesh = renderer->LoadMesh("Female_Guard.msh");
+    assassinMesh = renderer->LoadMesh("Assassin.msh");
+    girlMesh = renderer->LoadMesh("Girl.msh");
 
-    soldierMat = new MeshMaterial("Role_T.mat");
-    soldierAnim = new MeshAnimation("Role_T.anm");
+    meshes.push_back(maleMesh);
+    meshes.push_back(femaleMesh);
+    meshes.push_back(assassinMesh);
+    meshes.push_back(girlMesh);
 
     basicTex = renderer->LoadTexture("checkerboard.png");
     floorTex = renderer->LoadTexture("checkerboard.png");
@@ -73,15 +82,18 @@ void TutorialGame::InitialiseAssets() {
 
     lightSpecTex = renderer->LoadTexture("redstone_lamp_on_s.png");
 
+    InitMaterials();
+    InitAnimations();
+
     basicDayShader = renderer->LoadShader("PerPixel.vert", "PerPixelScene.frag");
     bumpDayShader = renderer->LoadShader("Bump.vert", "BumpScene.frag");
     specDayShader = renderer->LoadShader("Bump.vert", "SpecScene.frag");
-    skinningDayShader = renderer->LoadShader("Skinning.vert", "PerPixelScene.frag");
+    skinningDayShader = renderer->LoadShader("Skinning.vert", "SkinningScene.frag");
 
     basicNightShader = renderer->LoadShader("PerPixel.vert", "PerPixelBuffer.frag");
     bumpNightShader = renderer->LoadShader("Bump.vert", "BumpBuffer.frag");
     specNightShader = renderer->LoadShader("Bump.vert", "SpecBuffer.frag");
-    skinningNightShader = renderer->LoadShader("Skinning.vert", "PerPixelBuffer.frag");
+    skinningNightShader = renderer->LoadShader("Skinning.vert", "SkinningBuffer.frag");
 
     basicShader = new ShaderGroup(basicDayShader, basicNightShader);
     bumpShader = new ShaderGroup(bumpDayShader, bumpNightShader);
@@ -90,6 +102,112 @@ void TutorialGame::InitialiseAssets() {
 
     InitCamera();
     InitWorld();
+}
+
+void TutorialGame::InitMaterials() {
+    maleMaterial = new MeshMaterial("Male_Guard.mat");
+    for (int i = 0; i < maleMesh->GetSubMeshCount(); ++i) {
+        const MeshMaterialEntry* matEntry =
+            maleMaterial->GetMaterialForLayer(i);
+
+        const string* filename = nullptr;
+        matEntry->GetEntry("Diffuse", &filename);
+        string path = Assets::TEXTUREDIR + *filename;
+        GLuint texID = SOIL_load_OGL_texture(path.c_str(), SOIL_LOAD_AUTO,
+            SOIL_CREATE_NEW_ID, SOIL_FLAG_MIPMAPS | SOIL_FLAG_INVERT_Y);
+        maleTextures.emplace_back(texID);
+    }
+
+    femaleMaterial = new MeshMaterial("Female_Guard.mat");
+    for (int i = 0; i < femaleMesh->GetSubMeshCount(); ++i) {
+        const MeshMaterialEntry* matEntry =
+            femaleMaterial->GetMaterialForLayer(i);
+
+        const string* filename = nullptr;
+        matEntry->GetEntry("Diffuse", &filename);
+        string path = Assets::TEXTUREDIR + *filename;
+        GLuint texID = SOIL_load_OGL_texture(path.c_str(), SOIL_LOAD_AUTO,
+            SOIL_CREATE_NEW_ID, SOIL_FLAG_MIPMAPS | SOIL_FLAG_INVERT_Y);
+        femaleTextures.emplace_back(texID);
+    }
+
+    assassinMaterial = new MeshMaterial("Assassin.mat");
+    for (int i = 0; i < assassinMesh->GetSubMeshCount(); ++i) {
+        const MeshMaterialEntry* matEntry =
+            assassinMaterial->GetMaterialForLayer(i);
+
+        const string* filename = nullptr;
+        matEntry->GetEntry("Diffuse", &filename);
+        string path = Assets::TEXTUREDIR + *filename;
+        GLuint texID = SOIL_load_OGL_texture(path.c_str(), SOIL_LOAD_AUTO,
+            SOIL_CREATE_NEW_ID, SOIL_FLAG_MIPMAPS | SOIL_FLAG_INVERT_Y);
+        assassinTextures.emplace_back(texID);
+    }
+
+    girlMaterial = new MeshMaterial("Girl.mat");
+    for (int i = 0; i < girlMesh->GetSubMeshCount(); ++i) {
+        const MeshMaterialEntry* matEntry =
+            girlMaterial->GetMaterialForLayer(i);
+
+        const string* filename = nullptr;
+        matEntry->GetEntry("Diffuse", &filename);
+        string path = Assets::TEXTUREDIR + *filename;
+        GLuint texID = SOIL_load_OGL_texture(path.c_str(), SOIL_LOAD_AUTO,
+            SOIL_CREATE_NEW_ID, SOIL_FLAG_MIPMAPS | SOIL_FLAG_INVERT_Y);
+        girlTextures.emplace_back(texID);
+    }
+
+    textures.push_back(maleTextures);
+    textures.push_back(femaleTextures);
+    textures.push_back(assassinTextures);
+    textures.push_back(girlTextures);
+}
+
+void TutorialGame::InitAnimations() {
+    maleAnimation = new AnimationObject();
+    maleAnimation->SetAnim1(new MeshAnimation("Idle1.anm"));
+    maleAnimation->SetAnim2(new MeshAnimation("StepForward1.anm"));
+    maleAnimation->SetAnim3(new MeshAnimation("StepLeft1.anm"));
+    maleAnimation->SetAnim4(new MeshAnimation("StepRight1.anm"));
+    maleAnimation->SetAnim5(new MeshAnimation("StepBack1.anm"));
+    maleAnimation->SetAnim6(new MeshAnimation("Angry1.anm"));
+    maleAnimation->SetAnim7(new MeshAnimation("Happy1.anm"));
+    maleAnimation->SetAnim8(new MeshAnimation("Cheer1.anm"));
+    maleAnimation->SetActiveAnim(maleAnimation->GetAnim1());
+
+    femaleAnimation = new AnimationObject();
+    femaleAnimation->SetAnim1(new MeshAnimation("Idle2.anm"));
+    femaleAnimation->SetAnim2(new MeshAnimation("StepForward2.anm"));
+    femaleAnimation->SetAnim3(new MeshAnimation("StepLeft2.anm"));
+    femaleAnimation->SetAnim4(new MeshAnimation("StepRight2.anm"));
+    femaleAnimation->SetAnim5(new MeshAnimation("StepBack2.anm"));
+    femaleAnimation->SetAnim6(new MeshAnimation("Angry2.anm"));
+    femaleAnimation->SetAnim7(new MeshAnimation("Happy2.anm"));
+    femaleAnimation->SetAnim8(new MeshAnimation("Cheer2.anm"));
+    femaleAnimation->SetActiveAnim(femaleAnimation->GetAnim1());
+
+    assassinAnimation = new AnimationObject();
+    assassinAnimation->SetAnim1(new MeshAnimation("Assassin.anm"));
+    assassinAnimation->SetAnim2(new MeshAnimation("Assassin.anm"));
+    assassinAnimation->SetAnim3(new MeshAnimation("Assassin.anm"));
+    assassinAnimation->SetAnim4(new MeshAnimation("Assassin.anm"));
+    assassinAnimation->SetAnim5(new MeshAnimation("Assassin.anm"));
+    assassinAnimation->SetActiveAnim(assassinAnimation->GetAnim1());
+    assassinAnimation->SetIdle(false);
+
+    girlAnimation = new AnimationObject();
+    girlAnimation->SetAnim1(new MeshAnimation("Girl.anm"));
+    girlAnimation->SetAnim2(new MeshAnimation("Girl.anm"));
+    girlAnimation->SetAnim3(new MeshAnimation("Girl.anm"));
+    girlAnimation->SetAnim4(new MeshAnimation("Girl.anm"));
+    girlAnimation->SetAnim5(new MeshAnimation("Girl.anm"));
+    girlAnimation->SetActiveAnim(girlAnimation->GetAnim1());
+    girlAnimation->SetIdle(false);
+
+    animations.push_back(maleAnimation);
+    animations.push_back(femaleAnimation);
+    animations.push_back(assassinAnimation);
+    animations.push_back(girlAnimation);
 }
 
 TutorialGame::~TutorialGame() {
@@ -194,11 +312,11 @@ void TutorialGame::UpdateKeys() {
         InitCamera(); //F2 will reset the camera to a specific default place
     }
 
-    if (Window::GetKeyboard()->KeyPressed(KeyCodes::NUM1)) {
+    if (Window::GetKeyboard()->KeyPressed(KeyCodes::F3)) {
         renderer->ToggleNight();
     }
 
-    if (Window::GetKeyboard()->KeyPressed(KeyCodes::NUM3)) {
+    if (Window::GetKeyboard()->KeyPressed(KeyCodes::F4)) {
         renderer->ToggleProcess();
     }
 
@@ -411,7 +529,7 @@ GameObject* TutorialGame::AddCubeToWorld(const Vector3& position, Vector3 dimens
     return cube;
 }
 
-GameObject* TutorialGame::AddPlayerToWorld(const Vector3& position) {
+GameObject* TutorialGame::AddPlayer0ToWorld(const Vector3& position) {
     float meshSize = 1.0f;
     float inverseMass = 0.5f;
 
@@ -478,26 +596,6 @@ TrainObject* TutorialGame::AddTrainToWorld(const Vector3& position) {
     return train;
 }
 
-GameObject* TutorialGame::AddCreeperToWorld(const Vector3& position) {
-    GameObject* creeper = new GameObject();
-
-    SphereVolume* volume = new SphereVolume(0.5f);
-    creeper->SetBoundingVolume((CollisionVolume*)volume);
-    creeper->GetTransform()
-        .SetScale(Vector3(2, 2, 2))
-        .SetPosition(position);
-
-    creeper->SetRenderObject(new RenderObject(&creeper->GetTransform(), creeperMesh, nullptr, basicShader));
-    creeper->SetPhysicsObject(new PhysicsObject(&creeper->GetTransform(), creeper->GetBoundingVolume()));
-
-    creeper->GetPhysicsObject()->SetInverseMass(1.0f);
-    creeper->GetPhysicsObject()->InitSphereInertia();
-
-    world->AddGameObject(creeper);
-
-    return creeper;
-}
-
 GameObject* TutorialGame::AddTestingLightToWorld(const Vector3& position, const Vector4& colour) {
     GameObject* cube = new GameObject();
 
@@ -524,39 +622,33 @@ GameObject* TutorialGame::AddTestingLightToWorld(const Vector3& position, const 
     return cube;
 }
 
-SoldierObject* TutorialGame::AddSoldierToWorld(const Vector3& position) {
-    SoldierObject* soldier = new SoldierObject();
+PlayerObject* TutorialGame::AddPlayerToWorld(const Vector3& position) {
+    PlayerObject* player = new PlayerObject();
 
-    AABBVolume* volume = new AABBVolume(Vector3(0.5, 0.5, 0.5));
-    soldier->SetBoundingVolume((CollisionVolume*)volume);
+    AABBVolume* volume = new AABBVolume(Vector3(1.5, 1.5, 1.5));
+    player->SetBoundingVolume((CollisionVolume*)volume);
 
-    soldier->GetTransform()
+    player->GetTransform()
         .SetPosition(position)
-        .SetScale(Vector3(1, 1, 1));
+        .SetScale(Vector3(3, 3, 3));
 
-    soldier->SetRenderObject(new RenderObject(&soldier->GetTransform(), soldierMesh, nullptr, skinningShader, 3));
-    soldier->GetRenderObject()->SetColour(Vector4(1, 1, 1, 1));
-    soldier->GetRenderObject()->SetAnim(soldierAnim);
-    for (int i = 0; i < soldierMesh->GetSubMeshCount(); ++i) {
-        const MeshMaterialEntry* matEntry =
-            soldierMat->GetMaterialForLayer(i);
+    player->SetRenderObject(new RenderObject(&player->GetTransform(), maleMesh, nullptr, skinningShader, 3));
+    player->GetRenderObject()->SetColour(Vector4(1, 1, 1, 1));
+    player->GetRenderObject()->SetMaterial(maleMaterial);
+    player->GetRenderObject()->SetAnimationObject(maleAnimation);
+    player->GetRenderObject()->SetTextures(maleTextures);
 
-        const string* filename = nullptr;
-        matEntry->GetEntry("Diffuse", &filename);
-        string path = Assets::TEXTUREDIR + *filename;
-        GLuint texID = SOIL_load_OGL_texture(path.c_str(), SOIL_LOAD_AUTO,
-            SOIL_CREATE_NEW_ID, SOIL_FLAG_MIPMAPS | SOIL_FLAG_INVERT_Y);
-        soldier->GetRenderObject()->SetTextures(texID);
-    }
+    player->SetPlayerMeshes(meshes);
+    player->SetPlayerTextures(textures);
+    player->SetPlayerAnimations(animations);
 
-    soldier->SetPhysicsObject(new PhysicsObject(&soldier->GetTransform(), soldier->GetBoundingVolume()));
+    player->SetPhysicsObject(new PhysicsObject(&player->GetTransform(), player->GetBoundingVolume()));
+    player->GetPhysicsObject()->SetInverseMass(1);
+    player->GetPhysicsObject()->InitCubeInertia();
 
-    soldier->GetPhysicsObject()->SetInverseMass(1);
-    soldier->GetPhysicsObject()->InitCubeInertia();
+    world->AddGameObject(player);
 
-    world->AddGameObject(soldier);
-
-    return soldier;
+    return player;
 }
 
 void TutorialGame::InitDefaultFloor() {
@@ -564,16 +656,15 @@ void TutorialGame::InitDefaultFloor() {
 }
 
 void TutorialGame::InitGameExamples() {
-    AddPlayerToWorld(Vector3(0, 5, 0));
-    AddEnemyToWorld(Vector3(5, 5, 0));
+    AddPlayer0ToWorld(Vector3(0, 5, 0));
+    //AddEnemyToWorld(Vector3(5, 5, 0));
     trainObject = AddTrainToWorld(Vector3(10, 5, 0));
     trainObject->AddCarriage();
     trainObject->AddCarriage();
-    AddCreeperToWorld(Vector3(15, 5, 0));
     AddTestingLightToWorld(Vector3(10, 20, 0), Vector4(1, 1, 1, 0.7));
     AddTestingLightToWorld(Vector3(30, 20, 40), Vector4(1, 0, 0, 0.7));
     AddTestingLightToWorld(Vector3(60, 20, 20), Vector4(0, 1, 0, 0.7));
-    AddSoldierToWorld(Vector3(20, 5, 0));
+    player = AddPlayerToWorld(Vector3(20, 5, 0));
 }
 
 void TutorialGame::InitSphereGridWorld(int numRows, int numCols, float rowSpacing, float colSpacing, float radius) {

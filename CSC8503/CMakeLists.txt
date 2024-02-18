@@ -26,8 +26,8 @@ set(Source_Files
 set(GameObjects
         "TrainObject.h"
         "TrainCarriage.h"
-        "SoldierObject.h"
-        "SoldierObject.cpp"
+        "PlayerObject.h"
+        "PlayerObject.cpp"
         "TrainObject.cpp"
         "TrainCarriage.cpp"
 )
