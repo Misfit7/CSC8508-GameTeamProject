@@ -85,7 +85,7 @@ namespace NCL {
             PlayerObject* AddPlayerToWorld(const Vector3& position);
 
             CollectableObject* CreateObject(int ID);
-
+            CollectableObject* AddCollectableObjectToGround(int ID);
             StateGameObject* AddStateObjectToWorld(const Vector3& position);
             StateGameObject* testStateObject = nullptr;
 
@@ -102,9 +102,11 @@ namespace NCL {
             Audio* audio;
             std::vector<GameObject*> scene;
             KeyboardMouseController controller;
-
+            PlayerObject* player = nullptr;
             //collectObject
             CollectableObject* object = nullptr;
+            CollectableObject* groundObject = nullptr;
+
             Vector3 ObjectPos;
             Vector3 finalObjectPos;
 
@@ -228,6 +230,16 @@ namespace NCL {
                 return _nearestGridCenter;
             }
 
+            Vector3 PlayerFront()
+            {
+                Vector3 playerPos = player->GetTransform().GetPosition();
+                Quaternion facingDir = player->GetTransform().GetOrientation();
+                Vector3 ObjectOffset(0, 2, -5);
+                ObjectPos = facingDir * ObjectOffset;
+                ObjectOffset = facingDir * ObjectOffset;
+                finalObjectPos = ObjectPos + playerPos;
+                return finalObjectPos;
+            }
             static TutorialGame* instance;
         };
     }
