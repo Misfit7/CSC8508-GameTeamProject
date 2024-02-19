@@ -572,7 +572,7 @@ void GameTechRenderer::RenderCamera() {
             }
             else if ((*i).GetDrawMode() == 2) {
                 if ((*i).GetOBJMesh()->GetOBJTexture()) {
-                    BindGLuintTextureToShader((*i).GetOBJMesh()->GetOBJTexture(), "mainTex", 0);                
+                    BindGLuintTextureToShader((*i).GetOBJMesh()->GetOBJTexture(), "mainTex", 0);
                 }
 
                 glUniform1i(hasTexLocation, (OGLTexture*)(*i).GetOBJMesh()->GetOBJTexture() ? 1 : 0);

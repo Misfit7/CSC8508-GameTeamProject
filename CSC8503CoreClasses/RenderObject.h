@@ -111,17 +111,17 @@ namespace NCL {
             void SetCameraDistance(float f) { distanceFromCamera = f; }
 
         protected:
-            Mesh*             mesh;
-            OBJMesh*          objMesh;
-            Texture*          texture;
-            Texture*          bumpTexture;
-            Texture*          specTexture;
-            ShaderGroup*      shaderGroup;
-            MeshMaterial*     material;
+            Mesh* mesh;
+            OBJMesh* objMesh;
+            Texture* texture;
+            Texture* bumpTexture;
+            Texture* specTexture;
+            ShaderGroup* shaderGroup;
+            MeshMaterial* material;
             vector<GLuint>    textures;
-            Transform*        transform;
+            Transform* transform;
             Vector4	          colour;
-            AnimationObject*  animationObject;
+            AnimationObject* animationObject;
             int               drawMode;
             bool              emissive;
             float             distanceFromCamera = 0.0f;

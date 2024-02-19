@@ -41,7 +41,7 @@ namespace NCL {
 
             static TutorialGame* GetGame() {
                 return instance;
-            };           
+            };
 
         protected:
             void InitialiseAssets();
@@ -177,8 +177,6 @@ namespace NCL {
             vector<Mesh*> meshes;
             vector<vector<GLuint>> textures;
             vector<AnimationObject*> animations;
-
-            PlayerObject* player;
 
             //Coursework Additional functionality	
             GameObject* lockedObject = nullptr;
