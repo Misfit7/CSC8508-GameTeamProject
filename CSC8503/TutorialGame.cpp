@@ -623,8 +623,7 @@ GameObject* TutorialGame::AddTestingLightToWorld(const Vector3& position, const 
 }
 
 PlayerObject* TutorialGame::AddPlayerToWorld(const Vector3& position) {
-    PlayerObject* player = new PlayerObject();
-
+    player = new PlayerObject();
     AABBVolume* volume = new AABBVolume(Vector3(1.5, 1.5, 1.5));
     player->SetBoundingVolume((CollisionVolume*)volume);
 
@@ -651,6 +650,22 @@ PlayerObject* TutorialGame::AddPlayerToWorld(const Vector3& position) {
     return player;
 }
 
+CollectableObject*TutorialGame::AddCollectableObjectToGround(int objectId)
+{
+    Vector3 GroundPos = findNearestGridCenter(PlayerFront());
+    object->SetActive(false);
+    groundObject = new CollectableObject(world);
+    AABBVolume* volume = new AABBVolume(Vector3(1, 1, 1));
+    object->SetBoundingVolume((CollisionVolume*)volume);
+    object->GetTransform().SetPosition(GroundPos);
+    object->GetTransform().SetScale(Vector3(1, 1, 1));
+
+    object->SetPhysicsObject(new PhysicsObject(&object->GetTransform(), object->GetBoundingVolume()));
+    object->GetPhysicsObject()->SetInverseMass(1.0f);
+    object->GetPhysicsObject()->InitCubeInertia();
+    return object;
+
+}
 void TutorialGame::InitDefaultFloor() {
     AddFloorToWorld(Vector3(0, 0, 0));
 }
@@ -842,13 +857,14 @@ StateGameObject* TutorialGame::AddStateObjectToWorld(const Vector3& position) {
 
     return cube;
 }
+
 CollectableObject* TutorialGame::CreateObject(int objectId)
 {
-    Vector3 CameraPos = world->GetMainCamera().GetPosition();
+    Vector3 PlayerPos = player->GetTransform().GetPosition();
     object = new CollectableObject(world);
     AABBVolume* volume = new AABBVolume(Vector3(1, 1, 1));
     object->SetBoundingVolume((CollisionVolume*)volume);
-    object->GetTransform().SetPosition(CameraPos);
+    object->GetTransform().SetPosition(PlayerPos);
     object->GetTransform().SetScale(Vector3(1, 1, 1));
 
     object->SetPhysicsObject(new PhysicsObject(&object->GetTransform(), object->GetBoundingVolume()));
@@ -875,12 +891,6 @@ CollectableObject* TutorialGame::CreateObject(int objectId)
 
 void TutorialGame::HoldObject()
 {
-    Vector3 playerPos = character->GetTransform().GetPosition();
-    Quaternion facingDir = character->GetTransform().GetOrientation();
-    Vector3 ObjectOffset(0, 2, -5);
-    ObjectPos = facingDir * ObjectOffset;
-    ObjectOffset = facingDir * ObjectOffset;
-    finalObjectPos = ObjectPos + playerPos;
-    object->GetTransform().SetPosition(finalObjectPos);
+    object->GetTransform().SetPosition(PlayerFront());
 }
 
