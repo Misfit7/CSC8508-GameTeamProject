@@ -11,4 +11,5 @@ in Vertex{
 
 void main(void) {
     fragColour = texture(diffuseTex, IN.texCoord);
+	fragColour.rgb = pow(fragColour.rgb, vec3(1.0 / 2.2f));
 }
