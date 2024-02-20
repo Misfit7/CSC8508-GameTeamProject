@@ -82,7 +82,7 @@ void TutorialGame::InitialiseAssets() {
 
     std::cout << std::endl << "--------Loading Textures--------" << std::endl;
     basicTex = renderer->LoadTexture("checkerboard.png");
-    floorTex = renderer->LoadTexture("checkerboard.png");
+    floorTex = renderer->LoadTexture("wood.png");
     trainTex = renderer->LoadTexture("Train.jpg");
     lightTex = renderer->LoadTexture("redstone_lamp_on.png");
 
@@ -729,7 +729,7 @@ PlayerObject* TutorialGame::AddPlayerToWorld(const Vector3& position) {
     return player;
 }
 
-CollectableObject*TutorialGame::AddCollectableObjectToGround(int objectId)
+CollectableObject* TutorialGame::AddCollectableObjectToGround(int objectId)
 {
     Vector3 GroundPos = findNearestGridCenter(PlayerFront());
     object->SetActive(false);
