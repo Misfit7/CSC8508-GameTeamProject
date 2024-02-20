@@ -7,7 +7,7 @@ in Vertex{
 } IN;
 out vec4 fragColor;
 
-const float scaleFactors[7] = float[](0.006, 0.061, 0.242, 0.383, 0.242, 0.061, 0.006);
+const float scaleFactors[7] = float[](0.007, 0.060, 0.267, 0.334, 0.267, 0.060, 0.007);
 
 void main(void) {
     fragColor = vec4(0, 0, 0, 1);
