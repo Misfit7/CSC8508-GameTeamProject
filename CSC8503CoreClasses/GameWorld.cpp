@@ -9,6 +9,8 @@ using namespace NCL;
 using namespace NCL::CSC8503;
 
 GameWorld::GameWorld()	{
+	std::cout << std::endl << "--------Initialising Game World--------" << std::endl;
+
 	shuffleConstraints	= false;
 	shuffleObjects		= false;
 	worldIDCounter		= 0;

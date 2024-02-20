@@ -4,6 +4,8 @@ using namespace std;
 
 Audio::Audio(GameWorld* world)
 {
+    std::cout << std::endl << "--------Initialising Audio--------" << std::endl;
+
     this->world = world;
     // start the sound engine with default parameters
     soundEngine = createIrrKlangDevice();

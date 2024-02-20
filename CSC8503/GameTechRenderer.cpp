@@ -15,8 +15,11 @@ using namespace CSC8503;
 Matrix4 biasMatrix = Matrix4::Translation(Vector3(0.5f, 0.5f, 0.5f)) * Matrix4::Scale(Vector3(0.5f, 0.5f, 0.5f));
 
 GameTechRenderer::GameTechRenderer(GameWorld& world) : OGLRenderer(*Window::GetWindow()), gameWorld(world) {
+    std::cout << std::endl << "--------Initialising Renderer--------" << std::endl;
+
     glEnable(GL_DEPTH_TEST);
 
+    std::cout << std::endl << "--------Loading Shaders--------" << std::endl;
     debugShader = new OGLShader("debug.vert", "debug.frag");
     shadowShader = new OGLShader("shadow.vert", "shadow.frag");
     skinningShadowShader = new OGLShader("SkinningShadow.vert", "shadow.frag");
@@ -31,6 +34,7 @@ GameTechRenderer::GameTechRenderer(GameWorld& world) : OGLRenderer(*Window::GetW
     isProcess = false;
 
     //Set up the light properties
+    std::cout << std::endl << "--------Initialising Lights--------" << std::endl;
     sunLight = new Light(Vector3(-200.0f, 60.0f, -200.0f), Vector4(0.8f, 0.8f, 0.5f, 1.0f), 10000.0f);
     redstoneLight1 = new Light(Vector3(10, 20, 0), Vector4(1, 1, 0, 1), 50.0f);
     redstoneLight2 = new Light(Vector3(30, 20, 40), Vector4(1, 0, 0, 1), 30.0f);
@@ -62,7 +66,7 @@ GameTechRenderer::~GameTechRenderer() {
     glDeleteFramebuffers(1, &shadowFBO);
 }
 
-void GameTechRenderer::InitBuffers() {
+void GameTechRenderer::InitBuffers() {   
     glGenFramebuffers(1, &worldFBO);
     glGenFramebuffers(1, &lightFBO);
     glGenFramebuffers(1, &shadowFBO);
@@ -94,6 +98,7 @@ void GameTechRenderer::InitBuffers() {
     }
     GenerateCombinedTexture();
 
+    std::cout << std::endl << "--------Initialising Buffers--------" << std::endl;
     //World FBO
     glBindFramebuffer(GL_FRAMEBUFFER, worldFBO);
     glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0,
@@ -249,6 +254,7 @@ void GameTechRenderer::ClearAllBuffers() {
 }
 
 void GameTechRenderer::LoadSkybox() {
+    std::cout << std::endl << "--------Loading Skybox--------" << std::endl;
     skyboxShader = new OGLShader("skybox.vert", "skybox.frag");
     skyboxMesh = new OGLMesh();
     skyboxMesh->SetVertexPositions({ Vector3(-1, 1,-1), Vector3(-1,-1,-1) , Vector3(1,-1,-1) , Vector3(1,1,-1) });
@@ -383,19 +389,10 @@ void GameTechRenderer::RenderShadowMap() {
                 Matrix4 mvpMatrix = mvMatrix * modelMatrix;
                 glUniformMatrix4fv(mvpLocation, 1, false, (float*)&mvpMatrix);
                 if ((*i).GetDrawMode() == 1) {
-                    BindMesh((OGLMesh&)*(*i).GetMesh());
-                    size_t layerCount = (*i).GetMesh()->GetSubMeshCount();
-                    for (size_t i = 0; i < layerCount; ++i) {
-                        DrawBoundMesh((uint32_t)i);
-                    }
+                   Draw((*i).GetMesh());             
                 }
                 else if ((*i).GetDrawMode() == 2) {
-                    BindOBJMesh((OGLOBJMesh&)*(*i).GetOBJMesh());
-                    DrawBoundOBJMesh();
-                    for (unsigned int j = 0; j < (*i).GetOBJMesh()->GetChildrenList().size(); ++j) {
-                        BindOBJMesh((OGLOBJMesh&)*(*i).GetOBJMesh()->GetChildrenList().at(j));
-                        DrawBoundOBJMesh();
-                    }
+                    OBJDraw((*i).GetOBJMesh());
                 }
             }
             else {
@@ -478,8 +475,7 @@ void GameTechRenderer::RenderSkybox() {
     glActiveTexture(GL_TEXTURE6);
     glBindTexture(GL_TEXTURE_CUBE_MAP, skyboxTex);
 
-    BindMesh(*skyboxMesh);
-    DrawBoundMesh();
+    Draw(skyboxMesh, false);
 
     glEnable(GL_CULL_FACE);
     glEnable(GL_BLEND);
@@ -564,11 +560,7 @@ void GameTechRenderer::RenderCamera() {
 
                 glUniform1i(hasVColLocation, !(*i).GetMesh()->GetColourData().empty());
 
-                BindMesh((OGLMesh&)*(*i).GetMesh());
-                size_t layerCount = (*i).GetMesh()->GetSubMeshCount();
-                for (size_t i = 0; i < layerCount; ++i) {
-                    DrawBoundMesh((uint32_t)i);
-                }
+                Draw((*i).GetMesh());
             }
             else if ((*i).GetDrawMode() == 2) {
                 if ((*i).GetOBJMesh()->GetOBJTexture()) {
@@ -579,12 +571,7 @@ void GameTechRenderer::RenderCamera() {
 
                 glUniform1i(hasVColLocation, !(*i).GetOBJMesh()->GetColourData().empty());
 
-                BindOBJMesh((OGLOBJMesh&)*(*i).GetOBJMesh());
-                DrawBoundOBJMesh();
-                for (unsigned int j = 0; j < (*i).GetOBJMesh()->GetChildrenList().size(); ++j) {
-                    BindOBJMesh((OGLOBJMesh&)*(*i).GetOBJMesh()->GetChildrenList().at(j));
-                    DrawBoundOBJMesh();
-                }
+                OBJDraw((*i).GetOBJMesh());
             }
             else if ((*i).GetDrawMode() == 3) {
                 vector<Matrix4> frameMatrices;
@@ -603,6 +590,8 @@ void GameTechRenderer::RenderCamera() {
 
                 for (int j = 0; j < (*i).GetMesh()->GetSubMeshCount(); ++j) {
                     BindGLuintTextureToShader((*i).GetLayerTexture(j), "mainTex", 0);
+                    if(!(*i).GetBumpTexturesVector().empty()) 
+                        BindGLuintTextureToShader((*i).GetLayerBumpTexture(j), "bumpTex", 2);
                     glUniform1i(hasTexLocation, 1);
                     glUniform1i(hasVColLocation, !(*i).GetMesh()->GetColourData().empty());
                     DrawSubMesh(j);
@@ -747,8 +736,7 @@ void GameTechRenderer::ProcessCombine() {
     glUniform1i(glGetUniformLocation(activeShader->GetProgramID(), "diffuseTex"), 0);
     SetShaderLight(*sunLight);
 
-    BindMesh((OGLMesh&)*quad);
-    DrawBoundMesh();
+    Draw(quad, false);
 
 }
 
@@ -793,8 +781,7 @@ void GameTechRenderer::CombineBuffers() {
 
     SetShaderLight(*sunLight);
 
-    BindMesh((OGLMesh&)*quad);
-    DrawBoundMesh();
+    Draw(quad, false);
 
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
@@ -810,6 +797,15 @@ void GameTechRenderer::Draw(Mesh* mesh, bool multilayer) {
     else {
         BindMesh((OGLMesh&)*mesh);
         DrawBoundMesh();
+    }
+}
+
+void GameTechRenderer::OBJDraw(OBJMesh* mesh) {
+    BindOBJMesh((OGLOBJMesh&)*mesh);
+    DrawBoundOBJMesh();
+    for (unsigned int j = 0; j < mesh->GetChildrenList().size(); ++j) {
+        BindOBJMesh((OGLOBJMesh&)*mesh->GetChildrenList().at(j));
+        DrawBoundOBJMesh();
     }
 }
 

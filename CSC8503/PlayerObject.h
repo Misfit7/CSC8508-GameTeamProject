@@ -36,15 +36,23 @@ public:
     void SetPlayerTextures(vector<vector<GLuint>> t) {
         textures = t;
     }
+    void SetPlayerBumpTextures(vector<vector<GLuint>> t) {
+        bumpTextures = t;
+    }
     void SetPlayerAnimations(vector<AnimationObject*> a) {
         animations = a;
+    }
+    void SetPlayerShaders(vector<ShaderGroup*> s) {
+        shaders = s;
     }
 
 protected:
     int index;
     vector<Mesh*> meshes;
     vector<vector<GLuint>> textures;
+    vector<vector<GLuint>> bumpTextures;
     vector<AnimationObject*> animations;
+    vector<ShaderGroup*> shaders;
 };
 
 

@@ -134,17 +134,20 @@ namespace NCL {
             Shader* basicDayShader = nullptr;
             Shader* bumpDayShader = nullptr;
             Shader* specDayShader = nullptr;
-            Shader* skinningDayShader = nullptr;
+            Shader* skinningPerPixelDayShader = nullptr;
+            Shader* skinningBumpDayShader = nullptr;
 
             Shader* basicNightShader = nullptr;
             Shader* bumpNightShader = nullptr;
             Shader* specNightShader = nullptr;
-            Shader* skinningNightShader = nullptr;
+            Shader* skinningPerPixelNightShader = nullptr;
+            Shader* skinningBumpNightShader = nullptr;
 
-            ShaderGroup* basicShader;
-            ShaderGroup* bumpShader;
-            ShaderGroup* specShader;
-            ShaderGroup* skinningShader;
+            ShaderGroup* basicShader = nullptr;
+            ShaderGroup* bumpShader = nullptr;
+            ShaderGroup* specShader = nullptr;
+            ShaderGroup* skinningPerPixelShader = nullptr;
+            ShaderGroup* skinningBumpShader = nullptr;
 
             //Coursework Meshes
             Mesh* charMesh = nullptr;
@@ -155,6 +158,7 @@ namespace NCL {
             Mesh* femaleMesh = nullptr;
             Mesh* assassinMesh = nullptr;
             Mesh* girlMesh = nullptr;
+            Mesh* smurfMesh = nullptr;
 
             OBJMesh* trainMesh = nullptr;
             OBJMesh* creeperMesh = nullptr;
@@ -163,20 +167,30 @@ namespace NCL {
             MeshMaterial* femaleMaterial = nullptr;
             MeshMaterial* assassinMaterial = nullptr;
             MeshMaterial* girlMaterial = nullptr;
+            MeshMaterial* smurfMaterial = nullptr;
 
             vector<GLuint> maleTextures;
             vector<GLuint> femaleTextures;
             vector<GLuint> assassinTextures;
             vector<GLuint> girlTextures;
+            vector<GLuint> smurfTextures;
+
+            vector<GLuint> maleBumpTextures;
+            vector<GLuint> femaleBumpTextures;
+            vector<GLuint> girlBumpTextures;
+            vector<GLuint> smurfBumpTextures;
 
             AnimationObject* maleAnimation = nullptr;
             AnimationObject* femaleAnimation = nullptr;
             AnimationObject* assassinAnimation = nullptr;
             AnimationObject* girlAnimation = nullptr;
+            AnimationObject* smurfAnimation = nullptr;
 
             vector<Mesh*> meshes;
             vector<vector<GLuint>> textures;
+            vector<vector<GLuint>> bumpTextures;
             vector<AnimationObject*> animations;
+            vector<ShaderGroup*> shaders;
 
             //Coursework Additional functionality	
             GameObject* lockedObject = nullptr;
