@@ -735,15 +735,41 @@ CollectableObject* TutorialGame::AddCollectableObjectToGround(int objectId)
     object->SetActive(false);
     groundObject = new CollectableObject(world);
     AABBVolume* volume = new AABBVolume(Vector3(1, 1, 1));
-    object->SetBoundingVolume((CollisionVolume*)volume);
-    object->GetTransform().SetPosition(GroundPos);
-    object->GetTransform().SetScale(Vector3(1, 1, 1));
+    groundObject->SetBoundingVolume((CollisionVolume*)volume);
+    groundObject->GetTransform().SetPosition(GroundPos);
+    groundObject->GetTransform().SetScale(Vector3(1, 1, 1));
 
-    object->SetPhysicsObject(new PhysicsObject(&object->GetTransform(), object->GetBoundingVolume()));
-    object->GetPhysicsObject()->SetInverseMass(1.0f);
-    object->GetPhysicsObject()->InitCubeInertia();
-    return object;
+    groundObject->SetPhysicsObject(new PhysicsObject(&object->GetTransform(), object->GetBoundingVolume()));
+    groundObject->GetPhysicsObject()->SetInverseMass(1.0f);
+    groundObject->GetPhysicsObject()->InitCubeInertia();
+    switch (objectId)
+    {
+        case 1:
+            groundObject->SetRenderObject(new RenderObject(&object->GetTransform(), sphereMesh, nullptr, basicShader));
+            break;
+        case 2:
+            //�����Ʒ
+            break;
+        default:
+            //�����Ʒ
+            break;
+    }
+    world->AddGameObject(object);
 
+    return groundObject;
+}
+
+CollectableObject* TutorialGame::AddRailToWorld(int direction,Vector3 RailPosition,Vector3 lastRailPosition)
+{
+
+
+}
+int TutorialGame::SelectRailDir(Vector3 lastRailPosition,Vector3 RailPosition)
+{
+    if(distance(lastRailPosition,RailPosition)<= 10)
+    {
+
+    }
 }
 void TutorialGame::InitDefaultFloor() {
     AddFloorToWorld(Vector3(0, 0, 0));
@@ -939,27 +965,18 @@ StateGameObject* TutorialGame::AddStateObjectToWorld(const Vector3& position) {
 
 CollectableObject* TutorialGame::CreateObject(int objectId)
 {
-    Vector3 PlayerPos = player->GetTransform().GetPosition();
-    object = new CollectableObject(world);
-    AABBVolume* volume = new AABBVolume(Vector3(1, 1, 1));
-    object->SetBoundingVolume((CollisionVolume*)volume);
-    object->GetTransform().SetPosition(PlayerPos);
-    object->GetTransform().SetScale(Vector3(1, 1, 1));
 
-    object->SetPhysicsObject(new PhysicsObject(&object->GetTransform(), object->GetBoundingVolume()));
-    object->GetPhysicsObject()->SetInverseMass(1.0f);
-    object->GetPhysicsObject()->InitCubeInertia();
 
     switch (objectId)
     {
     case 1:
-        object->SetRenderObject(new RenderObject(&object->GetTransform(), sphereMesh, nullptr, basicShader));
+        AddRailToWorld();
         break;
     case 2:
-        //�����Ʒ
+
         break;
     default:
-        //�����Ʒ
+
         break;
     }
     world->AddGameObject(object);

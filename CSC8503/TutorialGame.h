@@ -65,7 +65,7 @@ namespace NCL {
             void InitCubeGridWorld(int numRows, int numCols, float rowSpacing, float colSpacing, const Vector3& cubeDims);
 
             void InitDefaultFloor();
-
+            int SelectRailDir(Vector3 lastRailPosition,Vector3 RailPosition);
             bool SelectObject();
             void MoveSelectedObject();
             void DebugObjectMovement();
@@ -86,6 +86,7 @@ namespace NCL {
 
             CollectableObject* CreateObject(int ID);
             CollectableObject* AddCollectableObjectToGround(int ID);
+            CollectableObject* AddRailToWorld(int direction,Vector3 position,Vector3 lastRailPosition);
             StateGameObject* AddStateObjectToWorld(const Vector3& position);
             StateGameObject* testStateObject = nullptr;
 
@@ -109,7 +110,8 @@ namespace NCL {
 
             Vector3 ObjectPos;
             Vector3 finalObjectPos;
-
+            Vector3 lastRailPositin;
+            Vector3 RailPositin;
 
             bool useGravity;
             bool inSelectionMode;
@@ -211,6 +213,12 @@ namespace NCL {
             const float GRID_CENTER_X = 5.0f;
             const float  GRID_CENTER_Y = 5.0f;
 
+            float distance(const Vector3& v1, const Vector3& v2) {
+                float dx = v1.x - v2.x;
+                float dy = v1.y - v2.y;
+                float dz = v1.z - v2.z;
+                return std::sqrt(dx * dx + dy * dy + dz * dz);
+            }
             double euclideanDistance(float x1, float y1, float x2, float y2) {
                 return sqrt(pow(x1 - x2, 2) + pow(y1 - y2, 2));
             }
