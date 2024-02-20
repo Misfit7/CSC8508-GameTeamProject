@@ -1,5 +1,8 @@
 #version 400 core
 
+layout (location = 0) out vec4 fragColor;
+layout (location = 5) out vec4 BrightColor;
+
 uniform vec4 		objectColour;
 uniform sampler2D 	mainTex;
 uniform sampler2DShadow shadowTex;
@@ -20,8 +23,6 @@ in Vertex
 	vec3 normal;
 	vec3 worldPos;
 } IN;
-
-out vec4 fragColor;
 
 void main(void)
 {
@@ -58,6 +59,12 @@ void main(void)
 	fragColor.rgb += lightColour.rgb * sFactor * shadow * attenuation; //specular light
 	
 	fragColor.rgb = pow(fragColor.rgb, vec3(1.0/2.2f));
+	
+	float brightness = dot(fragColor.rgb, vec3(0.2126, 0.7152, 0.0722));
+	if(brightness > 1.0)
+		BrightColor = vec4(fragColor.rgb, 1.0);
+	else
+		BrightColor = vec4(0.0, 0.0, 0.0, 1.0);
 	
 	fragColor.a = albedo.a;
 }

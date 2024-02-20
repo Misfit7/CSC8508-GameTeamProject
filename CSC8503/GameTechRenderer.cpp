@@ -30,7 +30,6 @@ GameTechRenderer::GameTechRenderer(GameWorld& world) : OGLRenderer(*Window::GetW
     InitBuffers();
 
     isNight = false;
-    isProcess = false;
 
     //Set up the light properties
 
@@ -66,7 +65,7 @@ GameTechRenderer::~GameTechRenderer() {
     glDeleteFramebuffers(1, &shadowFBO);
 }
 
-void GameTechRenderer::InitBuffers() {   
+void GameTechRenderer::InitBuffers() {
     glGenFramebuffers(1, &worldFBO);
     glGenFramebuffers(1, &lightFBO);
     glGenFramebuffers(1, &shadowFBO);
@@ -79,7 +78,8 @@ void GameTechRenderer::InitBuffers() {
         GL_COLOR_ATTACHMENT1 ,
         GL_COLOR_ATTACHMENT2 ,
         GL_COLOR_ATTACHMENT3 ,
-        GL_COLOR_ATTACHMENT4
+        GL_COLOR_ATTACHMENT4 ,
+        GL_COLOR_ATTACHMENT5
     };
 
     LoadSkybox();
@@ -93,8 +93,9 @@ void GameTechRenderer::InitBuffers() {
     GenerateScreenTexture(worldShadowTex);
     GenerateScreenTexture(lightDiffuseTex);
     GenerateScreenTexture(lightSpecularTex);
+    GenerateScreenTexture(hdrColourTex);
     for (int i = 0; i < 2; ++i) {
-        GenerateScreenTexture(processColourTex[i]);
+        GenerateScreenTexture(blurColourTex[i]);
     }
     GenerateCombinedTexture();
 
@@ -113,8 +114,9 @@ void GameTechRenderer::InitBuffers() {
         GL_TEXTURE_2D, worldShadowTex, 0);
     glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT,
         GL_TEXTURE_2D, worldDepthTex, 0);
-    processColourTex[0] = worldColourTex;
-    glDrawBuffers(5, buffers);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT5,
+        GL_TEXTURE_2D, hdrColourTex, 0);
+    glDrawBuffers(6, buffers);
     if (glCheckFramebufferStatus(GL_FRAMEBUFFER) !=
         GL_FRAMEBUFFER_COMPLETE) {
         std::cout << "bufferFBO Load Failed!!" << std::endl;
@@ -170,10 +172,12 @@ void GameTechRenderer::InitBuffers() {
     //Process FBO
     glBindFramebuffer(GL_FRAMEBUFFER, processFBO);
     glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0,
-        GL_TEXTURE_2D, processColourTex[1], 0);
-    glDrawBuffers(1, buffers);
+        GL_TEXTURE_2D, blurColourTex[0], 0);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1,
+        GL_TEXTURE_2D, blurColourTex[1], 0);
+    glDrawBuffers(2, buffers);
     if (glCheckFramebufferStatus(GL_FRAMEBUFFER) !=
-        GL_FRAMEBUFFER_COMPLETE || !processColourTex[1]) {
+        GL_FRAMEBUFFER_COMPLETE || !blurColourTex) {
         std::cout << "processFBO Load Failed!!" << std::endl;
         return;
     }
@@ -307,12 +311,11 @@ void GameTechRenderer::RenderFrame() {
     RenderShadowMap();
     RenderSkybox();
     RenderCamera();
-
     if (isNight) {
         DrawLightBuffer();
         CombineBuffers();
     }
-    if (isProcess)
+    else
     {
         DrawProcess();
         ProcessCombine();
@@ -390,7 +393,7 @@ void GameTechRenderer::RenderShadowMap() {
                 Matrix4 mvpMatrix = mvMatrix * modelMatrix;
                 glUniformMatrix4fv(mvpLocation, 1, false, (float*)&mvpMatrix);
                 if ((*i).GetDrawMode() == 1) {
-                   Draw((*i).GetMesh());             
+                    Draw((*i).GetMesh());
                 }
                 else if ((*i).GetDrawMode() == 2) {
                     OBJDraw((*i).GetOBJMesh());
@@ -454,7 +457,7 @@ void GameTechRenderer::RenderSkybox() {
     if (isNight) {
         glBindFramebuffer(GL_FRAMEBUFFER, skyboxFBO);
     }
-    if (isProcess)
+    else
     {
         glBindFramebuffer(GL_FRAMEBUFFER, worldFBO);
     }
@@ -489,9 +492,8 @@ void GameTechRenderer::RenderSkybox() {
 }
 
 void GameTechRenderer::RenderCamera() {
-    if (isNight || isProcess) {
-        glBindFramebuffer(GL_FRAMEBUFFER, worldFBO);
-    }
+    glBindFramebuffer(GL_FRAMEBUFFER, worldFBO);
+
 
     Matrix4 viewMatrix = gameWorld.GetMainCamera().BuildViewMatrix();
     Matrix4 projMatrix = gameWorld.GetMainCamera().BuildProjectionMatrix(hostWindow.GetScreenAspect());
@@ -595,7 +597,7 @@ void GameTechRenderer::RenderCamera() {
 
                 for (int j = 0; j < (*i).GetMesh()->GetSubMeshCount(); ++j) {
                     BindGLuintTextureToShader((*i).GetLayerTexture(j), "mainTex", 0);
-                    if(!(*i).GetBumpTexturesVector().empty()) 
+                    if (!(*i).GetBumpTexturesVector().empty())
                         BindGLuintTextureToShader((*i).GetLayerBumpTexture(j), "bumpTex", 2);
                     glUniform1i(hasTexLocation, 1);
                     glUniform1i(hasVColLocation, !(*i).GetMesh()->GetColourData().empty());
@@ -697,9 +699,10 @@ void GameTechRenderer::SetShaderLight(const Light& l) {
 
 void GameTechRenderer::DrawProcess() {
     glBindFramebuffer(GL_FRAMEBUFFER, processFBO);
-    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, processColourTex[1], 0);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, blurColourTex[1], 0);
     glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
 
+    bool first_iteration = true;
     glDisable(GL_DEPTH_TEST);
     BindMesh((OGLMesh&)*quad);
 
@@ -708,16 +711,19 @@ void GameTechRenderer::DrawProcess() {
     glActiveTexture(GL_TEXTURE0);
     glUniform1i(glGetUniformLocation(activeShader->GetProgramID(), "sceneTex"), 0);
 
-    for (int i = 0; i < 1; ++i) {
-        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, processColourTex[1], 0);
+    for (int i = 0; i < 2; ++i) {
+        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, blurColourTex[1], 0);
         glUniform1i(glGetUniformLocation(activeShader->GetProgramID(), "isVertical"), 0);
-        glBindTexture(GL_TEXTURE_2D, processColourTex[0]);
+        glBindTexture(GL_TEXTURE_2D, first_iteration ? hdrColourTex : blurColourTex[0]);
         DrawBoundMesh();
 
-        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, processColourTex[0], 0);
+        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, blurColourTex[0], 0);
         glUniform1i(glGetUniformLocation(activeShader->GetProgramID(), "isVertical"), 1);
-        glBindTexture(GL_TEXTURE_2D, processColourTex[1]);
+        glBindTexture(GL_TEXTURE_2D, blurColourTex[1]);
         DrawBoundMesh();
+
+        if (first_iteration)
+            first_iteration = false;
     }
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
@@ -730,8 +736,12 @@ void GameTechRenderer::ProcessCombine() {
     BindShader(*processCombineShader);
 
     glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, processColourTex[0]);
+    glBindTexture(GL_TEXTURE_2D, worldColourTex);
     glUniform1i(glGetUniformLocation(activeShader->GetProgramID(), "diffuseTex"), 0);
+
+    glActiveTexture(GL_TEXTURE1);
+    glBindTexture(GL_TEXTURE_2D, blurColourTex[0]);
+    glUniform1i(glGetUniformLocation(activeShader->GetProgramID(), "blurbloomTex"), 1);
 
     SetShaderLight(*sunLight);
 
@@ -810,10 +820,6 @@ void GameTechRenderer::OBJDraw(OBJMesh* mesh) {
 
 void GameTechRenderer::ToggleNight() {
     isNight = !isNight;
-}
-
-void GameTechRenderer::ToggleProcess() {
-    isProcess = !isProcess;
 }
 
 Mesh* GameTechRenderer::LoadMesh(const std::string& name) {

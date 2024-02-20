@@ -18,7 +18,7 @@ TutorialGame* TutorialGame::instance = nullptr;
 
 TutorialGame::TutorialGame() : controller(*Window::GetWindow()->GetKeyboard(), *Window::GetWindow()->GetMouse()) {
     std::cout << std::endl << "--------Initialising Game--------" << std::endl;
-    
+
     world = new GameWorld();
     audio = new Audio(world);
 #ifdef USEVULKAN
@@ -389,10 +389,6 @@ void TutorialGame::UpdateKeys() {
 
     if (Window::GetKeyboard()->KeyPressed(KeyCodes::F3)) {
         renderer->ToggleNight();
-    }
-
-    if (Window::GetKeyboard()->KeyPressed(KeyCodes::F4)) {
-        renderer->ToggleProcess();
     }
 
     if (Window::GetKeyboard()->KeyPressed(KeyCodes::G)) {
