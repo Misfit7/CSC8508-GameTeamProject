@@ -64,6 +64,7 @@ namespace NCL {
             void SetDebugLineBufferSizes(size_t newVertCount);
 
             void Draw(Mesh* mesh, bool multilayer = true);
+            void OBJDraw(OBJMesh* mesh);
 
             //sort and frustum
             vector<const RenderObject*> activeObjects;

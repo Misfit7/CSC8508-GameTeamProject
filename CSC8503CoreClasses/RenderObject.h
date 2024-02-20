@@ -67,6 +67,9 @@ namespace NCL {
             ShaderGroup* GetShaderGroup() const {
                 return shaderGroup;
             }
+            void SetShaderGroup(ShaderGroup* s) {
+                shaderGroup = s;
+            }
 
             void SetMaterial(MeshMaterial* m) {
                 material = m;
@@ -83,6 +86,19 @@ namespace NCL {
                     return 0;
                 }
                 return textures[i];
+            }
+
+            void SetBumpTextures(vector<GLuint> t) {
+                bumpTextures = t;
+            }
+            GLuint GetLayerBumpTexture(int i) const {
+                if (i < 0 || i > textures.size()) {
+                    return 0;
+                }
+                return bumpTextures[i];
+            }
+            vector<GLuint> GetBumpTexturesVector() const {
+                return bumpTextures;
             }
 
             void SetColour(const Vector4& c) {
@@ -118,7 +134,8 @@ namespace NCL {
             Texture* specTexture;
             ShaderGroup* shaderGroup;
             MeshMaterial* material;
-            vector<GLuint>    textures;
+            vector<GLuint> textures;
+            vector<GLuint> bumpTextures;
             Transform* transform;
             Vector4	          colour;
             AnimationObject* animationObject;

@@ -17,6 +17,8 @@ using namespace CSC8503;
 TutorialGame* TutorialGame::instance = nullptr;
 
 TutorialGame::TutorialGame() : controller(*Window::GetWindow()->GetKeyboard(), *Window::GetWindow()->GetMouse()) {
+    std::cout << std::endl << "--------Initialising Game--------" << std::endl;
+    
     world = new GameWorld();
     audio = new Audio(world);
 #ifdef USEVULKAN
@@ -55,6 +57,9 @@ for this module, even in the coursework, but you can add it if you like!
 
 */
 void TutorialGame::InitialiseAssets() {
+    std::cout << std::endl << "--------Initialising Assets--------" << std::endl;
+
+    std::cout << std::endl << "--------Loading Meshes--------" << std::endl;
     cubeMesh = renderer->LoadMesh("cube.msh");
     sphereMesh = renderer->LoadMesh("sphere.msh");
     charMesh = renderer->LoadMesh("goat.msh");
@@ -67,12 +72,15 @@ void TutorialGame::InitialiseAssets() {
     femaleMesh = renderer->LoadMesh("Female_Guard.msh");
     assassinMesh = renderer->LoadMesh("Assassin.msh");
     girlMesh = renderer->LoadMesh("Girl.msh");
+    smurfMesh = renderer->LoadMesh("Smurf.msh");
 
     meshes.push_back(maleMesh);
     meshes.push_back(femaleMesh);
     meshes.push_back(assassinMesh);
     meshes.push_back(girlMesh);
+    meshes.push_back(smurfMesh);
 
+    std::cout << std::endl << "--------Loading Textures--------" << std::endl;
     basicTex = renderer->LoadTexture("checkerboard.png");
     floorTex = renderer->LoadTexture("wood.png");
     trainTex = renderer->LoadTexture("Train.jpg");
@@ -85,26 +93,37 @@ void TutorialGame::InitialiseAssets() {
     InitMaterials();
     InitAnimations();
 
+    std::cout << std::endl << "--------Loading Shaders--------" << std::endl;
     basicDayShader = renderer->LoadShader("PerPixel.vert", "PerPixelScene.frag");
     bumpDayShader = renderer->LoadShader("Bump.vert", "BumpScene.frag");
     specDayShader = renderer->LoadShader("Bump.vert", "SpecScene.frag");
-    skinningDayShader = renderer->LoadShader("Skinning.vert", "SkinningScene.frag");
+    skinningPerPixelDayShader = renderer->LoadShader("SkinningPerPixel.vert", "SkinningPerPixelScene.frag");
+    skinningBumpDayShader = renderer->LoadShader("SkinningBump.vert", "SkinningBumpScene.frag");
 
     basicNightShader = renderer->LoadShader("PerPixel.vert", "PerPixelBuffer.frag");
     bumpNightShader = renderer->LoadShader("Bump.vert", "BumpBuffer.frag");
     specNightShader = renderer->LoadShader("Bump.vert", "SpecBuffer.frag");
-    skinningNightShader = renderer->LoadShader("Skinning.vert", "SkinningBuffer.frag");
+    skinningPerPixelNightShader = renderer->LoadShader("SkinningPerPixel.vert", "SkinningPerPixelBuffer.frag");
+    skinningBumpNightShader = renderer->LoadShader("SkinningBump.vert", "SkinningBumpBuffer.frag");
 
     basicShader = new ShaderGroup(basicDayShader, basicNightShader);
     bumpShader = new ShaderGroup(bumpDayShader, bumpNightShader);
     specShader = new ShaderGroup(specDayShader, specNightShader);
-    skinningShader = new ShaderGroup(skinningDayShader, skinningNightShader);
+    skinningPerPixelShader = new ShaderGroup(skinningPerPixelDayShader, skinningPerPixelNightShader);
+    skinningBumpShader = new ShaderGroup(skinningBumpDayShader, skinningBumpNightShader);
+
+    shaders.push_back(skinningBumpShader);
+    shaders.push_back(skinningBumpShader);
+    shaders.push_back(skinningPerPixelShader);
+    shaders.push_back(skinningBumpShader);
+    shaders.push_back(skinningBumpShader);
 
     InitCamera();
     InitWorld();
 }
 
 void TutorialGame::InitMaterials() {
+    std::cout << std::endl << "--------Loading Materials--------" << std::endl;
     maleMaterial = new MeshMaterial("Male_Guard.mat");
     for (int i = 0; i < maleMesh->GetSubMeshCount(); ++i) {
         const MeshMaterialEntry* matEntry =
@@ -116,6 +135,12 @@ void TutorialGame::InitMaterials() {
         GLuint texID = SOIL_load_OGL_texture(path.c_str(), SOIL_LOAD_AUTO,
             SOIL_CREATE_NEW_ID, SOIL_FLAG_MIPMAPS | SOIL_FLAG_INVERT_Y);
         maleTextures.emplace_back(texID);
+
+        matEntry->GetEntry("Bump", &filename);
+        string path2 = Assets::TEXTUREDIR + *filename;
+        GLuint texID2 = SOIL_load_OGL_texture(path.c_str(), SOIL_LOAD_AUTO,
+            SOIL_CREATE_NEW_ID, SOIL_FLAG_MIPMAPS | SOIL_FLAG_INVERT_Y);
+        maleBumpTextures.emplace_back(texID2);
     }
 
     femaleMaterial = new MeshMaterial("Female_Guard.mat");
@@ -129,6 +154,12 @@ void TutorialGame::InitMaterials() {
         GLuint texID = SOIL_load_OGL_texture(path.c_str(), SOIL_LOAD_AUTO,
             SOIL_CREATE_NEW_ID, SOIL_FLAG_MIPMAPS | SOIL_FLAG_INVERT_Y);
         femaleTextures.emplace_back(texID);
+
+        matEntry->GetEntry("Bump", &filename);
+        string path2 = Assets::TEXTUREDIR + *filename;
+        GLuint texID2 = SOIL_load_OGL_texture(path.c_str(), SOIL_LOAD_AUTO,
+            SOIL_CREATE_NEW_ID, SOIL_FLAG_MIPMAPS | SOIL_FLAG_INVERT_Y);
+        femaleBumpTextures.emplace_back(texID2);
     }
 
     assassinMaterial = new MeshMaterial("Assassin.mat");
@@ -143,6 +174,7 @@ void TutorialGame::InitMaterials() {
             SOIL_CREATE_NEW_ID, SOIL_FLAG_MIPMAPS | SOIL_FLAG_INVERT_Y);
         assassinTextures.emplace_back(texID);
     }
+    vector<GLuint> assassinBumpTextures;
 
     girlMaterial = new MeshMaterial("Girl.mat");
     for (int i = 0; i < girlMesh->GetSubMeshCount(); ++i) {
@@ -155,15 +187,48 @@ void TutorialGame::InitMaterials() {
         GLuint texID = SOIL_load_OGL_texture(path.c_str(), SOIL_LOAD_AUTO,
             SOIL_CREATE_NEW_ID, SOIL_FLAG_MIPMAPS | SOIL_FLAG_INVERT_Y);
         girlTextures.emplace_back(texID);
+
+        matEntry->GetEntry("Bump", &filename);
+        string path2 = Assets::TEXTUREDIR + *filename;
+        GLuint texID2 = SOIL_load_OGL_texture(path.c_str(), SOIL_LOAD_AUTO,
+            SOIL_CREATE_NEW_ID, SOIL_FLAG_MIPMAPS | SOIL_FLAG_INVERT_Y);
+        girlBumpTextures.emplace_back(texID2);
+    }
+
+    smurfMaterial = new MeshMaterial("Smurf.mat");
+    for (int i = 0; i < smurfMesh->GetSubMeshCount(); ++i) {
+        const MeshMaterialEntry* matEntry =
+            smurfMaterial->GetMaterialForLayer(i);
+
+        const string* filename = nullptr;
+        matEntry->GetEntry("Diffuse", &filename);
+        string path = Assets::TEXTUREDIR + *filename;
+        GLuint texID = SOIL_load_OGL_texture(path.c_str(), SOIL_LOAD_AUTO,
+            SOIL_CREATE_NEW_ID, SOIL_FLAG_MIPMAPS | SOIL_FLAG_INVERT_Y);
+        smurfTextures.emplace_back(texID);
+
+        matEntry->GetEntry("Bump", &filename);
+        string path2 = Assets::TEXTUREDIR + *filename;
+        GLuint texID2 = SOIL_load_OGL_texture(path.c_str(), SOIL_LOAD_AUTO,
+            SOIL_CREATE_NEW_ID, SOIL_FLAG_MIPMAPS | SOIL_FLAG_INVERT_Y);
+        smurfBumpTextures.emplace_back(texID2);
     }
 
     textures.push_back(maleTextures);
     textures.push_back(femaleTextures);
     textures.push_back(assassinTextures);
     textures.push_back(girlTextures);
+    textures.push_back(smurfTextures);
+
+    bumpTextures.push_back(maleBumpTextures);
+    bumpTextures.push_back(femaleBumpTextures);
+    bumpTextures.push_back(assassinBumpTextures);
+    bumpTextures.push_back(girlBumpTextures);
+    bumpTextures.push_back(smurfBumpTextures);
 }
 
 void TutorialGame::InitAnimations() {
+    std::cout << std::endl << "--------Loading Animations--------" << std::endl;
     maleAnimation = new AnimationObject();
     maleAnimation->SetAnim1(new MeshAnimation("Idle1.anm"));
     maleAnimation->SetAnim2(new MeshAnimation("StepForward1.anm"));
@@ -204,10 +269,20 @@ void TutorialGame::InitAnimations() {
     girlAnimation->SetActiveAnim(girlAnimation->GetAnim1());
     girlAnimation->SetIdle(false);
 
+    smurfAnimation = new AnimationObject();
+    smurfAnimation->SetAnim1(new MeshAnimation("Smurf.anm"));
+    smurfAnimation->SetAnim2(new MeshAnimation("Smurf.anm"));
+    smurfAnimation->SetAnim3(new MeshAnimation("Smurf.anm"));
+    smurfAnimation->SetAnim4(new MeshAnimation("Smurf.anm"));
+    smurfAnimation->SetAnim5(new MeshAnimation("Smurf.anm"));
+    smurfAnimation->SetActiveAnim(smurfAnimation->GetAnim1());
+    smurfAnimation->SetIdle(false);
+
     animations.push_back(maleAnimation);
     animations.push_back(femaleAnimation);
     animations.push_back(assassinAnimation);
     animations.push_back(girlAnimation);
+    animations.push_back(smurfAnimation);
 }
 
 TutorialGame::~TutorialGame() {
@@ -426,6 +501,7 @@ void TutorialGame::InitCamera() {
 }
 
 void TutorialGame::InitWorld() {
+    std::cout << std::endl << "--------Initialising Game Objects--------" << std::endl;
     world->ClearAndErase();
     physics->Clear();
 
@@ -631,15 +707,18 @@ PlayerObject* TutorialGame::AddPlayerToWorld(const Vector3& position) {
         .SetPosition(position)
         .SetScale(Vector3(3, 3, 3));
 
-    player->SetRenderObject(new RenderObject(&player->GetTransform(), maleMesh, nullptr, skinningShader, 3));
+    player->SetRenderObject(new RenderObject(&player->GetTransform(), maleMesh, nullptr, skinningBumpShader, 3));
     player->GetRenderObject()->SetColour(Vector4(1, 1, 1, 1));
     player->GetRenderObject()->SetMaterial(maleMaterial);
     player->GetRenderObject()->SetAnimationObject(maleAnimation);
     player->GetRenderObject()->SetTextures(maleTextures);
+    player->GetRenderObject()->SetBumpTextures(maleBumpTextures);
 
     player->SetPlayerMeshes(meshes);
     player->SetPlayerTextures(textures);
+    player->SetPlayerBumpTextures(bumpTextures);
     player->SetPlayerAnimations(animations);
+    player->SetPlayerShaders(shaders);
 
     player->SetPhysicsObject(new PhysicsObject(&player->GetTransform(), player->GetBoundingVolume()));
     player->GetPhysicsObject()->SetInverseMass(1);

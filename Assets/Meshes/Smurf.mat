@@ -1,0 +1,17 @@
+MeshMat
+1
+2
+5
+Body
+2
+Diffuse:/Body_baseColor.jpg
+Bump:/Body_Normal.png
+Accesorios
+2
+Diffuse:/Material_baseColor.jpg
+Bump:/Material_normal.png
+0
+0
+0
+0
+1

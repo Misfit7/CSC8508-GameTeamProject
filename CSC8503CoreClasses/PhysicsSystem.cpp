@@ -14,6 +14,8 @@ using namespace NCL;
 using namespace CSC8503;
 
 PhysicsSystem::PhysicsSystem(GameWorld &g) : gameWorld(g) {
+    std::cout << std::endl << "--------Initialising Physics System--------" << std::endl;
+
     applyGravity = false;
     useBroadPhase = false;
     dTOffset = 0.0f;
