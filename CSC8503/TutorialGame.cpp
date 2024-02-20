@@ -18,7 +18,7 @@ TutorialGame* TutorialGame::instance = nullptr;
 
 TutorialGame::TutorialGame() : controller(*Window::GetWindow()->GetKeyboard(), *Window::GetWindow()->GetMouse()) {
     std::cout << std::endl << "--------Initialising Game--------" << std::endl;
-    
+
     world = new GameWorld();
     audio = new Audio(world);
 #ifdef USEVULKAN
@@ -93,7 +93,7 @@ void TutorialGame::InitialiseAssets() {
     InitMaterials();
     InitAnimations();
 
-    std::cout << std::endl << "--------Loading Shaders--------" << std::endl;
+    std::cout << std::endl << "--------Loading Shader Groups--------" << std::endl;
     basicDayShader = renderer->LoadShader("PerPixel.vert", "PerPixelScene.frag");
     bumpDayShader = renderer->LoadShader("Bump.vert", "BumpScene.frag");
     specDayShader = renderer->LoadShader("Bump.vert", "SpecScene.frag");
@@ -389,10 +389,6 @@ void TutorialGame::UpdateKeys() {
 
     if (Window::GetKeyboard()->KeyPressed(KeyCodes::F3)) {
         renderer->ToggleNight();
-    }
-
-    if (Window::GetKeyboard()->KeyPressed(KeyCodes::F4)) {
-        renderer->ToggleProcess();
     }
 
     if (Window::GetKeyboard()->KeyPressed(KeyCodes::G)) {
@@ -744,33 +740,35 @@ CollectableObject* TutorialGame::AddCollectableObjectToGround(int objectId)
     groundObject->GetPhysicsObject()->InitCubeInertia();
     switch (objectId)
     {
-        case 1:
-            groundObject->SetRenderObject(new RenderObject(&object->GetTransform(), sphereMesh, nullptr, basicShader));
-            break;
-        case 2:
-            //�����Ʒ
-            break;
-        default:
-            //�����Ʒ
-            break;
+    case 1:
+        groundObject->SetRenderObject(new RenderObject(&object->GetTransform(), sphereMesh, nullptr, basicShader));
+        break;
+    case 2:
+        //�����Ʒ
+        break;
+    default:
+        //�����Ʒ
+        break;
     }
     world->AddGameObject(object);
 
     return groundObject;
 }
 
-CollectableObject* TutorialGame::AddRailToWorld(int direction,Vector3 RailPosition,Vector3 lastRailPosition)
+CollectableObject* TutorialGame::AddRailToWorld(int direction, Vector3 RailPosition, Vector3 lastRailPosition)
 {
 
-
+    return 0;
 }
-int TutorialGame::SelectRailDir(Vector3 lastRailPosition,Vector3 RailPosition)
+int TutorialGame::SelectRailDir(Vector3 lastRailPosition, Vector3 RailPosition)
 {
-    if(distance(lastRailPosition,RailPosition)<= 10)
+    if (distance(lastRailPosition, RailPosition) <= 10)
     {
 
     }
+    return 0;
 }
+
 void TutorialGame::InitDefaultFloor() {
     AddFloorToWorld(Vector3(0, 0, 0));
 }
@@ -970,7 +968,7 @@ CollectableObject* TutorialGame::CreateObject(int objectId)
     switch (objectId)
     {
     case 1:
-        AddRailToWorld();
+        //AddRailToWorld();
         break;
     case 2:
 
