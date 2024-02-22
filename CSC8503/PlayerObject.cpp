@@ -96,22 +96,32 @@ void PlayerObject::playermovement() {
     //float yaw = Maths::RadiansToDegrees(atan2(-np.x, -np.z));
    // start->GetTransform().SetOrientation(qq->EulerAnglesToQuaternion(0, yaw, 0));
     if (Window::GetKeyboard()->KeyHeld(NCL::KeyCodes::UP)) {
-        physicsObject->AddForceAtPosition(Vector3(20, 0, 0), transform.GetPosition());
+
+        face = Vector3(1, 0, 0);
+        physicsObject->AddForceAtPosition(face*speed, transform.GetPosition());
         transform.SetOrientation(qq->EulerAnglesToQuaternion(0, -90, 0));
     }
     else if (Window::GetKeyboard()->KeyHeld(NCL::KeyCodes::LEFT)) {
-        physicsObject->AddForceAtPosition(Vector3(0, 0, -20), transform.GetPosition());
+        face = Vector3(0, 0, -1);
+        physicsObject->AddForceAtPosition(face * speed, transform.GetPosition());
         transform.SetOrientation(qq->EulerAnglesToQuaternion(0, 0, 0));
     }
     else if (Window::GetKeyboard()->KeyHeld(NCL::KeyCodes::DOWN)) {
-        physicsObject->AddForceAtPosition(Vector3(-20, 0, 0), transform.GetPosition());
+        face = Vector3(-1, 0, 0);
+        physicsObject->AddForceAtPosition(face * speed, transform.GetPosition());
         transform.SetOrientation(qq->EulerAnglesToQuaternion(0, 90, 0));
     }
     else if (Window::GetKeyboard()->KeyHeld(NCL::KeyCodes::RIGHT)) {
-        physicsObject->AddForceAtPosition(Vector3(0, 0, 20), transform.GetPosition());
+        face = Vector3(0, 0, 1);
+        physicsObject->AddForceAtPosition(face * speed, transform.GetPosition());
         transform.SetOrientation(qq->EulerAnglesToQuaternion(0, 180, 0));
     }
     else {
         physicsObject->SetLinearVelocity(Vector3(0, 0, 0));
+    }
+}
+void PlayerObject::cuttree() {
+    if (Window::GetKeyboard()->KeyHeld(NCL::KeyCodes::F)) {
+        //Ray ray = CollisionDetection::BuildRayFromMouse(world->GetMainCamera());
     }
 }

@@ -16,7 +16,7 @@ void CollectableObject::Update(float dt) {
         if (!putDown) {
             putDown = true;
             Vector3 position = transform.GetPosition();
-            transform.SetPosition(Vector3(position.x + 10, 5, position.z));
+            transform.SetPosition(Vector3(position.x, 5, position.z)+player->GetFace()*5.0f);
         }
     }
 }
