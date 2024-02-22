@@ -728,7 +728,29 @@ PlayerObject* TutorialGame::AddPlayerToWorld(const Vector3& position) {
 
     return player;
 }
+TreeObject* TutorialGame::AddTreeToWorld(const Vector3& position) {
+    float meshSize = 3.0f;
+    float inverseMass = 0.5f;
 
+    TreeObject* tree = new TreeObject();
+    tree->Setscale(meshSize);
+    AABBVolume* volume = new AABBVolume(Vector3(0.3f, 0.9f, 0.3f) * tree->Getscale());
+    tree->SetBoundingVolume((CollisionVolume*)volume);
+    tree->SetTypeID(10086);
+    tree->GetTransform()
+        .SetScale(Vector3(tree->Getscale(), tree->Getscale(), tree->Getscale()))
+        .SetPosition(position);
+
+    tree->SetRenderObject(new RenderObject(&tree->GetTransform(), cubeMesh, nullptr, basicShader));// todo can change capsule
+    tree->SetPhysicsObject(new PhysicsObject(&tree->GetTransform(), tree->GetBoundingVolume()));
+
+    tree->GetPhysicsObject()->SetInverseMass(inverseMass);
+    tree->GetPhysicsObject()->InitSphereInertia();
+
+    world->AddGameObject(tree);
+
+    return tree;
+}
 CollectableObject* TutorialGame::AddCollectableObjectToGround(int objectId)
 {
     Vector3 GroundPos = object->findNearestGridCenter(object->PlayerFront());
@@ -811,7 +833,8 @@ void TutorialGame::InitGameExamples() {
     AddTestingLightToWorld(Vector3(30, 20, 40), Vector4(1, 0, 0, 0.7));
     AddTestingLightToWorld(Vector3(60, 20, 20), Vector4(0, 1, 0, 0.7));
     player = AddPlayerToWorld(Vector3(20, 5, 0));
-    pickaxe = AddPickaxeToWorld(Vector3(20, 5, 20));
+    pickaxe = AddPickaxeToWorld(Vector3(20,5,20));
+    AddTreeToWorld(Vector3(30, 3, 0));
 }
 
 void TutorialGame::InitSphereGridWorld(int numRows, int numCols, float rowSpacing, float colSpacing, float radius) {
