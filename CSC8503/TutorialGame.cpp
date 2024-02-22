@@ -68,17 +68,19 @@ void TutorialGame::InitialiseAssets() {
     capsuleMesh = renderer->LoadMesh("capsule.msh");
     trainMesh = renderer->LoadOBJMesh("Train.obj");
     creeperMesh = renderer->LoadOBJMesh("Creeper.obj");
+   // pickaxeMesh = renderer->LoadOBJMesh("PickAxe.obj");
+   // axeMesh = renderer->LoadOBJMesh("Axe.obj");
     maleMesh = renderer->LoadMesh("Male_Guard.msh");
-    femaleMesh = renderer->LoadMesh("Female_Guard.msh");
-    assassinMesh = renderer->LoadMesh("Assassin.msh");
-    girlMesh = renderer->LoadMesh("Girl.msh");
-    smurfMesh = renderer->LoadMesh("Smurf.msh");
+    //femaleMesh = renderer->LoadMesh("Female_Guard.msh");
+    //assassinMesh = renderer->LoadMesh("Assassin.msh");
+    //girlMesh = renderer->LoadMesh("Girl.msh");
+    //smurfMesh = renderer->LoadMesh("Smurf.msh");
 
     meshes.push_back(maleMesh);
-    meshes.push_back(femaleMesh);
-    meshes.push_back(assassinMesh);
-    meshes.push_back(girlMesh);
-    meshes.push_back(smurfMesh);
+    //meshes.push_back(femaleMesh);
+    //meshes.push_back(assassinMesh);
+    //meshes.push_back(girlMesh);
+    //meshes.push_back(smurfMesh);
 
     std::cout << std::endl << "--------Loading Textures--------" << std::endl;
     basicTex = renderer->LoadTexture("checkerboard.png");
@@ -143,88 +145,88 @@ void TutorialGame::InitMaterials() {
         maleBumpTextures.emplace_back(texID2);
     }
 
-    femaleMaterial = new MeshMaterial("Female_Guard.mat");
-    for (int i = 0; i < femaleMesh->GetSubMeshCount(); ++i) {
-        const MeshMaterialEntry* matEntry =
-            femaleMaterial->GetMaterialForLayer(i);
-
-        const string* filename = nullptr;
-        matEntry->GetEntry("Diffuse", &filename);
-        string path = Assets::TEXTUREDIR + *filename;
-        GLuint texID = SOIL_load_OGL_texture(path.c_str(), SOIL_LOAD_AUTO,
-            SOIL_CREATE_NEW_ID, SOIL_FLAG_MIPMAPS | SOIL_FLAG_INVERT_Y);
-        femaleTextures.emplace_back(texID);
-
-        matEntry->GetEntry("Bump", &filename);
-        string path2 = Assets::TEXTUREDIR + *filename;
-        GLuint texID2 = SOIL_load_OGL_texture(path.c_str(), SOIL_LOAD_AUTO,
-            SOIL_CREATE_NEW_ID, SOIL_FLAG_MIPMAPS | SOIL_FLAG_INVERT_Y);
-        femaleBumpTextures.emplace_back(texID2);
-    }
-
-    assassinMaterial = new MeshMaterial("Assassin.mat");
-    for (int i = 0; i < assassinMesh->GetSubMeshCount(); ++i) {
-        const MeshMaterialEntry* matEntry =
-            assassinMaterial->GetMaterialForLayer(i);
-
-        const string* filename = nullptr;
-        matEntry->GetEntry("Diffuse", &filename);
-        string path = Assets::TEXTUREDIR + *filename;
-        GLuint texID = SOIL_load_OGL_texture(path.c_str(), SOIL_LOAD_AUTO,
-            SOIL_CREATE_NEW_ID, SOIL_FLAG_MIPMAPS | SOIL_FLAG_INVERT_Y);
-        assassinTextures.emplace_back(texID);
-    }
-    vector<GLuint> assassinBumpTextures;
-
-    girlMaterial = new MeshMaterial("Girl.mat");
-    for (int i = 0; i < girlMesh->GetSubMeshCount(); ++i) {
-        const MeshMaterialEntry* matEntry =
-            girlMaterial->GetMaterialForLayer(i);
-
-        const string* filename = nullptr;
-        matEntry->GetEntry("Diffuse", &filename);
-        string path = Assets::TEXTUREDIR + *filename;
-        GLuint texID = SOIL_load_OGL_texture(path.c_str(), SOIL_LOAD_AUTO,
-            SOIL_CREATE_NEW_ID, SOIL_FLAG_MIPMAPS | SOIL_FLAG_INVERT_Y);
-        girlTextures.emplace_back(texID);
-
-        matEntry->GetEntry("Bump", &filename);
-        string path2 = Assets::TEXTUREDIR + *filename;
-        GLuint texID2 = SOIL_load_OGL_texture(path.c_str(), SOIL_LOAD_AUTO,
-            SOIL_CREATE_NEW_ID, SOIL_FLAG_MIPMAPS | SOIL_FLAG_INVERT_Y);
-        girlBumpTextures.emplace_back(texID2);
-    }
-
-    smurfMaterial = new MeshMaterial("Smurf.mat");
-    for (int i = 0; i < smurfMesh->GetSubMeshCount(); ++i) {
-        const MeshMaterialEntry* matEntry =
-            smurfMaterial->GetMaterialForLayer(i);
-
-        const string* filename = nullptr;
-        matEntry->GetEntry("Diffuse", &filename);
-        string path = Assets::TEXTUREDIR + *filename;
-        GLuint texID = SOIL_load_OGL_texture(path.c_str(), SOIL_LOAD_AUTO,
-            SOIL_CREATE_NEW_ID, SOIL_FLAG_MIPMAPS | SOIL_FLAG_INVERT_Y);
-        smurfTextures.emplace_back(texID);
-
-        matEntry->GetEntry("Bump", &filename);
-        string path2 = Assets::TEXTUREDIR + *filename;
-        GLuint texID2 = SOIL_load_OGL_texture(path.c_str(), SOIL_LOAD_AUTO,
-            SOIL_CREATE_NEW_ID, SOIL_FLAG_MIPMAPS | SOIL_FLAG_INVERT_Y);
-        smurfBumpTextures.emplace_back(texID2);
-    }
+    //femaleMaterial = new MeshMaterial("Female_Guard.mat");
+    //for (int i = 0; i < femaleMesh->GetSubMeshCount(); ++i) {
+    //    const MeshMaterialEntry* matEntry =
+    //        femaleMaterial->GetMaterialForLayer(i);
+    //
+    //    const string* filename = nullptr;
+    //    matEntry->GetEntry("Diffuse", &filename);
+    //    string path = Assets::TEXTUREDIR + *filename;
+    //    GLuint texID = SOIL_load_OGL_texture(path.c_str(), SOIL_LOAD_AUTO,
+    //        SOIL_CREATE_NEW_ID, SOIL_FLAG_MIPMAPS | SOIL_FLAG_INVERT_Y);
+    //    femaleTextures.emplace_back(texID);
+    //
+    //    matEntry->GetEntry("Bump", &filename);
+    //    string path2 = Assets::TEXTUREDIR + *filename;
+    //    GLuint texID2 = SOIL_load_OGL_texture(path.c_str(), SOIL_LOAD_AUTO,
+    //        SOIL_CREATE_NEW_ID, SOIL_FLAG_MIPMAPS | SOIL_FLAG_INVERT_Y);
+    //    femaleBumpTextures.emplace_back(texID2);
+    //}
+    //
+    //assassinMaterial = new MeshMaterial("Assassin.mat");
+    //for (int i = 0; i < assassinMesh->GetSubMeshCount(); ++i) {
+    //    const MeshMaterialEntry* matEntry =
+    //        assassinMaterial->GetMaterialForLayer(i);
+    //
+    //    const string* filename = nullptr;
+    //    matEntry->GetEntry("Diffuse", &filename);
+    //    string path = Assets::TEXTUREDIR + *filename;
+    //    GLuint texID = SOIL_load_OGL_texture(path.c_str(), SOIL_LOAD_AUTO,
+    //        SOIL_CREATE_NEW_ID, SOIL_FLAG_MIPMAPS | SOIL_FLAG_INVERT_Y);
+    //    assassinTextures.emplace_back(texID);
+    //}
+    //vector<GLuint> assassinBumpTextures;
+    //
+    //girlMaterial = new MeshMaterial("Girl.mat");
+    //for (int i = 0; i < girlMesh->GetSubMeshCount(); ++i) {
+    //    const MeshMaterialEntry* matEntry =
+    //        girlMaterial->GetMaterialForLayer(i);
+    //
+    //    const string* filename = nullptr;
+    //    matEntry->GetEntry("Diffuse", &filename);
+    //    string path = Assets::TEXTUREDIR + *filename;
+    //    GLuint texID = SOIL_load_OGL_texture(path.c_str(), SOIL_LOAD_AUTO,
+    //        SOIL_CREATE_NEW_ID, SOIL_FLAG_MIPMAPS | SOIL_FLAG_INVERT_Y);
+    //    girlTextures.emplace_back(texID);
+    //
+    //    matEntry->GetEntry("Bump", &filename);
+    //    string path2 = Assets::TEXTUREDIR + *filename;
+    //    GLuint texID2 = SOIL_load_OGL_texture(path.c_str(), SOIL_LOAD_AUTO,
+    //        SOIL_CREATE_NEW_ID, SOIL_FLAG_MIPMAPS | SOIL_FLAG_INVERT_Y);
+    //    girlBumpTextures.emplace_back(texID2);
+    //}
+    //
+    //smurfMaterial = new MeshMaterial("Smurf.mat");
+    //for (int i = 0; i < smurfMesh->GetSubMeshCount(); ++i) {
+    //    const MeshMaterialEntry* matEntry =
+    //        smurfMaterial->GetMaterialForLayer(i);
+    //
+    //    const string* filename = nullptr;
+    //    matEntry->GetEntry("Diffuse", &filename);
+    //    string path = Assets::TEXTUREDIR + *filename;
+    //    GLuint texID = SOIL_load_OGL_texture(path.c_str(), SOIL_LOAD_AUTO,
+    //        SOIL_CREATE_NEW_ID, SOIL_FLAG_MIPMAPS | SOIL_FLAG_INVERT_Y);
+    //    smurfTextures.emplace_back(texID);
+    //
+    //    matEntry->GetEntry("Bump", &filename);
+    //    string path2 = Assets::TEXTUREDIR + *filename;
+    //    GLuint texID2 = SOIL_load_OGL_texture(path.c_str(), SOIL_LOAD_AUTO,
+    //        SOIL_CREATE_NEW_ID, SOIL_FLAG_MIPMAPS | SOIL_FLAG_INVERT_Y);
+    //    smurfBumpTextures.emplace_back(texID2);
+    //}
 
     textures.push_back(maleTextures);
-    textures.push_back(femaleTextures);
-    textures.push_back(assassinTextures);
-    textures.push_back(girlTextures);
-    textures.push_back(smurfTextures);
+    //textures.push_back(femaleTextures);
+    //textures.push_back(assassinTextures);
+    //textures.push_back(girlTextures);
+    //textures.push_back(smurfTextures);
 
     bumpTextures.push_back(maleBumpTextures);
-    bumpTextures.push_back(femaleBumpTextures);
-    bumpTextures.push_back(assassinBumpTextures);
-    bumpTextures.push_back(girlBumpTextures);
-    bumpTextures.push_back(smurfBumpTextures);
+    //bumpTextures.push_back(femaleBumpTextures);
+    //bumpTextures.push_back(assassinBumpTextures);
+    //bumpTextures.push_back(girlBumpTextures);
+    //bumpTextures.push_back(smurfBumpTextures);
 }
 
 void TutorialGame::InitAnimations() {
@@ -240,49 +242,49 @@ void TutorialGame::InitAnimations() {
     maleAnimation->SetAnim8(new MeshAnimation("Cheer1.anm"));
     maleAnimation->SetActiveAnim(maleAnimation->GetAnim1());
 
-    femaleAnimation = new AnimationObject();
-    femaleAnimation->SetAnim1(new MeshAnimation("Idle2.anm"));
-    femaleAnimation->SetAnim2(new MeshAnimation("StepForward2.anm"));
-    femaleAnimation->SetAnim3(new MeshAnimation("StepLeft2.anm"));
-    femaleAnimation->SetAnim4(new MeshAnimation("StepRight2.anm"));
-    femaleAnimation->SetAnim5(new MeshAnimation("StepBack2.anm"));
-    femaleAnimation->SetAnim6(new MeshAnimation("Angry2.anm"));
-    femaleAnimation->SetAnim7(new MeshAnimation("Happy2.anm"));
-    femaleAnimation->SetAnim8(new MeshAnimation("Cheer2.anm"));
-    femaleAnimation->SetActiveAnim(femaleAnimation->GetAnim1());
-
-    assassinAnimation = new AnimationObject();
-    assassinAnimation->SetAnim1(new MeshAnimation("Assassin.anm"));
-    assassinAnimation->SetAnim2(new MeshAnimation("Assassin.anm"));
-    assassinAnimation->SetAnim3(new MeshAnimation("Assassin.anm"));
-    assassinAnimation->SetAnim4(new MeshAnimation("Assassin.anm"));
-    assassinAnimation->SetAnim5(new MeshAnimation("Assassin.anm"));
-    assassinAnimation->SetActiveAnim(assassinAnimation->GetAnim1());
-    assassinAnimation->SetIdle(false);
-
-    girlAnimation = new AnimationObject();
-    girlAnimation->SetAnim1(new MeshAnimation("Girl.anm"));
-    girlAnimation->SetAnim2(new MeshAnimation("Girl.anm"));
-    girlAnimation->SetAnim3(new MeshAnimation("Girl.anm"));
-    girlAnimation->SetAnim4(new MeshAnimation("Girl.anm"));
-    girlAnimation->SetAnim5(new MeshAnimation("Girl.anm"));
-    girlAnimation->SetActiveAnim(girlAnimation->GetAnim1());
-    girlAnimation->SetIdle(false);
-
-    smurfAnimation = new AnimationObject();
-    smurfAnimation->SetAnim1(new MeshAnimation("Smurf.anm"));
-    smurfAnimation->SetAnim2(new MeshAnimation("Smurf.anm"));
-    smurfAnimation->SetAnim3(new MeshAnimation("Smurf.anm"));
-    smurfAnimation->SetAnim4(new MeshAnimation("Smurf.anm"));
-    smurfAnimation->SetAnim5(new MeshAnimation("Smurf.anm"));
-    smurfAnimation->SetActiveAnim(smurfAnimation->GetAnim1());
-    smurfAnimation->SetIdle(false);
+    //femaleAnimation = new AnimationObject();
+    //femaleAnimation->SetAnim1(new MeshAnimation("Idle2.anm"));
+    //femaleAnimation->SetAnim2(new MeshAnimation("StepForward2.anm"));
+    //femaleAnimation->SetAnim3(new MeshAnimation("StepLeft2.anm"));
+    //femaleAnimation->SetAnim4(new MeshAnimation("StepRight2.anm"));
+    //femaleAnimation->SetAnim5(new MeshAnimation("StepBack2.anm"));
+    //femaleAnimation->SetAnim6(new MeshAnimation("Angry2.anm"));
+    //femaleAnimation->SetAnim7(new MeshAnimation("Happy2.anm"));
+    //femaleAnimation->SetAnim8(new MeshAnimation("Cheer2.anm"));
+    //femaleAnimation->SetActiveAnim(femaleAnimation->GetAnim1());
+    //
+    //assassinAnimation = new AnimationObject();
+    //assassinAnimation->SetAnim1(new MeshAnimation("Assassin.anm"));
+    //assassinAnimation->SetAnim2(new MeshAnimation("Assassin.anm"));
+    //assassinAnimation->SetAnim3(new MeshAnimation("Assassin.anm"));
+    //assassinAnimation->SetAnim4(new MeshAnimation("Assassin.anm"));
+    //assassinAnimation->SetAnim5(new MeshAnimation("Assassin.anm"));
+    //assassinAnimation->SetActiveAnim(assassinAnimation->GetAnim1());
+    //assassinAnimation->SetIdle(false);
+    //
+    //girlAnimation = new AnimationObject();
+    //girlAnimation->SetAnim1(new MeshAnimation("Girl.anm"));
+    //girlAnimation->SetAnim2(new MeshAnimation("Girl.anm"));
+    //girlAnimation->SetAnim3(new MeshAnimation("Girl.anm"));
+    //girlAnimation->SetAnim4(new MeshAnimation("Girl.anm"));
+    //girlAnimation->SetAnim5(new MeshAnimation("Girl.anm"));
+    //girlAnimation->SetActiveAnim(girlAnimation->GetAnim1());
+    //girlAnimation->SetIdle(false);
+    //
+    //smurfAnimation = new AnimationObject();
+    //smurfAnimation->SetAnim1(new MeshAnimation("Smurf.anm"));
+    //smurfAnimation->SetAnim2(new MeshAnimation("Smurf.anm"));
+    //smurfAnimation->SetAnim3(new MeshAnimation("Smurf.anm"));
+    //smurfAnimation->SetAnim4(new MeshAnimation("Smurf.anm"));
+    //smurfAnimation->SetAnim5(new MeshAnimation("Smurf.anm"));
+    //smurfAnimation->SetActiveAnim(smurfAnimation->GetAnim1());
+    //smurfAnimation->SetIdle(false);
 
     animations.push_back(maleAnimation);
-    animations.push_back(femaleAnimation);
-    animations.push_back(assassinAnimation);
-    animations.push_back(girlAnimation);
-    animations.push_back(smurfAnimation);
+    //animations.push_back(femaleAnimation);
+    //animations.push_back(assassinAnimation);
+    //animations.push_back(girlAnimation);
+    //animations.push_back(smurfAnimation);
 }
 
 TutorialGame::~TutorialGame() {
@@ -695,7 +697,7 @@ GameObject* TutorialGame::AddTestingLightToWorld(const Vector3& position, const 
 }
 
 PlayerObject* TutorialGame::AddPlayerToWorld(const Vector3& position) {
-    player = new PlayerObject();
+    player = new PlayerObject("Player");
     AABBVolume* volume = new AABBVolume(Vector3(1.5, 1.5, 1.5));
     player->SetBoundingVolume((CollisionVolume*)volume);
 
@@ -727,7 +729,7 @@ PlayerObject* TutorialGame::AddPlayerToWorld(const Vector3& position) {
 
 CollectableObject* TutorialGame::AddCollectableObjectToGround(int objectId)
 {
-    Vector3 GroundPos = findNearestGridCenter(PlayerFront());
+    Vector3 GroundPos = object->findNearestGridCenter(object->PlayerFront());
     object->SetActive(false);
     groundObject = new CollectableObject(world);
     AABBVolume* volume = new AABBVolume(Vector3(1, 1, 1));
@@ -755,19 +757,43 @@ CollectableObject* TutorialGame::AddCollectableObjectToGround(int objectId)
     return groundObject;
 }
 
-CollectableObject* TutorialGame::AddRailToWorld(int direction, Vector3 RailPosition, Vector3 lastRailPosition)
-{
+PickaxeObject* TutorialGame::AddPickaxeToWorld(const Vector3& position) {
+    PickaxeObject* pickaxe = new PickaxeObject(world, "Pickaxe");
 
-    return 0;
-}
-int TutorialGame::SelectRailDir(Vector3 lastRailPosition, Vector3 RailPosition)
-{
-    if (distance(lastRailPosition, RailPosition) <= 10)
-    {
+    AABBVolume* volume = new AABBVolume(Vector3(0.5f, 0.5f, 0.5f));
+    pickaxe->SetBoundingVolume((CollisionVolume*)volume);
 
-    }
-    return 0;
+    pickaxe->SetPlayer(player);
+
+    pickaxe->GetTransform()
+        .SetPosition(pickaxe->findNearestGridCenter(position))
+        .SetScale(Vector3(1, 1, 1));
+
+    pickaxe->SetRenderObject(new RenderObject(&pickaxe->GetTransform(), cubeMesh, basicTex, basicShader));
+    pickaxe->SetPhysicsObject(new PhysicsObject(&pickaxe->GetTransform(), pickaxe->GetBoundingVolume()));
+    pickaxe->GetPhysicsObject()->SetGravity(false);
+    pickaxe->GetPhysicsObject()->SetResolve(false);
+
+    pickaxe->GetPhysicsObject()->SetInverseMass(1);
+    pickaxe->GetPhysicsObject()->InitCubeInertia();
+
+    world->AddGameObject(pickaxe);
+
+    return pickaxe;
 }
+
+//CollectableObject* TutorialGame::AddRailToWorld(int direction,Vector3 RailPosition,Vector3 lastRailPosition)
+//{
+//
+//
+//}
+//int TutorialGame::SelectRailDir(Vector3 lastRailPosition,Vector3 RailPosition)
+//{
+//    if(distance(lastRailPosition,RailPosition)<= 10)
+//    {
+//
+//    }
+//}
 
 void TutorialGame::InitDefaultFloor() {
     AddFloorToWorld(Vector3(0, 0, 0));
@@ -783,6 +809,7 @@ void TutorialGame::InitGameExamples() {
     AddTestingLightToWorld(Vector3(30, 20, 40), Vector4(1, 0, 0, 0.7));
     AddTestingLightToWorld(Vector3(60, 20, 20), Vector4(0, 1, 0, 0.7));
     player = AddPlayerToWorld(Vector3(20, 5, 0));
+    pickaxe = AddPickaxeToWorld(Vector3(20,5,20));
 }
 
 void TutorialGame::InitSphereGridWorld(int numRows, int numCols, float rowSpacing, float colSpacing, float radius) {
@@ -971,7 +998,7 @@ CollectableObject* TutorialGame::CreateObject(int objectId)
         //AddRailToWorld();
         break;
     case 2:
-
+        return AddPickaxeToWorld(Vector3(20, 20, 20));
         break;
     default:
 
@@ -985,6 +1012,5 @@ CollectableObject* TutorialGame::CreateObject(int objectId)
 
 void TutorialGame::HoldObject()
 {
-    object->GetTransform().SetPosition(PlayerFront());
+    object->GetTransform().SetPosition(object->PlayerFront());
 }
-

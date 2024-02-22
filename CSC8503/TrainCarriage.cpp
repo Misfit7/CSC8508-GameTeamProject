@@ -1,7 +1,7 @@
-
-
 #include "TrainCarriage.h"
 #include "TrainObject.h"
+
+using namespace NCL::CSC8503;
 
 TrainCarriage::TrainCarriage() {
 
@@ -35,6 +35,15 @@ Quaternion RotateBetweenVectors2(const Vector3 &from, const Vector3 &to) {
     rotationAxis.Normalise();
     float rotationAngle = std::acos(dotProduct);// 计算旋转角度
     return Quaternion(rotationAxis, rotationAngle);// 构建旋转四元数
+}
+
+void TrainCarriage::UpdateOrientation(Vector3 direction) {
+    Quaternion rotation;
+    if (direction.x > 0) rotation = Quaternion::EulerAnglesToQuaternion(0, -90, 0);
+    else if (direction.x < 0) rotation = Quaternion::EulerAnglesToQuaternion(0, 90, 0);
+    else if (direction.z > 0) rotation = Quaternion::EulerAnglesToQuaternion(0, 180, 0);
+    else if (direction.z < 0) rotation = Quaternion::EulerAnglesToQuaternion(0, 0, 0);
+    transform.SetOrientation(rotation);
 }
 
 void TrainCarriage::Update(float dt) {

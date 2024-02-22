@@ -24,9 +24,13 @@ set(Source_Files
 )
 
 set(GameObjects
+        "CollectableObject.h"
+        "PickaxeObject.h"
         "TrainObject.h"
         "TrainCarriage.h"
         "PlayerObject.h"
+        "CollectableObject.cpp"
+        "PickaxeObject.cpp"
         "PlayerObject.cpp"
         "TrainObject.cpp"
         "TrainCarriage.cpp"

@@ -2,6 +2,8 @@
 #include "PlayerObject.h"
 #include "Window.h"
 
+using namespace NCL::CSC8503;
+
 void PlayerObject::Update(float dt) {
     if (Window::GetKeyboard()->KeyDown(KeyCodes::UP) && renderObject->GetAnimationObject()->GetAnim2()) {
         if (renderObject->GetAnimationObject()->GetFlag2()) {
@@ -79,12 +81,12 @@ void PlayerObject::Update(float dt) {
         }
     }
 
-    if (Window::GetKeyboard()->KeyPressed(KeyCodes::E)) {
-        renderObject->SetMesh(meshes[(index + 1) % 5]);
-        renderObject->SetAnimationObject(animations[(index + 1) % 5]);
-        renderObject->SetTextures(textures[(index + 1) % 5]);
-        renderObject->SetBumpTextures(bumpTextures[(index + 1) % 5]);
-        renderObject->SetShaderGroup(shaders[(index + 1) % 5]);
-        index++;
-    }
+    //if (Window::GetKeyboard()->KeyPressed(KeyCodes::E)) {
+    //    renderObject->SetMesh(meshes[(index + 1) % 5]);
+    //    renderObject->SetAnimationObject(animations[(index + 1) % 5]);
+    //    renderObject->SetTextures(textures[(index + 1) % 5]);
+    //    renderObject->SetBumpTextures(bumpTextures[(index + 1) % 5]);
+    //    renderObject->SetShaderGroup(shaders[(index + 1) % 5]);
+    //    index++;
+    //}
 }
