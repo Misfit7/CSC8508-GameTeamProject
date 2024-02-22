@@ -21,6 +21,7 @@ TutorialGame::TutorialGame() : controller(*Window::GetWindow()->GetKeyboard(), *
 
     world = new GameWorld();
     audio = new Audio(world);
+    ui = new UI();
 #ifdef USEVULKAN
     renderer = new GameTechVulkanRenderer(*world);
     renderer->Init();
@@ -68,8 +69,8 @@ void TutorialGame::InitialiseAssets() {
     capsuleMesh = renderer->LoadMesh("capsule.msh");
     trainMesh = renderer->LoadOBJMesh("Train.obj");
     creeperMesh = renderer->LoadOBJMesh("Creeper.obj");
-   // pickaxeMesh = renderer->LoadOBJMesh("PickAxe.obj");
-   // axeMesh = renderer->LoadOBJMesh("Axe.obj");
+    // pickaxeMesh = renderer->LoadOBJMesh("PickAxe.obj");
+    // axeMesh = renderer->LoadOBJMesh("Axe.obj");
     maleMesh = renderer->LoadMesh("Male_Guard.msh");
     //femaleMesh = renderer->LoadMesh("Female_Guard.msh");
     //assassinMesh = renderer->LoadMesh("Assassin.msh");
@@ -327,6 +328,7 @@ void TutorialGame::UpdateGame(float dt) {
 
     UpdateKeys();
     audio->UpdateKeys();
+    ui->Demo();
 
     if (useGravity) {
         Debug::Print("(G)ravity on", Vector2(5, 95), Debug::RED);
@@ -809,7 +811,7 @@ void TutorialGame::InitGameExamples() {
     AddTestingLightToWorld(Vector3(30, 20, 40), Vector4(1, 0, 0, 0.7));
     AddTestingLightToWorld(Vector3(60, 20, 20), Vector4(0, 1, 0, 0.7));
     player = AddPlayerToWorld(Vector3(20, 5, 0));
-    pickaxe = AddPickaxeToWorld(Vector3(20,5,20));
+    pickaxe = AddPickaxeToWorld(Vector3(20, 5, 20));
 }
 
 void TutorialGame::InitSphereGridWorld(int numRows, int numCols, float rowSpacing, float colSpacing, float radius) {

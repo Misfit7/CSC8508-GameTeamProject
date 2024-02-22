@@ -10,6 +10,7 @@ set(Header_Files
         "StateGameObject.h"
         "TutorialGame.h"
         "Audio.h"
+        "UI.h"
 )
 source_group("Header Files" FILES ${Header_Files})
 
@@ -21,6 +22,7 @@ set(Source_Files
         "StateGameObject.cpp"
         "TutorialGame.cpp"
         "Audio.cpp"
+        "UI.cpp"
 )
 
 set(GameObjects
@@ -221,7 +223,7 @@ endif ()
 include_directories("../Common/OpenGLRendering/")
 include_directories("../Common/NCLCoreClasses/")
 include_directories("../Common/CSC8503CoreClasses/")
-include_directories("../Plugins/irrKlang")
+include_directories("../Plugins/irrKlang/")
 
 target_link_libraries(${PROJECT_NAME} LINK_PUBLIC "../Plugins/irrKlang/lib/irrKlang")
 target_link_libraries(${PROJECT_NAME} LINK_PUBLIC NCLCoreClasses)

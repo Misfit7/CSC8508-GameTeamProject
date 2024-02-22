@@ -9,6 +9,7 @@
 #include "NavigationGrid.h"
 #include "MeshMaterial.h"
 #include "Audio.h"
+#include "UI.h"
 #include "StateGameObject.h"
 #include "CollectableObject.h"
 #include "TrainObject.h"
@@ -90,6 +91,7 @@ namespace NCL {
             PhysicsSystem* physics;
             GameWorld* world;
             Audio* audio;
+            UI* ui;
             std::vector<GameObject*> scene;
             KeyboardMouseController controller;
 
@@ -202,7 +204,7 @@ namespace NCL {
 
             vector<Vector3> mazeNodes;
             NavigationGrid* navGrid;
-           
+
             static TutorialGame* instance;
         };
     }
