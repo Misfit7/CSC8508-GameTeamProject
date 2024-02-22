@@ -6,6 +6,7 @@
 #include "Light.h"
 
 #include "GameWorld.h"
+#include "UI.h"
 
 #include "Frustum.h"
 
@@ -25,6 +26,7 @@ namespace NCL {
             Texture* LoadTexture(const std::string& name);
             Shader* LoadShader(const std::string& vertex, const std::string& fragment);
             void       ToggleNight();
+            UI* GetUI() { return ui; };
 
         protected:
             void NewRenderLines();
@@ -35,13 +37,13 @@ namespace NCL {
             OGLShader* defaultShader;
 
             GameWorld& gameWorld;
+            UI* ui;
 
             void InitBuffers();
             void ClearAllBuffers();
 
             void GenerateShadowTexture();
             void GenerateCombinedTexture();
-            void GenerateProcessTexture();
             void GenerateScreenTexture(GLuint& into, bool depth = false);
 
             void BuildObjectList();

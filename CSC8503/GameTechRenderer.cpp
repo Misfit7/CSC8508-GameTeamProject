@@ -15,7 +15,7 @@ Matrix4 biasMatrix = Matrix4::Translation(Vector3(0.5f, 0.5f, 0.5f)) * Matrix4::
 
 GameTechRenderer::GameTechRenderer(GameWorld& world) : OGLRenderer(*Window::GetWindow()), gameWorld(world) {
     std::cout << std::endl << "--------Initialising Renderer--------" << std::endl;
-
+    ui = new UI(&world);
     glEnable(GL_DEPTH_TEST);
 
     std::cout << std::endl << "--------Loading Shaders--------" << std::endl;
@@ -322,6 +322,9 @@ void GameTechRenderer::RenderFrame() {
     }
 
     glDisable(GL_CULL_FACE); //Todo - text indices are going the wrong way...
+
+    ui->DrawUI();
+
     glDisable(GL_BLEND);
     glDisable(GL_DEPTH_TEST);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);

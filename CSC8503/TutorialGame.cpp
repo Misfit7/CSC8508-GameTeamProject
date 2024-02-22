@@ -21,7 +21,6 @@ TutorialGame::TutorialGame() : controller(*Window::GetWindow()->GetKeyboard(), *
 
     world = new GameWorld();
     audio = new Audio(world);
-    ui = new UI();
 #ifdef USEVULKAN
     renderer = new GameTechVulkanRenderer(*world);
     renderer->Init();
@@ -328,7 +327,6 @@ void TutorialGame::UpdateGame(float dt) {
 
     UpdateKeys();
     audio->UpdateKeys();
-    ui->Demo();
 
     if (useGravity) {
         Debug::Print("(G)ravity on", Vector2(5, 95), Debug::RED);
@@ -368,6 +366,7 @@ void TutorialGame::UpdateGame(float dt) {
     world->UpdateWorld(dt);
     renderer->Update(dt);
     physics->Update(dt);
+    renderer->GetUI()->Update(dt); //UI
 
     if (testStateObject) {
         //std::cout<<"debug"<<std::endl;
@@ -393,6 +392,10 @@ void TutorialGame::UpdateKeys() {
 
     if (Window::GetKeyboard()->KeyPressed(KeyCodes::F3)) {
         renderer->ToggleNight();
+    }
+
+    if (Window::GetKeyboard()->KeyPressed(KeyCodes::F4)) {
+        renderer->GetUI()->ToggleShowUIdemo();
     }
 
     if (Window::GetKeyboard()->KeyPressed(KeyCodes::G)) {
@@ -833,7 +836,7 @@ void TutorialGame::InitGameExamples() {
     AddTestingLightToWorld(Vector3(30, 20, 40), Vector4(1, 0, 0, 0.7));
     AddTestingLightToWorld(Vector3(60, 20, 20), Vector4(0, 1, 0, 0.7));
     player = AddPlayerToWorld(Vector3(20, 5, 0));
-    pickaxe = AddPickaxeToWorld(Vector3(20,5,20));
+    pickaxe = AddPickaxeToWorld(Vector3(20, 5, 20));
     AddTreeToWorld(Vector3(30, 3, 0));
 }
 

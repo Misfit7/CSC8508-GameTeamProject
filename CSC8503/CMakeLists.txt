@@ -40,6 +40,12 @@ set(GameObjects
         "TreeObject.cpp"
 )
 
+file(GLOB UI
+    "../Plugins/imGui/*im*"
+)
+
+source_group("UI" FILES ${UI})
+
 if (USE_VULKAN)
     list(APPEND Header_Files "GameTechVulkanRenderer.h")
     list(APPEND Source_Files "GameTechVulkanRenderer.cpp")
@@ -56,6 +62,7 @@ set(ALL_FILES
         ${Header_Files}
         ${Source_Files}
         ${GameObjects}
+	${UI}
 )
 
 if (USE_VULKAN)
@@ -225,7 +232,7 @@ endif ()
 include_directories("../Common/OpenGLRendering/")
 include_directories("../Common/NCLCoreClasses/")
 include_directories("../Common/CSC8503CoreClasses/")
-include_directories("../Plugins/irrKlang/")
+include_directories("../Plugins/irrKlang")
 
 target_link_libraries(${PROJECT_NAME} LINK_PUBLIC "../Plugins/irrKlang/lib/irrKlang")
 target_link_libraries(${PROJECT_NAME} LINK_PUBLIC NCLCoreClasses)
