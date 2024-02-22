@@ -13,78 +13,78 @@ https://research.ncl.ac.uk/game/
 #include "Vector2i.h"
 
 namespace NCL {
-	class GameTimer;
-	namespace Rendering {
-		class RendererBase;
-	};
-	using namespace Rendering;
-	
-	class Window {
-	public:
-		static Window* CreateGameWindow(std::string title = "NCLGL!", int sizeX = 800, int sizeY = 600, bool fullScreen = false, int offsetX = 100, int offsetY = 100);
+    class GameTimer;
+    namespace Rendering {
+        class RendererBase;
+    };
+    using namespace Rendering;
 
-		static void DestroyGameWindow() {
-			delete window;
-			window = nullptr;
-		}
+    class Window {
+    public:
+        static Window* CreateGameWindow(std::string title = "NCLGL!", int sizeX = 800, int sizeY = 600, bool fullScreen = false, int offsetX = 100, int offsetY = 100);
 
-		bool		IsMinimised() const { return minimised;	 }
+        static void DestroyGameWindow() {
+            delete window;
+            window = nullptr;
+        }
 
-		bool		UpdateWindow();
-		void		SetRenderer(RendererBase* r);
+        bool		IsMinimised() const { return minimised; }
 
-		bool		HasInitialised()	const { return init; }
+        bool		UpdateWindow();
+        void		SetRenderer(RendererBase* r);
 
-		float		GetScreenAspect()	const {
-			return (float)size.x / (float)size.y;
-		}
+        bool		HasInitialised()	const { return init; }
 
-		Vector2i		GetScreenSize()		const { return size; }
-		Vector2i		GetScreenPosition()	const { return position; }
+        float		GetScreenAspect()	const {
+            return (float)size.x / (float)size.y;
+        }
 
-		const std::string&  GetTitle()   const { return windowTitle; }
-		void				SetTitle(const std::string& title) {
-			windowTitle = title;
-			UpdateTitle();
-		};
+        Vector2i		GetScreenSize()		const { return size; }
+        Vector2i		GetScreenPosition()	const { return position; }
 
-		virtual void	LockMouseToWindow(bool lock) {};
-		virtual void	ShowOSPointer(bool show) {};
+        const std::string& GetTitle()   const { return windowTitle; }
+        void				SetTitle(const std::string& title) {
+            windowTitle = title;
+            UpdateTitle();
+        };
 
-		virtual void	SetWindowPosition(int x, int y) {};
-		virtual void	SetFullScreen(bool state) {};
-		virtual void	SetConsolePosition(int x, int y) {};
-		virtual void	ShowConsole(bool state) {};
+        virtual void	LockMouseToWindow(bool lock) {};
+        virtual void	ShowOSPointer(bool show) {};
 
-		static const Keyboard*	 GetKeyboard() { return keyboard; }
-		static const Mouse*		 GetMouse() { return mouse; }
-		static const GameTimer&	 GetTimer() { return timer; }
+        virtual void	SetWindowPosition(int x, int y) {};
+        virtual void	SetFullScreen(bool state) {};
+        virtual void	SetConsolePosition(int x, int y) {};
+        virtual void	ShowConsole(bool state) {};
 
-		static Window*	const GetWindow() { return window; }
-	protected:
-		Window();
-		virtual ~Window();
+        static const Keyboard* GetKeyboard() { return keyboard; }
+        static const Mouse* GetMouse() { return mouse; }
+        static const GameTimer& GetTimer() { return timer; }
 
-		virtual void UpdateTitle() {}
+        static Window* const GetWindow() { return window; }
+    protected:
+        Window();
+        virtual ~Window();
 
-		virtual bool InternalUpdate() = 0;
+        virtual void UpdateTitle() {}
 
-		void ResizeRenderer();
+        virtual bool InternalUpdate() = 0;
 
-		RendererBase*	renderer;
+        void ResizeRenderer();
 
-		bool				minimised;
-		bool				init;
-		Vector2i			position;
-		Vector2i			size;
-		Vector2i			defaultSize;
+        RendererBase* renderer;
 
-		std::string			windowTitle;
+        bool				minimised;
+        bool				init;
+        Vector2i			position;
+        Vector2i			size;
+        Vector2i			defaultSize;
 
-		static Window*		window;
-		static Keyboard*	keyboard;
-		static Mouse*		mouse;
+        std::string			windowTitle;
 
-		static GameTimer	timer;
-	};
+        static Window* window;
+        static Keyboard* keyboard;
+        static Mouse* mouse;
+
+        static GameTimer	timer;
+    };
 }

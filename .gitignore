@@ -20,6 +20,7 @@ x64/
 build/
 [Dd]ebug
 /Testing
+/.idea
 
 *.sln
 *.vcxproj
@@ -38,6 +39,7 @@ build.ninja
 *.out
 
 # CMake generated files
+CMake/
 CMakeFiles/
 CMakeCache.txt
 cmake_install.cmake
@@ -50,7 +52,7 @@ Makefile.*
 
 # IDE-specific files
 .vscode/
-/.idea
+.idea/
 
 # Dependency directories
 dependencies/
