@@ -45,7 +45,7 @@ namespace NCL::CSC8503 {
         void SetPlayerShaders(vector<ShaderGroup*> s) {
             shaders = s;
         }
-
+        void playermovement();
     protected:
         int index;
         vector<Mesh*> meshes;

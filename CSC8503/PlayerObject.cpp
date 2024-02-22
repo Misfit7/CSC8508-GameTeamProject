@@ -89,4 +89,29 @@ void PlayerObject::Update(float dt) {
     //    renderObject->SetShaderGroup(shaders[(index + 1) % 5]);
     //    index++;
     //}
+    playermovement();
+}
+void PlayerObject::playermovement() {
+    Quaternion* qq;
+    //float yaw = Maths::RadiansToDegrees(atan2(-np.x, -np.z));
+   // start->GetTransform().SetOrientation(qq->EulerAnglesToQuaternion(0, yaw, 0));
+    if (Window::GetKeyboard()->KeyHeld(NCL::KeyCodes::UP)) {
+        physicsObject->AddForceAtPosition(Vector3(20, 0, 0), transform.GetPosition());
+        transform.SetOrientation(qq->EulerAnglesToQuaternion(0, -90, 0));
+    }
+    else if (Window::GetKeyboard()->KeyHeld(NCL::KeyCodes::LEFT)) {
+        physicsObject->AddForceAtPosition(Vector3(0, 0, -20), transform.GetPosition());
+        transform.SetOrientation(qq->EulerAnglesToQuaternion(0, 0, 0));
+    }
+    else if (Window::GetKeyboard()->KeyHeld(NCL::KeyCodes::DOWN)) {
+        physicsObject->AddForceAtPosition(Vector3(-20, 0, 0), transform.GetPosition());
+        transform.SetOrientation(qq->EulerAnglesToQuaternion(0, 90, 0));
+    }
+    else if (Window::GetKeyboard()->KeyHeld(NCL::KeyCodes::RIGHT)) {
+        physicsObject->AddForceAtPosition(Vector3(0, 0, 20), transform.GetPosition());
+        transform.SetOrientation(qq->EulerAnglesToQuaternion(0, 180, 0));
+    }
+    else {
+        physicsObject->SetLinearVelocity(Vector3(0, 0, 0));
+    }
 }
