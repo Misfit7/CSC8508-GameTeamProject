@@ -95,7 +95,7 @@ void TutorialGame::InitialiseAssets() {
     InitMaterials();
     InitAnimations();
 
-    std::cout << std::endl << "--------Loading Shaders--------" << std::endl;
+    std::cout << std::endl << "--------Loading Shader Groups--------" << std::endl;
     basicDayShader = renderer->LoadShader("PerPixel.vert", "PerPixelScene.frag");
     bumpDayShader = renderer->LoadShader("Bump.vert", "BumpScene.frag");
     specDayShader = renderer->LoadShader("Bump.vert", "SpecScene.frag");
@@ -742,15 +742,15 @@ CollectableObject* TutorialGame::AddCollectableObjectToGround(int objectId)
     groundObject->GetPhysicsObject()->InitCubeInertia();
     switch (objectId)
     {
-        case 1:
-            groundObject->SetRenderObject(new RenderObject(&object->GetTransform(), sphereMesh, nullptr, basicShader));
-            break;
-        case 2:
-            //�����Ʒ
-            break;
-        default:
-            //�����Ʒ
-            break;
+    case 1:
+        groundObject->SetRenderObject(new RenderObject(&object->GetTransform(), sphereMesh, nullptr, basicShader));
+        break;
+    case 2:
+        //�����Ʒ
+        break;
+    default:
+        //�����Ʒ
+        break;
     }
     world->AddGameObject(object);
 
@@ -794,6 +794,7 @@ PickaxeObject* TutorialGame::AddPickaxeToWorld(const Vector3& position) {
 //
 //    }
 //}
+
 void TutorialGame::InitDefaultFloor() {
     AddFloorToWorld(Vector3(0, 0, 0));
 }
