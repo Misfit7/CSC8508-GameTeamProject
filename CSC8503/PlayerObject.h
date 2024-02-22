@@ -45,9 +45,28 @@ namespace NCL::CSC8503 {
         void SetPlayerShaders(vector<ShaderGroup*> s) {
             shaders = s;
         }
+<<<<<<< Updated upstream
 
+=======
+        void SetFace(Vector3 a) {
+            face = a;
+        }
+        void SetSpeed(float a) {
+            speed = a;
+        }
+        float GetSpeed() {
+            return speed;
+        }
+        Vector3 GetFace() {
+            return face;
+        }
+        void playermovement();
+        void cuttree();
+>>>>>>> Stashed changes
     protected:
         int index;
+        Vector3 face;
+        float speed=20.0f;
         vector<Mesh*> meshes;
         vector<vector<GLuint>> textures;
         vector<vector<GLuint>> bumpTextures;
