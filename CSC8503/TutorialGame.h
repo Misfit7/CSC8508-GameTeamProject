@@ -65,7 +65,7 @@ namespace NCL {
             void InitCubeGridWorld(int numRows, int numCols, float rowSpacing, float colSpacing, const Vector3& cubeDims);
 
             void InitDefaultFloor();
-            int SelectRailDir(Vector3 lastRailPosition,Vector3 RailPosition);
+            int SelectRailDir(Vector3 lastRailPosition, Vector3 RailPosition);
             bool SelectObject();
             void MoveSelectedObject();
             void DebugObjectMovement();
@@ -86,7 +86,7 @@ namespace NCL {
 
             CollectableObject* CreateObject(int ID);
             CollectableObject* AddCollectableObjectToGround(int ID);
-            CollectableObject* AddRailToWorld(int direction,Vector3 position,Vector3 lastRailPosition);
+            CollectableObject* AddRailToWorld(int direction, Vector3 position, Vector3 lastRailPosition);
             StateGameObject* AddStateObjectToWorld(const Vector3& position);
             StateGameObject* testStateObject = nullptr;
 

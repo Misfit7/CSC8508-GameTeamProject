@@ -75,11 +75,11 @@ endif()
 ################################################################################
 # Sub-projects
 ################################################################################
-add_subdirectory(NCLCoreClasses)
-add_subdirectory(CSC8503CoreClasses)
-add_subdirectory(OpenGLRendering)
+add_subdirectory(Common/NCLCoreClasses)
+add_subdirectory(Common/CSC8503CoreClasses)
+add_subdirectory(Common/OpenGLRendering)
 add_subdirectory(CSC8503)
 if(USE_VULKAN)
-    add_subdirectory(VulkanRendering)
+    add_subdirectory(Common/VulkanRendering)
 endif()
 set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT CSC8503)

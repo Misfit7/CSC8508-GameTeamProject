@@ -144,20 +144,20 @@ target_precompile_headers(${PROJECT_NAME} PRIVATE
         <chrono>
         <sstream>
 
-        "../NCLCoreClasses/Vector2i.h"
-        "../NCLCoreClasses/Vector3i.h"
-        "../NCLCoreClasses/Vector4i.h"
+        "../Common/NCLCoreClasses/Vector2i.h"
+        "../Common/NCLCoreClasses/Vector3i.h"
+        "../Common/NCLCoreClasses/Vector4i.h"
 
-        "../NCLCoreClasses/Vector2.h"
-        "../NCLCoreClasses/Vector3.h"
-        "../NCLCoreClasses/Vector4.h"
-        "../NCLCoreClasses/Quaternion.h"
-        "../NCLCoreClasses/Plane.h"
-        "../NCLCoreClasses/Matrix2.h"
-        "../NCLCoreClasses/Matrix3.h"
-        "../NCLCoreClasses/Matrix4.h"
+        "../Common/NCLCoreClasses/Vector2.h"
+        "../Common/NCLCoreClasses/Vector3.h"
+        "../Common/NCLCoreClasses/Vector4.h"
+        "../Common/NCLCoreClasses/Quaternion.h"
+        "../Common/NCLCoreClasses/Plane.h"
+        "../Common/NCLCoreClasses/Matrix2.h"
+        "../Common/NCLCoreClasses/Matrix3.h"
+        "../Common/NCLCoreClasses/Matrix4.h"
 
-        "../NCLCoreClasses/GameTimer.h"
+        "../Common/NCLCoreClasses/GameTimer.h"
 )
 
 if (USE_VULKAN)
@@ -214,25 +214,25 @@ if (MSVC)
     target_link_libraries(${PROJECT_NAME} LINK_PUBLIC "Winmm.lib")
 endif ()
 
-include_directories("../OpenGLRendering/")
-include_directories("../NCLCoreClasses/")
-include_directories("../CSC8503CoreClasses/")
-include_directories("../irrKlang")
+include_directories("../Common/OpenGLRendering/")
+include_directories("../Common/NCLCoreClasses/")
+include_directories("../Common/CSC8503CoreClasses/")
+include_directories("../Plugins/irrKlang")
 
-target_link_libraries(${PROJECT_NAME} LINK_PUBLIC "../irrKlang/lib/irrKlang")
+target_link_libraries(${PROJECT_NAME} LINK_PUBLIC "../Plugins/irrKlang/lib/irrKlang")
 target_link_libraries(${PROJECT_NAME} LINK_PUBLIC NCLCoreClasses)
 target_link_libraries(${PROJECT_NAME} LINK_PUBLIC CSC8503CoreClasses)
 target_link_libraries(${PROJECT_NAME} LINK_PUBLIC OpenGLRendering)
 
 # copy dlls
-file(GLOB DLLS "../irrKlang/bin/*.dll")
+file(GLOB DLLS "../Plugins/irrKlang/bin/*.dll")
 
 foreach (DLL ${DLLS})
     add_custom_command(TARGET ${PROJECT_NAME} PRE_BUILD COMMAND ${CMAKE_COMMAND} -E copy ${DLL} $<TARGET_FILE_DIR:${PROJECT_NAME}>)
 endforeach (DLL)
 
 if (USE_VULKAN)
-    include_directories("../VulkanRendering/")
+    include_directories("../Common/VulkanRendering/")
     target_link_libraries(${PROJECT_NAME} LINK_PUBLIC VulkanRendering)
 
     add_compile_definitions(VULKAN_HPP_DISPATCH_LOADER_DYNAMIC)

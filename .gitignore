@@ -19,11 +19,16 @@ x64/
 # CMake build directory
 build/
 [Dd]ebug
+/Testing
 
 *.sln
 *.vcxproj
 *.vcxproj.filters
 *.vcxproj.user
+
+.ninja_deps
+.ninja_log
+build.ninja
 
 # Compiled object files
 *.o
@@ -45,7 +50,7 @@ Makefile.*
 
 # IDE-specific files
 .vscode/
-.idea/
+/.idea
 
 # Dependency directories
 dependencies/
