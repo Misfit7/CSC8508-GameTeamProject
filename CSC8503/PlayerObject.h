@@ -1,4 +1,3 @@
-
 #pragma once
 
 #include "PhysicsSystem.h"
@@ -15,44 +14,44 @@
 #include "RenderObject.h"
 #include "AnimationObject.h"
 #include "TrainCarriage.h"
-using namespace NCL;
-using namespace CSC8503;
 
-class PlayerObject : public GameObject {
+namespace NCL::CSC8503 {
+    class PlayerObject : public GameObject {
 
-public:
-    PlayerObject() {};
-    ~PlayerObject() {};
+    public:
+        PlayerObject(std::string name) {
+            this->name = name;
+        };
+        ~PlayerObject() {};
 
-    void OnCollisionBegin(GameObject* otherObject) override {};
+        void OnCollisionBegin(GameObject* otherObject) override {};
 
-    void OnCollisionEnd(GameObject* otherObject) override {};
+        void OnCollisionEnd(GameObject* otherObject) override {};
 
-    void Update(float dt) override;
+        void Update(float dt) override;
 
-    void SetPlayerMeshes(vector<Mesh*> m) {
-        meshes = m;
-    }
-    void SetPlayerTextures(vector<vector<GLuint>> t) {
-        textures = t;
-    }
-    void SetPlayerBumpTextures(vector<vector<GLuint>> t) {
-        bumpTextures = t;
-    }
-    void SetPlayerAnimations(vector<AnimationObject*> a) {
-        animations = a;
-    }
-    void SetPlayerShaders(vector<ShaderGroup*> s) {
-        shaders = s;
-    }
+        void SetPlayerMeshes(vector<Mesh*> m) {
+            meshes = m;
+        }
+        void SetPlayerTextures(vector<vector<GLuint>> t) {
+            textures = t;
+        }
+        void SetPlayerBumpTextures(vector<vector<GLuint>> t) {
+            bumpTextures = t;
+        }
+        void SetPlayerAnimations(vector<AnimationObject*> a) {
+            animations = a;
+        }
+        void SetPlayerShaders(vector<ShaderGroup*> s) {
+            shaders = s;
+        }
 
-protected:
-    int index;
-    vector<Mesh*> meshes;
-    vector<vector<GLuint>> textures;
-    vector<vector<GLuint>> bumpTextures;
-    vector<AnimationObject*> animations;
-    vector<ShaderGroup*> shaders;
-};
-
-
+    protected:
+        int index;
+        vector<Mesh*> meshes;
+        vector<vector<GLuint>> textures;
+        vector<vector<GLuint>> bumpTextures;
+        vector<AnimationObject*> animations;
+        vector<ShaderGroup*> shaders;
+    };
+}

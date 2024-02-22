@@ -104,11 +104,16 @@ namespace NCL::CSC8503 {
         void SetWorldID(int newID) {
             worldID = newID;
         }
-
         int		GetWorldID() const {
             return worldID;
         }
-        bool triggerDelete;
+
+        void SetTypeID(int newID) {
+            typeID = newID;
+        }
+        int		GetTypeID() const {
+            return typeID;
+        }
 
     protected:
         Transform			transform;
@@ -120,7 +125,9 @@ namespace NCL::CSC8503 {
         NetworkObject* networkObject;
 
         bool		isActive;
+        bool        triggerDelete;
         int			worldID;
+        int         typeID;
         std::string	name;
 
         Vector3 broadphaseAABB;

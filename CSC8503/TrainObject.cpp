@@ -1,7 +1,7 @@
-
-
 #include "TrainObject.h"
 #include "TutorialGame.h"
+
+using namespace NCL::CSC8503;
 
 TrainObject::TrainObject() {
     path.push_back({Vector3(10, 5, 60), 4});
@@ -50,6 +50,15 @@ Quaternion RotateBetweenVectors(const Vector3 &from, const Vector3 &to) {
     return Quaternion(rotationAxis, rotationAngle);
 }
 
+void TrainObject::UpdateOrientation(Vector3 direction) {
+    Quaternion rotation;
+    if (direction.x > 0) rotation = Quaternion::EulerAnglesToQuaternion(0, -90, 0);
+    else if (direction.x < 0) rotation = Quaternion::EulerAnglesToQuaternion(0, 90, 0);
+    else if (direction.z > 0) rotation = Quaternion::EulerAnglesToQuaternion(0, 180, 0);
+    else if (direction.z < 0) rotation = Quaternion::EulerAnglesToQuaternion(0, 0, 0);
+    transform.SetOrientation(rotation);
+}
+
 void TrainObject::Update(float dt) {
     if (path.size() == 0) return;
     auto it = path.begin();
@@ -63,7 +72,7 @@ void TrainObject::Update(float dt) {
 
     } else {
         Vector3 newDirection(1.0f, 0.0f, 0.0f);
-        Vector3 currentDirection = this->GetTransform().GetMatrix() * Vector3(0.0f, 0.0f, 1.0f);
+        Vector3 currentDirection = this->GetTransform().GetMatrix() * Vector3(1.0f, 0.0f, 0.0f);
         Quaternion rotation = RotateBetweenVectors(currentDirection, newDirection);
         this->GetTransform().SetOrientation(rotation);
 
