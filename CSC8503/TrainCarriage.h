@@ -1,4 +1,5 @@
 #pragma once
+
 #include"PhysicsSystem.h"
 #include"PhysicsObject.h"
 #include "StateMachine.h"
@@ -11,20 +12,22 @@
 #include <vector>
 #include "RenderObject.h"
 #include "TrainCarriage.h"
-class TrainCarriage: public GameObject{
-public:
-    TrainCarriage();
 
-    ~TrainCarriage();
+namespace NCL::CSC8503 {
+    class TrainCarriage : public GameObject {
+    public:
+        TrainCarriage();
 
-    void OnCollisionBegin(GameObject *otherObject) override;
+        ~TrainCarriage();
 
-    void OnCollisionEnd(GameObject *otherObject) override;
+        void OnCollisionBegin(GameObject* otherObject) override;
 
-    void Update(float dt);
+        void OnCollisionEnd(GameObject* otherObject) override;
 
+        void Update(float dt);
 
-    std::vector< std::pair<Vector3,int> > path;
-};
+        void UpdateOrientation(Vector3 direction);
 
-
+        std::vector< std::pair<Vector3, int> > path;
+    };;
+}
