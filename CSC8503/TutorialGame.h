@@ -13,6 +13,7 @@
 #include "CollectableObject.h"
 #include "TrainObject.h"
 #include "PlayerObject.h"
+#include "TreeObject.h"
 #include "PickaxeObject.h"
 #include <cmath>
 #include <limits>
@@ -70,7 +71,7 @@ namespace NCL {
             TrainObject* AddTrainToWorld(const Vector3& position);
             GameObject* AddTestingLightToWorld(const Vector3& position, const Vector4& colour);
             PlayerObject* AddPlayerToWorld(const Vector3& position);
-
+            TreeObject* AddTreeToWorld(const Vector3& position);
             CollectableObject* AddCollectableObjectToGround(int ID);
             PickaxeObject* AddPickaxeToWorld(const Vector3& position);
 
