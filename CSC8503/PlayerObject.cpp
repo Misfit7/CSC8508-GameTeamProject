@@ -89,8 +89,6 @@ void PlayerObject::Update(float dt) {
     //    renderObject->SetShaderGroup(shaders[(index + 1) % 5]);
     //    index++;
     //}
-<<<<<<< Updated upstream
-=======
     playermovement();
 }
 void PlayerObject::playermovement() {
@@ -98,6 +96,7 @@ void PlayerObject::playermovement() {
     //float yaw = Maths::RadiansToDegrees(atan2(-np.x, -np.z));
    // start->GetTransform().SetOrientation(qq->EulerAnglesToQuaternion(0, yaw, 0));
     if (Window::GetKeyboard()->KeyHeld(NCL::KeyCodes::UP)) {
+
         face = Vector3(1, 0, 0);
         physicsObject->AddForceAtPosition(face*speed, transform.GetPosition());
         transform.SetOrientation(qq->EulerAnglesToQuaternion(0, -90, 0));
@@ -125,5 +124,4 @@ void PlayerObject::cuttree() {
     if (Window::GetKeyboard()->KeyHeld(NCL::KeyCodes::F)) {
         //Ray ray = CollisionDetection::BuildRayFromMouse(world->GetMainCamera());
     }
->>>>>>> Stashed changes
 }

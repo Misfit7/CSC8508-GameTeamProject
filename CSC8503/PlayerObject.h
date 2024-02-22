@@ -45,9 +45,7 @@ namespace NCL::CSC8503 {
         void SetPlayerShaders(vector<ShaderGroup*> s) {
             shaders = s;
         }
-<<<<<<< Updated upstream
 
-=======
         void SetFace(Vector3 a) {
             face = a;
         }
@@ -62,7 +60,7 @@ namespace NCL::CSC8503 {
         }
         void playermovement();
         void cuttree();
->>>>>>> Stashed changes
+
     protected:
         int index;
         Vector3 face;
