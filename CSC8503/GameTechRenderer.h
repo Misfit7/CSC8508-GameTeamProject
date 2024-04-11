@@ -4,6 +4,7 @@
 #include "OGLTexture.h"
 #include "OGLMesh.h"
 #include "Light.h"
+#include "Particle.h"
 
 #include "GameWorld.h"
 #include "UI.h"
@@ -24,9 +25,12 @@ namespace NCL {
             Mesh* LoadMesh(const std::string& name);
             OBJMesh* LoadOBJMesh(const std::string& name);
             Texture* LoadTexture(const std::string& name);
+            GLuint LoadGLTexture(const std::string& name);
             Shader* LoadShader(const std::string& vertex, const std::string& fragment);
             void       ToggleNight();
             UI* GetUI() { return ui; };
+            ParticleGenerator* GetParticle() { return particle; };
+            void Update(float dt) override;
 
         protected:
             void NewRenderLines();
@@ -54,8 +58,9 @@ namespace NCL {
             void DrawLightBuffer();
             void SetShaderLight(const Light& l);
             void DrawPointLights();
+            void DrawParticle();
 
-            void DrawProcess();
+            void DrawProcess(int count);
             void ProcessCombine();
 
             void CombineBuffers();
@@ -95,13 +100,15 @@ namespace NCL {
             //Process Buffer
             GLuint processFBO;
             GLuint hdrColourTex;
+            GLuint pausedScreenTex;
             GLuint blurColourTex[2];
 
             //Skybox Buffer
             OGLShader* debugShader;
             OGLShader* skyboxShader;
             OGLMesh* skyboxMesh;
-            GLuint		skyboxTex;
+            GLuint		daySkyboxTex;
+            GLuint      nightSkyboxTex;
             GLuint		skyboxBufferTex;
             GLuint      skyboxFBO;
 
@@ -113,9 +120,10 @@ namespace NCL {
             Matrix4     shadowMatrix;
 
             Light* sunLight;
-            Light* redstoneLight1;
-            Light* redstoneLight2;
-            Light* redstoneLight3;
+            Light* stationLight;
+            Light* playerLight;
+            Light* trainLight;
+            Light* robotLight;
 
             OGLShader* pointLightShader;
             Mesh* sphere;
@@ -144,6 +152,11 @@ namespace NCL {
             size_t textCount;
 
             bool   isNight;
+
+            //Particle
+            OGLShader* particleShader;
+            GLuint particleTex;
+            ParticleGenerator* particle;
         };
     }
 }

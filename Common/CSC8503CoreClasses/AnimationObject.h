@@ -150,7 +150,7 @@ namespace NCL {
             bool           flag6 = true;
             bool           flag7 = true;
             bool           flag8 = true;
-            bool           idle  = true;
+            bool           idle = true;
             float          currentFrame = 0;
             float          frameTime = 0.0f;
         };

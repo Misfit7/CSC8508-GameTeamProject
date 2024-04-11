@@ -190,6 +190,10 @@ void Win32Window::CheckMessages(MSG& msg) {
         GetRawInputData((HRAWINPUT)msg.lParam, RID_INPUT, lpb, &dwSize, sizeof(RAWINPUTHEADER));
         RAWINPUT* raw = (RAWINPUT*)lpb;
 
+        if (thisWindow->exInputFunc) {
+            thisWindow->exInputFunc(raw);
+        }
+
         if (keyboard && raw->header.dwType == RIM_TYPEKEYBOARD && active) {
             thisWindow->winKeyboard->UpdateRAW(raw);
         }

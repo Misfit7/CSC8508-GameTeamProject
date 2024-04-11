@@ -12,123 +12,132 @@ https://research.ncl.ac.uk/game/
 #include "Controller.h"
 
 namespace NCL {
-	using namespace NCL::Maths;
-	class Camera {
-	public:
-		Camera(void) {
-			pitch		= 0.0f;
-			yaw			= 0.0f;
+    using namespace NCL::Maths;
+    class Camera {
+    public:
+        Camera(void) {
+            pitch = 0.0f;
+            yaw = 0.0f;
 
-			nearPlane	= 1.0f;
-			farPlane	= 1000.0f;
-		};
+            nearPlane = 1.0f;
+            farPlane = 1000.0f;
+        };
 
-		Camera(float pitch, float yaw, const Vector3& position) : Camera() {
-			this->pitch		= pitch;
-			this->yaw		= yaw;
-			this->position	= position;
+        Camera(float pitch, float yaw, const Vector3& position) : Camera() {
+            this->pitch = pitch;
+            this->yaw = yaw;
+            this->position = position;
 
-			this->nearPlane = 1.0f;
-			this->farPlane	= 100.0f;
-		}
+            this->nearPlane = 1.0f;
+            this->farPlane = 1000.0f;
+        }
 
-		~Camera(void) = default;
+        ~Camera(void) = default;
 
-		virtual void UpdateCamera(float dt);
+        virtual void UpdateCamera(float dt);
 
-		float GetNearPlane() const {
-			return nearPlane;
-		}
+        void InitCam() {
+            this->pitch = 0.0f;
+            this->yaw = 0.0f;
+            this->position = Vector3(0, 0, 0);
 
-		float GetFarPlane() const {
-			return farPlane;
-		}
+            this->nearPlane = 1.0f;
+            this->farPlane = 1000.0f;
+        }
 
-		Camera& SetNearPlane(float val) {
-			nearPlane = val;
-			return *this;
-		}
-		
-		Camera& SetFarPlane(float val) {
-			farPlane = val;
-			return *this;
-		}
+        float GetNearPlane() const {
+            return nearPlane;
+        }
 
-		Camera& SetController(const Controller& c) {
-			activeController = &c;
-			return *this;
-		}
+        float GetFarPlane() const {
+            return farPlane;
+        }
 
-		//Builds a view matrix for the current camera variables, suitable for sending straight
-		//to a vertex shader (i.e it's already an 'inverse camera matrix').
-		Matrix4 BuildViewMatrix() const;
+        Camera& SetNearPlane(float val) {
+            nearPlane = val;
+            return *this;
+        }
 
-		virtual Matrix4 BuildProjectionMatrix(float aspectRatio = 1.0f) const = 0;
+        Camera& SetFarPlane(float val) {
+            farPlane = val;
+            return *this;
+        }
 
-		//Gets position in world space
-		Vector3 GetPosition() const { return position; }
-		//Sets position in world space
-		Camera&	SetPosition(const Vector3& val) { position = val;  return *this; }
+        Camera& SetController(const Controller& c) {
+            activeController = &c;
+            return *this;
+        }
 
-		//Gets yaw, in degrees
-		float	GetYaw()   const { return yaw; }
-		//Sets yaw, in degrees
-		Camera&	SetYaw(float y) { yaw = y;  return *this; }
+        //Builds a view matrix for the current camera variables, suitable for sending straight
+        //to a vertex shader (i.e it's already an 'inverse camera matrix').
+        Matrix4 BuildViewMatrix() const;
 
-		//Gets pitch, in degrees
-		float	GetPitch() const { return pitch; }
-		//Sets pitch, in degrees
-		Camera& SetPitch(float p) { pitch = p; return *this; }
+        virtual Matrix4 BuildProjectionMatrix(float aspectRatio = 1.0f) const = 0;
 
-	protected:
-		float	nearPlane;
-		float	farPlane;
+        //Gets position in world space
+        Vector3 GetPosition() const { return position; }
+        //Sets position in world space
+        Camera& SetPosition(const Vector3& val) { position = val;  return *this; }
 
-		float	yaw;
-		float	pitch;
-		Vector3 position;
+        //Gets yaw, in degrees
+        float	GetYaw()   const { return yaw; }
+        //Sets yaw, in degrees
+        Camera& SetYaw(float y) { yaw = y;  return *this; }
 
-		const Controller* activeController = nullptr;
-	};
+        //Gets pitch, in degrees
+        float	GetPitch() const { return pitch; }
+        //Sets pitch, in degrees
+        Camera& SetPitch(float p) { pitch = p; return *this; }
 
-	class OrhographicCamera : public Camera {
-	public:
-		OrhographicCamera() {
-			left	= 0;
-			right	= 0;
-			top		= 0;
-			bottom	= 0;
-		}
-		~OrhographicCamera() = default;
+    protected:
+        float	nearPlane;
+        float	farPlane;
 
-		Matrix4 BuildProjectionMatrix(float aspectRatio = 1.0f) const override;
+        float	yaw;
+        float	pitch;
+        Vector3 position;
 
-	protected:
-		float	left;
-		float	right;
-		float	top;
-		float	bottom;
-	};
+        const Controller* activeController = nullptr;
+    };
 
-	class PerspectiveCamera : public Camera {
-	public:
-		PerspectiveCamera() {
-			fov = 45.0f;
-		}
-		~PerspectiveCamera() = default;
+    class OrhographicCamera : public Camera {
+    public:
+        OrhographicCamera() {
+            left = 0;
+            right = 0;
+            top = 0;
+            bottom = 0;
+        }
+        ~OrhographicCamera() = default;
 
-		float GetFieldOfVision() const {
-			return fov;
-		}
+        Matrix4 BuildProjectionMatrix(float aspectRatio = 1.0f) const override;
 
-		PerspectiveCamera& SetFieldOfVision(float val) {
-			fov = val;
-			return *this;
-		}
+    protected:
+        float	left;
+        float	right;
+        float	top;
+        float	bottom;
+    };
 
-		Matrix4 BuildProjectionMatrix(float aspectRatio = 1.0f) const override;
+    class PerspectiveCamera : public Camera {
+    public:
+        PerspectiveCamera() {
+            fov = 45.0f;
+        }
+        ~PerspectiveCamera() = default;
 
-	protected:
-		float	fov;
-	};
+        float GetFieldOfVision() const {
+            return fov;
+        }
+
+        PerspectiveCamera& SetFieldOfVision(float val) {
+            fov = val;
+            return *this;
+        }
+
+        Matrix4 BuildProjectionMatrix(float aspectRatio = 1.0f) const override;
+
+    protected:
+        float	fov;
+    };
 }

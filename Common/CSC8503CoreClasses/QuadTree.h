@@ -26,7 +26,7 @@ namespace NCL {
         template<class T>
         class QuadTreeNode {
         public:
-            typedef std::function<void(std::list<QuadTreeEntry<T>> &)> QuadTreeFunc;
+            typedef std::function<void(std::vector<QuadTreeEntry<T>>&)> QuadTreeFunc;
         protected:
             friend class QuadTree<T>;
 
@@ -42,27 +42,29 @@ namespace NCL {
                 delete[] children;
             }
 
-            void Insert(T &object, const Vector3 &objectPos, const Vector3 &objectSize, int depthLeft, int maxSize) {
-                if (!CollisionDetection::AABBTest(objectPos, Vector3(position.x, 0, position.y),
-                                                  objectSize, Vector3(size.x, 1000.0f, size.y))) {
+            void Insert(T& object, const Vector3& objectPos, const Vector3& objectSize, int depthLeft, int maxSize) {
+                if (!CollisionDetection::AABBTest
+                (objectPos, Vector3(position.x, 0, position.y),
+                    objectSize, Vector3(size.x, 1000.0f, size.y))) {
                     return;
                 }
                 if (children) { // not a leaf node , just descend the tree
                     for (int i = 0; i < 4; ++i) {
                         children[i].Insert(object, objectPos, objectSize,
-                                           depthLeft - 1, maxSize);
+                            depthLeft - 1, maxSize);
                     }
-                } else { // currently a leaf node , can just expand
+                }
+                else { // currently a leaf node , can just expand
                     contents.push_back(QuadTreeEntry<T>(object, objectPos, objectSize));
-                    if ((int) contents.size() > maxSize && depthLeft > 0) {
+                    if ((int)contents.size() > maxSize && depthLeft > 0) {
                         if (!children) {
                             Split();
                             // we need to reinsert the contents so far !
-                            for (const auto &i: contents) {
+                            for (const auto& i : contents) {
                                 for (int j = 0; j < 4; ++j) {
                                     auto entry = i;
                                     children[j].Insert(entry.object, entry.pos,
-                                                       entry.size, depthLeft - 1, maxSize);
+                                        entry.size, depthLeft - 1, maxSize);
                                 }
                             }
                             contents.clear(); // contents now distributed !
@@ -84,12 +86,13 @@ namespace NCL {
             void DebugDraw() {
             }
 
-            void OperateOnContents(QuadTreeFunc &func) {
+            void OperateOnContents(QuadTreeFunc& func) {
 
                 if (children) {
                     for (int i = 0; i < 4; i++)
                         children[i].OperateOnContents(func);
-                } else {
+                }
+                else {
                     if (!contents.empty())
                         func(contents);
                 }
@@ -97,12 +100,12 @@ namespace NCL {
             }
 
         protected:
-            std::list<QuadTreeEntry<T> > contents;
+            std::vector<QuadTreeEntry<T> > contents;
 
             Vector2 position;
             Vector2 size;
 
-            QuadTreeNode<T> *children;
+            QuadTreeNode<T>* children;
         };
     }
 }
@@ -123,7 +126,7 @@ namespace NCL {
             ~QuadTree() {
             }
 
-            void Insert(T object, const Vector3 &pos, const Vector3 &size) {
+            void Insert(T object, const Vector3& pos, const Vector3& size) {
                 root.Insert(object, pos, size, maxDepth, maxSize);
             }
 

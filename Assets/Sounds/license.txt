@@ -1,27 +1,8 @@
 The music files are out-takes of the following tracks:
 
-helltroopers.ogg
-helltroopers.mp3 - Hell Troopers Main Title (c) 1999 Nikolaus Gebhardt
+https://mixkit.co/free-sound-effects
 
-ophelia.ogg
-ophelia.mp3 - ophelias symphony, by Tomas PhUsIoN 2006
-              see http://ccmixter.org/media/files/phusion/6442
-              license: Creative Commons Attribution 2.5 (see below)
-
-getout.ogg
-getout.mp3 - never get out, by tone_group 2007
-	     license: Creative Commons Attribution 2.5 (see below)
-	     http://ccmixter.org/media/files/seb_grenning/8920
-	     license: Creative Commons Attribution 2.5 (see below)
-
-MF-3DAYS.S3M
-MF-PANTS.MOD
-MF-W-90.XM - Fred Scalliet also known as MAGIC FRED
-	     http://www.commoncontent.org/catalog/audio/music/3083/
-	     http://fred.dsimprove.be/index2.php?menu=122
-             license: Attribution-NonCommercial-ShareAlike 2.0 (see below)
-	     and: http://fred.dsimprove.be/license.htm
-
+https://pixabay.com/sound-effects
 
 ==================================================================================================
 Creative Commons
@@ -85,7 +66,7 @@ Creative Commons is not a party to this License, and makes no warranty whatsoeve
 Except for the limited purpose of indicating to the public that the Work is licensed under the CCPL, neither party will use the trademark "Creative Commons" or any related trademark or logo of Creative Commons without the prior written consent of Creative Commons. Any permitted use will be in compliance with Creative Commons' then-current trademark usage guidelines, as may be published on its website or otherwise made available upon request from time to time.
 
 Creative Commons may be contacted at http://creativecommons.org/.
-« Back to Commons Deed              
+  Back to Commons Deed              
 
 
 ==================================================================================================

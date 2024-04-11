@@ -2,7 +2,7 @@
 //#include "./enet/enet.h"
 struct _ENetHost;
 struct _ENetPeer;
-struct _ENetEvent;
+struct _ENetEvent; 
 
 enum BasicNetworkMessages {
 	None,
@@ -14,7 +14,13 @@ enum BasicNetworkMessages {
 	Received_State, //received from a client, informs that its received packet n
 	Player_Connected,
 	Player_Disconnected,
-	Shutdown
+	Shutdown,
+	Update_Objects,
+	Client_Num,
+	Default_Bool,
+	Win_Lose,
+	Restart_Game,
+	Spawn_Player
 };
 
 struct GamePacket {

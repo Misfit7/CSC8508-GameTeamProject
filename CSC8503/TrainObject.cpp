@@ -4,50 +4,31 @@
 using namespace NCL::CSC8503;
 
 TrainObject::TrainObject() {
-    path.push_back({Vector3(10, 5, 60), 4});
 
-    // path.push_back({Vector3(60, 0, 60), 1});
 }
 
 TrainObject::~TrainObject() {
 
 }
 
-TrainObject::TrainObject(GameWorld *w, OBJMesh *mesh, ShaderGroup *shader) {
-
-    path.push_back({Vector3(10, 5, 60), 4});
-    path.push_back({Vector3(60, 5, 60), 1});
+TrainObject::TrainObject(GameWorld* w) {
     world = w;
-    trainMesh = mesh;
-    basicShader = shader;
-    trainCarriage = new TrainCarriage[20];
+    typeID = 20;
+    trainCarriage = new TrainCarriage[trainMaxIndex];
     trainIndex = 0;
+    name = "Train";
+    onFire = false;
+    fire = 100.0f;
+
+    distance = 0.0f;
 }
 
-void TrainObject::OnCollisionBegin(GameObject *otherObject) {
+void TrainObject::OnCollisionBegin(GameObject* otherObject) {
 
 }
 
-void TrainObject::OnCollisionEnd(GameObject *otherObject) {
+void TrainObject::OnCollisionEnd(GameObject* otherObject) {
 
-}
-
-Quaternion RotateBetweenVectors(const Vector3 &from, const Vector3 &to) {
-    Vector3 source = from.Normalised();
-    Vector3 target = to.Normalised();
-    float dotProduct = Vector3::Dot(source, target);
-    if (dotProduct < -0.999f) {
-        Vector3 axis = Vector3::Cross(Vector3(1.0f, 0.0f, 0.0f), source);
-        if (axis.LengthSquared() < 0.01f) {
-            axis = Vector3::Cross(Vector3(0.0f, 1.0f, 0.0f), source);
-        }
-        axis.Normalise();
-        return Quaternion(axis, 0.0f);
-    }
-    Vector3 rotationAxis = Vector3::Cross(source, target);
-    rotationAxis.Normalise();
-    float rotationAngle = std::acos(dotProduct);
-    return Quaternion(rotationAxis, rotationAngle);
 }
 
 void TrainObject::UpdateOrientation(Vector3 direction) {
@@ -60,114 +41,247 @@ void TrainObject::UpdateOrientation(Vector3 direction) {
 }
 
 void TrainObject::Update(float dt) {
-    if (path.size() == 0) return;
-    auto it = path.begin();
-    auto itt = it->first;
-    int flag = it->second;
-    if (flag <= 1) {
-        Vector3 newDirection(0.0f, 0.0f, 1.0f);
-        Vector3 currentDirection = this->GetTransform().GetMatrix() * Vector3(0.0f, 0.0f, 1.0f);
-        Quaternion rotation = RotateBetweenVectors(currentDirection, newDirection);
-        this->GetTransform().SetOrientation(rotation);
-
-    } else {
-        Vector3 newDirection(1.0f, 0.0f, 0.0f);
-        Vector3 currentDirection = this->GetTransform().GetMatrix() * Vector3(1.0f, 0.0f, 0.0f);
-        Quaternion rotation = RotateBetweenVectors(currentDirection, newDirection);
-        this->GetTransform().SetOrientation(rotation);
-
+    if (path.size() == 0) {
+        if (transform.GetPosition() != finishPath) {
+            TutorialGame::GetGame()->SetFailure(true);
+            return;
+        }
+        else {
+            TutorialGame::GetGame()->SetSuccess(true);
+            return;
+        }
     }
-    Vector3 target = itt;
-    Vector3 dir = (target - this->GetTransform().GetPosition());
-    dir = Vector3(dir.x, 0, dir.z);
-    GetPhysicsObject()->SetLinearVelocity(dir.Normalised() * 1000.0f * dt);
-    float mm = (this->GetTransform().GetPosition() - target).Length();
+    else {
+        if (path[path.size() - 1] == finalPath)
+            path.push_back(finishPath);
+        Vector3 target = path[0];
+        position1 = target;
+        direction = (target - this->GetTransform().GetPosition());
+        direction = Vector3(direction.x, 0, direction.z);
+        float trainSpeed = 0.07f;
+        force = TutorialGame::GetGame()->GetPlayTime()*trainSpeed + TutorialGame::GetGame()->GetLevel() * 1.0f+5.0f;
+        if (force >= 30.0f)force = 30.0f;
+        //std::cout << force << std::endl;
+        if (path[path.size() - 1] == finishPath) force = 800.0f;
+        GetPhysicsObject()->SetLinearVelocity(direction.Normalised() * force * dt);
 
-    if (mm < 0.5) {
-        path.erase(it);
+        float dtdist = (lastpos - curpos).Length();
+        distance += dtdist; //run dist
+        lastpos = curpos; curpos = this->GetTransform().GetPosition();
+        time_s += dt;
+        dist_s += dtdist;
+        if (time_s >= 1.0f) {
+            speed = dist_s / time_s;
+            dist_s = time_s = 0.0f;
+        }
+        float2 = distance;
+        float3 = speed;
+
+        float mm = (this->GetTransform().GetPosition() - target).Length();
+        if (mm < 0.5f) {
+            if (GetDirection() < 3) transform.SetPosition(Vector3(target.x, transform.GetPosition().y, transform.GetPosition().z));
+            else transform.SetPosition(Vector3(transform.GetPosition().x, transform.GetPosition().y, target.z));
+            physicsObject->SetLinearVelocity(Vector3());
+            path.erase(path.begin());
+        }
+
+        if (showDebug) {
+            Debug::Print("Train Position: " + std::to_string(transform.GetPosition().x) + " " + std::to_string(transform.GetPosition().y) + " " + std::to_string(transform.GetPosition().z), Vector2(0, 15), Debug::BLUE);
+            Debug::Print("Current Path: " + std::to_string(target.x) + " " + std::to_string(target.y) + " " + std::to_string(target.z), Vector2(0, 20), Debug::BLUE);
+        }
     }
     for (int i = 1; i <= trainIndex; i++)
         trainCarriage[i].Update(dt);
+    //std::cout << "Position: " << transform.GetPosition().x << " " << transform.GetPosition().y << " " << transform.GetPosition().z << std::endl;
+    //std::cout << "Target: " << target.x << " " << target.y << " " << target.z << std::endl;
+    UpdateOrientation(direction);
+
+    flag1 = onFire;
+    if (onFire) {
+        float1 = fire;
+        float speed = 1.0f;
+        if (fire > 0.0f)
+            fire -= dt * speed;
+        else
+            TutorialGame::GetGame()->SetFailure(true);
+    }
+
+    showDebug = TutorialGame::GetGame()->ShowDebug();
 }
 
-void TrainObject::UpdatePath(std::vector<std::pair<Vector3, int>> p) {
-    path = p;
+void TrainObject::InitPaths(int level) {
+    switch (level) {
+    case 1:
+        firstPath = Vector3(50, 8.0f, 100);
+        finalPath = Vector3(270, 8.0f, 50);
+        finishPath = Vector3(290, 8.0f, 50);
+        path.push_back(firstPath);
+        break;
+    case 2:
+        firstPath = Vector3(50, 8.0f, 50);
+        finalPath = Vector3(270, 8.0f, 150);
+        finishPath = Vector3(290, 8.0f, 150);
+        path.push_back(firstPath);
+        break;
+    case 3:
+        firstPath = Vector3(50, 8.0f, 20);
+        finalPath = Vector3(270, 8.0f, 150);
+        finishPath = Vector3(290, 8.0f, 150);
+        path.push_back(firstPath);
+        break;
+    case 4:
+        firstPath = Vector3(50, 8.0f, 20);
+        finalPath = Vector3(270, 8.0f, 180);
+        finishPath = Vector3(290, 8.0f, 180);
+        path.push_back(firstPath);
+        break;
+    case 5:
+        firstPath = Vector3(50, 8.0f, 10);
+        finalPath = Vector3(270, 8.0f, 160);
+        finishPath = Vector3(290, 8.0f, 160);
+        path.push_back(firstPath);
+        break;
+    default:
+        break;
+    }
 }
 
+void TrainObject::AddPath(Vector3 p) {
+    path.push_back(Vector3(p.x,8.0,p.z));
+}
 
-void TrainObject::AddCarriage() {
+void TrainObject::AddCarriagePath(Vector3 p) {
+    TutorialGame::GetGame()->GetMaterialCarriage()->AddPath(p);
+    TutorialGame::GetGame()->GetProduceCarriage()->AddPath(p);
+    TutorialGame::GetGame()->GetWaterCarriage()->AddPath(p);
+}
+
+void TrainObject::UploadAssets(Mesh* mesh, Texture* texture, ShaderGroup* shader) {
+    carriageMesh = mesh;
+    carriageTex = texture;
+    basicShader = shader;
+}
+
+TrainCarriage* TrainObject::AddCarriage(int id, bool spawn) {
     Vector3 nowPos;
     if (trainIndex == 0)
-        nowPos = GetTransform().GetPosition();
+        nowPos = GetTransform().GetPosition() - Vector3(0, 3.5f, 0);
     else
         nowPos = trainCarriage[trainIndex].GetTransform().GetPosition();
 
     Vector3 nextPos;
 
+    nextPos = nowPos;
+    nextPos.x -= 10;
 
-    if (path.front().second <= 1) { //车头方向为上下 ，添加的车厢竖值放置
-        nextPos = nowPos;
-        nextPos.x -= 3;
-    } else {
-        nextPos = nowPos;
-        nextPos.z -= 3;
+    if (id == 21) {
+        MaterialCarriage* carriage = new MaterialCarriage(world);
+        std::vector<Vector3> carriagePath;
+        carriagePath.push_back(Vector3(path[0].x, 4.5f, path[0].z));
+        carriage->SetPath(carriagePath);
+        AABBVolume* volume = new AABBVolume(Vector3(2, 2, 2));
+        carriage->SetBoundingVolume((CollisionVolume*)volume);
 
-    }
-//    std::cout<<nowPos<<std::endl;
-//    std::cout<<nextPos<<std::endl;
+        carriage->SetSpawned(spawn);
 
-    TrainCarriage *carriage = new TrainCarriage;
-    carriage->path = path;
-    SphereVolume *volume = new SphereVolume(0.5f);
-    carriage->SetBoundingVolume((CollisionVolume *) volume);
-    carriage->GetTransform()
-            .SetScale(Vector3(2, 2, 2))
+        carriage->GetTransform()
+            .SetScale(Vector3(4, 4, 4))
             .SetPosition(nextPos);
 
-    carriage->SetRenderObject(new RenderObject(&carriage->GetTransform(), trainMesh, nullptr, basicShader));
-    carriage->SetPhysicsObject(new PhysicsObject(&carriage->GetTransform(), carriage->GetBoundingVolume()));
+        carriage->SetRenderObject(new RenderObject(&carriage->GetTransform(), carriageMesh, carriageTex, basicShader));
+        carriage->SetPhysicsObject(new PhysicsObject(&carriage->GetTransform(), carriage->GetBoundingVolume()));
 
-    carriage->GetPhysicsObject()->SetInverseMass(1.0);
-    carriage->GetPhysicsObject()->InitSphereInertia();
+        carriage->GetPhysicsObject()->SetInverseMass(0);
+        carriage->GetPhysicsObject()->InitSphereInertia();
+        carriage->GetPhysicsObject()->SetChannel(1);
 
-    trainCarriage[++trainIndex] = *carriage;
-    world->AddGameObject(carriage);
+        carriage->SetNetworkObject(new NetworkObject(*carriage, id));
 
-//    if(trainIndex==1){
-//        AddConstraint(this,&trainCarriage[trainIndex]);
-//    }
-//    else{
-//        AddConstraint(&trainCarriage[trainIndex-1],&trainCarriage[trainIndex]);
-//    }
+        carriage->SetTypeID(id);
 
+        trainCarriage[++trainIndex] = *carriage;
+        carriage->SetTrain(this);
+        world->AddGameObject(carriage);
+
+        return carriage;
+    }
+    if (id == 22) {
+        ProduceCarriage* carriage = new ProduceCarriage(world);
+        std::vector<Vector3> carriagePath;
+        carriagePath.push_back(Vector3(path[0].x, 4.5f, path[0].z));
+        carriage->SetPath(carriagePath);
+        AABBVolume* volume = new AABBVolume(Vector3(2, 2, 2));
+        carriage->SetBoundingVolume((CollisionVolume*)volume);
+
+        carriage->SetSpawned(spawn);
+
+        carriage->GetTransform()
+            .SetScale(Vector3(4, 4, 4))
+            .SetPosition(nextPos);
+
+        carriage->SetRenderObject(new RenderObject(&carriage->GetTransform(), carriageMesh, carriageTex, basicShader));
+        carriage->SetPhysicsObject(new PhysicsObject(&carriage->GetTransform(), carriage->GetBoundingVolume()));
+
+        carriage->GetRenderObject()->SetColour(Vector4(1, 1, 0, 1));
+
+        carriage->GetPhysicsObject()->SetInverseMass(0);
+        carriage->GetPhysicsObject()->InitSphereInertia();
+        carriage->GetPhysicsObject()->SetChannel(1);
+
+        carriage->SetNetworkObject(new NetworkObject(*carriage, id));
+
+        carriage->SetTypeID(id);
+
+        trainCarriage[++trainIndex] = *carriage;
+        carriage->SetTrain(this);
+        world->AddGameObject(carriage);
+
+        return carriage;
+    }
+    if (id == 23) {
+        WaterCarriage* carriage = new WaterCarriage(world);
+        std::vector<Vector3> carriagePath;
+        carriagePath.push_back(Vector3(path[0].x, 4.5f, path[0].z));
+        carriage->SetPath(carriagePath);
+        AABBVolume* volume = new AABBVolume(Vector3(2, 2, 2));
+        carriage->SetBoundingVolume((CollisionVolume*)volume);
+
+        carriage->SetSpawned(spawn);
+
+        carriage->GetTransform()
+            .SetScale(Vector3(4, 4, 4))
+            .SetPosition(nextPos);
+
+        carriage->SetRenderObject(new RenderObject(&carriage->GetTransform(), carriageMesh, carriageTex, basicShader));
+        carriage->SetPhysicsObject(new PhysicsObject(&carriage->GetTransform(), carriage->GetBoundingVolume()));
+
+        carriage->GetRenderObject()->SetColour(Vector4(0, 0, 1, 1));
+
+        carriage->GetPhysicsObject()->SetInverseMass(0);
+        carriage->GetPhysicsObject()->InitSphereInertia();
+        carriage->GetPhysicsObject()->SetChannel(1);
+
+        carriage->SetNetworkObject(new NetworkObject(*carriage, id));
+
+        carriage->SetTypeID(id);
+
+        trainCarriage[++trainIndex] = *carriage;
+        carriage->SetTrain(this);
+        world->AddGameObject(carriage);
+
+        return carriage;
+    }
 }
 
-void TrainObject::AddConstraint(GameObject *a, GameObject *b) {
+void TrainObject::AddConstraint(GameObject* a, GameObject* b) {
     float maxDistance = 10.0f;
-    PositionConstraint *constraint = new PositionConstraint(a, b, maxDistance);
+    PositionConstraint* constraint = new PositionConstraint(a, b, maxDistance);
     world->AddConstraint(constraint);
 }
-//void TutorialGame::BridgeConstraintTest() {
-//    Vector3 cubeSize = Vector3(8, 8, 8);
-//    float invCubeMass = 5;  // how heavy the middle pieces are
-//    int numLinks = 10;
-//    float maxDistance = 30;  // constraint distance
-//    float cubeDistance = 20;  // distance between links
-//
-//    Vector3 startPos = Vector3(5, 100, 5);
-//
-//    GameObject* start = AddCubeToWorld(startPos + Vector3(0, 0, 0), cubeSize, 0);
-//    GameObject* end = AddCubeToWorld(startPos + Vector3((numLinks + 2) * cubeDistance, 0, 0), cubeSize, 0);
-//
-//    GameObject* previous = start;
-//
-//    for (int i = 0; i < numLinks; ++i) {
-//        GameObject* block = AddCubeToWorld(startPos + Vector3((i + 1) * cubeDistance, 0, 0), cubeSize, invCubeMass);
-//        PositionConstraint* constraint = new PositionConstraint(previous, block, maxDistance);
-//        world->AddConstraint(constraint);
-//        previous = block;
-//    }
-//    PositionConstraint* constraint = new PositionConstraint(previous, end, maxDistance);
-//    world->AddConstraint(constraint);
-//}
 
+int TrainObject::GetDirection() {
+    if (direction.x > 0) return 1;
+    else if (direction.x < 0) return 2;
+    else if (direction.z > 0) return 3;
+    else if (direction.z < 0) return 4;
+}

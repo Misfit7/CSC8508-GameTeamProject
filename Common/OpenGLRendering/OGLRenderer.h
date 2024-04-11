@@ -49,15 +49,16 @@ namespace NCL {
             }
 
             virtual bool SetVerticalSync(VerticalSyncState s);
+            static void SetTextureRepeating(GLuint texture, bool repeating);
 
-		protected:	
-			int  width;
-			int  height;
+        protected:
+            int  width;
+            int  height;
 
-			void BeginFrame()	override;
-			void RenderFrame()	override;
-			void EndFrame()		override;
-			void SwapBuffers()  override;
+            void BeginFrame()	override;
+            void RenderFrame()	override;
+            void EndFrame()		override;
+            void SwapBuffers()  override;
 
             void BindShader(const OGLShader& s);
             void BindTextureToShader(const OGLTexture& t, const std::string& uniform, int texUnit) const;
@@ -67,7 +68,7 @@ namespace NCL {
             void DrawBoundMesh(uint32_t subLayer = 0, uint32_t numInstances = 1);
             void DrawBoundOBJMesh(uint32_t subLayer = 0, uint32_t numInstances = 1);
             void DrawSubMesh(int i, uint32_t numInstances = 1);
-            void SetTextureRepeating(GLuint texture, bool repeating);
+
 #ifdef _WIN32
             void InitWithWin32(Window& w);
             void DestroyWithWin32();

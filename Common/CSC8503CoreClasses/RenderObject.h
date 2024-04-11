@@ -20,6 +20,7 @@ namespace NCL {
         {
         public:
             RenderObject(Transform* parentTransform, Mesh* mesh, Texture* tex, ShaderGroup* shaderGroup, int drawMode = 1);
+            RenderObject(Transform* parentTransform, Mesh* mesh, GLuint tex, ShaderGroup* shaderGroup, int drawMode = 1);
             RenderObject(Transform* parentTransform, OBJMesh* mesh, Texture* tex, ShaderGroup* shaderGroup, int drawMode = 2);
             ~RenderObject();
 
@@ -71,13 +72,6 @@ namespace NCL {
                 shaderGroup = s;
             }
 
-            void SetMaterial(MeshMaterial* m) {
-                material = m;
-            }
-            MeshMaterial* GetMaterial() const {
-                return material;
-            }
-
             void SetTextures(vector<GLuint> t) {
                 textures = t;
             }
@@ -101,10 +95,30 @@ namespace NCL {
                 return bumpTextures;
             }
 
+            void SetGLTexture(GLuint t) {
+                glTexture = t;
+            }
+            GLuint GetGLTexture() const {
+                return glTexture;
+            }
+
+            void SetIsGL(bool i) {
+                isGL = i;
+            }
+            bool IsGL() const {
+                return isGL;
+            }
+
+            void SetShadow(bool s) {
+                shadow = s;
+            }
+            bool HasShadow() const {
+                return shadow;
+            }
+
             void SetColour(const Vector4& c) {
                 colour = c;
             }
-
             Vector4 GetColour() const {
                 return colour;
             }
@@ -123,8 +137,26 @@ namespace NCL {
                 return emissive;
             }
 
-            float GetCameraDistance() const { return distanceFromCamera; }
-            void SetCameraDistance(float f) { distanceFromCamera = f; }
+            float GetCameraDistance() const {
+                return distanceFromCamera;
+            }
+            void SetCameraDistance(float f) {
+                distanceFromCamera = f;
+            }
+
+            float GetTextureRotate() const {
+                return textureRotate;
+            }
+            void SetTextureRotate(float r) {
+                textureRotate = r;
+            }
+
+            float GetTextureCycle() const {
+                return textureCycle;
+            }
+            void SetTextureCycle(float c) {
+                textureCycle = c;
+            }
 
         protected:
             Mesh* mesh;
@@ -132,8 +164,8 @@ namespace NCL {
             Texture* texture;
             Texture* bumpTexture;
             Texture* specTexture;
+            GLuint glTexture;
             ShaderGroup* shaderGroup;
-            MeshMaterial* material;
             vector<GLuint> textures;
             vector<GLuint> bumpTextures;
             Transform* transform;
@@ -141,7 +173,11 @@ namespace NCL {
             AnimationObject* animationObject;
             int               drawMode;
             bool              emissive;
+            bool              isGL = false;
+            bool              shadow = true;
             float             distanceFromCamera = 0.0f;
+            float             textureRotate;
+            float             textureCycle;
         };
     }
 }

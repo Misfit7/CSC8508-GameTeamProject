@@ -14,6 +14,7 @@ x64/
 #*.db
 #/.vs/CSC8503/FileContentIndex/read.lock
 /.vs
+/PS5/.vs
 #/Build
 #/out/build/x64-Debug
 # CMake build directory
@@ -44,7 +45,14 @@ CMakeFiles/
 CMakeCache.txt
 cmake_install.cmake
 CMakeLists.txt.user
+PS5/CMake/
+PS5/CMakeFiles/
+PS5/CMakeCache.txt
+PS5/cmake_install.cmake
+PS5/CMakeLists.txt.user
 *.dir/
+PS5/Prospero
+PS5/Prospero_Debug
 
 # Generated Makefiles
 Makefile
@@ -58,12 +66,13 @@ Makefile.*
 dependencies/
 
 # Large files exceeding GitHub's file size limit
-CSC8503CoreClasses/CMakeFiles/CSC8503CoreClasses.dir/cmake_pch.cxx.pch
-NCLCoreClasses/CMakeFiles/NCLCoreClasses.dir/cmake_pch.cxx.pch
-OpenGLRendering/CMakeFiles/OpenGLRendering.dir/cmake_pch.cxx.pch
+CSC8503CoreClasses/CSC8503CoreClasses.dir/cmake_pch.cxx.pch
+NCLCoreClasses/NCLCoreClasses.dir/cmake_pch.cxx.pch
+OpenGLRendering/OpenGLRendering.dir/cmake_pch.cxx.pch
 
 CSC8503CoreClasses/CMakeFiles/*
 NCLCoreClasses/CMakeFiles/*
 OpenGLRendering/CMakeFiles/*
 
-
+PS5/CSC8503CoreClasses/CMakeFiles/*
+PS5/NCLCoreClasses/CMakeFiles/*

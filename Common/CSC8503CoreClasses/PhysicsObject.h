@@ -56,6 +56,13 @@ namespace NCL {
 				angularVelocity = v;
 			}
 
+			int GetChannel() const {
+				return channel;
+			}
+			void SetChannel(int c) {
+				channel = c;
+			}
+
 			bool UseGravity() const {
 				return gravity;
 			}
@@ -69,7 +76,12 @@ namespace NCL {
 			void SetResolve(bool r) {
 				resolve = r;
 			}
-
+			float GetRealDamping() {
+				return RealDamping;
+			}
+			void SetRealDamping(float damping) {
+				RealDamping = damping;
+			}
 			void InitCubeInertia();
 			void InitSphereInertia();
 
@@ -86,7 +98,8 @@ namespace NCL {
 			float inverseMass;
 			float elasticity;
 			float friction;
-
+			float RealDamping=0.962f;
+			int AccelTime;
 			//linear stuff
 			Vector3 linearVelocity;
 			Vector3 force;
@@ -97,6 +110,7 @@ namespace NCL {
 			Vector3 inverseInertia;
 			Matrix3 inverseInteriaTensor;
 
+			int channel;
 			bool gravity;
 			bool resolve;
 		};

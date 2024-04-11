@@ -1,5 +1,7 @@
 #include "TrainCarriage.h"
 #include "TrainObject.h"
+#include "TutorialGame.h"
+#include "NetworkedGame.h"
 
 using namespace NCL::CSC8503;
 
@@ -11,33 +13,15 @@ TrainCarriage::~TrainCarriage() {
 
 }
 
-void TrainCarriage::OnCollisionBegin(GameObject *otherObject) {
+void TrainCarriage::OnCollisionBegin(GameObject* otherObject) {
 
 }
 
-void TrainCarriage::OnCollisionEnd(GameObject *otherObject) {
+void TrainCarriage::OnCollisionEnd(GameObject* otherObject) {
 
 }
 
-Quaternion RotateBetweenVectors2(const Vector3 &from, const Vector3 &to) {
-    Vector3 source = from.Normalised(); // 首先，计算两个向量的标准化版本
-    Vector3 target = to.Normalised();
-    float dotProduct = Vector3::Dot(source, target);// 计算两个向量之间的点积
-    if (dotProduct < -0.999f) { // 如果点积接近于-1，表示两个向量相反
-        Vector3 axis = Vector3::Cross(Vector3(1.0f, 0.0f, 0.0f), source);  // 选择任意垂直于 source 向量的向量作为旋转轴
-        if (axis.LengthSquared() < 0.01f) {
-            axis = Vector3::Cross(Vector3(0.0f, 1.0f, 0.0f), source);
-        }
-        axis.Normalise();
-        return Quaternion(axis, 0.0f);  // 返回一个绕选择的轴旋转 180 度的四元数
-    }
-    Vector3 rotationAxis = Vector3::Cross(source, target);// 计算旋转轴
-    rotationAxis.Normalise();
-    float rotationAngle = std::acos(dotProduct);// 计算旋转角度
-    return Quaternion(rotationAxis, rotationAngle);// 构建旋转四元数
-}
-
-void TrainCarriage::UpdateOrientation(Vector3 direction) {
+void TrainCarriage::UpdateOrientation() {
     Quaternion rotation;
     if (direction.x > 0) rotation = Quaternion::EulerAnglesToQuaternion(0, -90, 0);
     else if (direction.x < 0) rotation = Quaternion::EulerAnglesToQuaternion(0, 90, 0);
@@ -46,30 +30,197 @@ void TrainCarriage::UpdateOrientation(Vector3 direction) {
     transform.SetOrientation(rotation);
 }
 
+int TrainCarriage::GetDirection() {
+    if (direction.x > 0) return 1;
+    else if (direction.x < 0) return 2;
+    else if (direction.z > 0) return 3;
+    else if (direction.z < 0) return 4;
+}
+
 void TrainCarriage::Update(float dt) {
     if (path.size() == 0) return;
-    auto it = path.begin();
-    auto itt = it->first;
-    int flag = it->second;
-    if (flag <= 1) {
-        Vector3 newDirection(0.0f, 0.0f, 1.0f);
-        Vector3 currentDirection = this->GetTransform().GetMatrix() * Vector3(0.0f, 0.0f, 1.0f);
-        Quaternion rotation = RotateBetweenVectors2(currentDirection, newDirection);
-        this->GetTransform().SetOrientation(rotation);
+    Vector3 target = path[0];
+    direction = (target - this->GetTransform().GetPosition());
+    direction = Vector3(direction.x, 0, direction.z);
+    GetPhysicsObject()->SetLinearVelocity(direction.Normalised() * TutorialGame::GetGame()->GetTrain()->GetForce() * dt);
+    UpdateOrientation();
 
-    } else {
-        Vector3 newDirection(1.0f, 0.0f, 0.0f);
-        Vector3 currentDirection = this->GetTransform().GetMatrix() * Vector3(0.0f, 0.0f, 1.0f);
-        Quaternion rotation = RotateBetweenVectors2(currentDirection, newDirection);
-        this->GetTransform().SetOrientation(rotation);
-
-    }
-    Vector3 target = itt;
-    Vector3 dir = (target - this->GetTransform().GetPosition());
-    dir = Vector3(dir.x, 0, dir.z);
-    GetPhysicsObject()->SetLinearVelocity(dir.Normalised() * 1000.0f * dt);
     float mm = (this->GetTransform().GetPosition() - target).Length();
     if (mm < 0.5) {
-        path.erase(it);
+        if (GetDirection() < 3) transform.SetPosition(Vector3(target.x, transform.GetPosition().y, transform.GetPosition().z));
+        else transform.SetPosition(Vector3(transform.GetPosition().x, transform.GetPosition().y, target.z));
+        physicsObject->SetLinearVelocity(Vector3());
+        path.erase(path.begin());
+    }
+}
+
+void TrainCarriage::AddPath(Vector3 p) {
+    this->path.push_back(p);
+}
+
+void MaterialCarriage::Update(float dt) {
+    if (path.size() != 0) {
+        Vector3 target = path[0];
+        direction = (target - this->GetTransform().GetPosition());
+        direction = Vector3(direction.x, 0, direction.z);
+        //std::cout << "Dir: " << direction.x << " " << direction.y << " " << direction.z << std::endl;
+        GetPhysicsObject()->SetLinearVelocity(direction.Normalised() * TutorialGame::GetGame()->GetTrain()->GetForce() * dt);
+        UpdateOrientation();
+
+        float mm = (this->GetTransform().GetPosition() - target).Length();
+        if (mm < 0.5) {
+            if (GetDirection() < 3) transform.SetPosition(Vector3(target.x, transform.GetPosition().y, transform.GetPosition().z));
+            else transform.SetPosition(Vector3(transform.GetPosition().x, transform.GetPosition().y, target.z));
+            physicsObject->SetLinearVelocity(Vector3());
+            path.erase(path.begin());
+        }
+    }
+
+    if (produceCarriage->Finished()) {
+        if (!planks.empty() && !stones.empty()) {
+            ready = true;
+        }
+        else {
+            ready = false;
+        }
+    }
+
+    //std::cout << "Plank: " << planks.size() << std::endl;
+    //std::cout << "Stone: " << stones.size() << std::endl;
+}
+
+void MaterialCarriage::UpdateMaterial() {
+    if (TutorialGame::GetGame()->IsNetworked()) {
+        NetworkedGame::GetNetworkedGame()->SetUpdateMaterialFlag(true);
+        NetworkedGame::GetNetworkedGame()->SetRemovedPlankNetworkID(planks[0]->GetNetworkObject()->GetNetworkID());
+        NetworkedGame::GetNetworkedGame()->SetRemovedStoneNetworkID(stones[0]->GetNetworkObject()->GetNetworkID());
+        NetworkedGame::GetNetworkedGame()->SetMaterialUpdatingTag(3);
+    }
+    world->RemoveGameObject(planks[0]);
+    planks.erase(planks.begin());
+    if (!planks.empty()) {
+        for (size_t i = 0; i < planks.size(); ++i) {
+            planks[i]->SetHeight(transform.GetPosition().y + 4 + i);
+        }
+    }
+    world->RemoveGameObject(stones[0]);
+    stones.erase(stones.begin());
+    if (!stones.empty()) {
+        for (size_t i = 0; i < stones.size(); ++i) {
+            stones[i]->SetHeight(transform.GetPosition().y + 4 + i);
+        }
+    }
+}
+
+void ProduceCarriage::OnCollisionBegin(GameObject* otherObject) {
+    if (otherObject->GetTypeID() == 1) {
+        if (!rails.empty()) {
+            if (otherObject->GetSlot() == 0) {
+                int num = 0;
+                num = rails.size() > 3 ? 3 : rails.size();
+                for (int i = 0; i < num; ++i) {
+                    if (rails[0]) {
+                        rails[0]->SetPlayer((PlayerObject*)otherObject);
+                        rails[0]->SetPutDown(false);
+                        rails[0]->SetInCarriage(false);
+                        rails[0]->SetNum(otherObject->GetSlotNum() + 1);
+                        otherObject->SetSlot(7);
+                        otherObject->SetSlotNum(otherObject->GetSlotNum() + 1);
+                        rails.erase(rails.begin());
+                        for (size_t i = 0; i < rails.size(); ++i) {
+                            rails[i]->SetHeight(transform.GetPosition().y + 4 + i);
+                        }
+                    }
+                }
+                TutorialGame::GetGame()->GetAudio()->PlayGet();
+            }
+            else if (otherObject->GetSlot() == 7 && otherObject->GetSlotNum() < 3) {
+                for (int i = 0; i < 3 - otherObject->GetSlotNum(); ++i) {
+                    if (rails[0]) {
+                        rails[0]->SetPlayer((PlayerObject*)otherObject);
+                        rails[0]->SetPutDown(false);
+                        rails[0]->SetInCarriage(false);
+                        rails[0]->SetNum(otherObject->GetSlotNum() + 1);
+                        otherObject->SetSlotNum(otherObject->GetSlotNum() + 1);
+                        rails.erase(rails.begin());
+                        for (size_t i = 0; i < rails.size(); ++i) {
+                            rails[i]->SetHeight(transform.GetPosition().y + 4 + i);
+                        }
+                    }
+                }
+                TutorialGame::GetGame()->GetAudio()->PlayGet();
+            }
+        }
+    }
+}
+
+void ProduceCarriage::Update(float dt) {
+    if (path.size() != 0) {
+        Vector3 target = path[0];
+        direction = (target - this->GetTransform().GetPosition());
+        direction = Vector3(direction.x, 0, direction.z);
+        //std::cout << "Dir: " << direction.x << " " << direction.y << " " << direction.z << std::endl;
+        GetPhysicsObject()->SetLinearVelocity(direction.Normalised() * TutorialGame::GetGame()->GetTrain()->GetForce() * dt);
+        UpdateOrientation();
+
+        float mm = (this->GetTransform().GetPosition() - target).Length();
+        if (mm < 0.5) {
+            if (GetDirection() < 3) transform.SetPosition(Vector3(target.x, transform.GetPosition().y, transform.GetPosition().z));
+            else transform.SetPosition(Vector3(transform.GetPosition().x, transform.GetPosition().y, target.z));
+            physicsObject->SetLinearVelocity(Vector3());
+            path.erase(path.begin());
+        }
+    }
+
+    if (finish && materialCarriage->IsReady()) {
+        finish = false;
+        counter = 3.0f;
+        materialCarriage->UpdateMaterial();
+    }
+    if (!finish) {
+        counter -= dt;
+        renderObject->SetColour(Vector4(1, 1, counter / 3, 1));
+    }
+    if (counter <= 0 && !finish) {
+        if (rails.size() < 10) {
+            finish = true;
+            RailObject* rail = TutorialGame::GetGame()->AddRailToWorld(transform.GetPosition());
+            rail->SetCarriage(this);
+            rail->SetHeight(transform.GetPosition().y + 4 + rails.size());
+            rails.push_back(rail);
+            if (NetworkedGame::GetNetworkedGame()->IsNetworked()) {
+                NetworkedGame::GetNetworkedGame()->SetProduceRailFlag(true);
+                NetworkedGame::GetNetworkedGame()->SetRailNetworkID(rail->GetNetworkObject()->GetNetworkID());
+                NetworkedGame::GetNetworkedGame()->SetRailProducedTag(4);
+            }
+        }
+    }
+}
+void WaterCarriage::Update(float dt) {
+    if (path.size() != 0) {
+        Vector3 target = path[0];
+        direction = (target - this->GetTransform().GetPosition());
+        direction = Vector3(direction.x, 0, direction.z);
+        //std::cout << "Dir: " << direction.x << " " << direction.y << " " << direction.z << std::endl;
+        GetPhysicsObject()->SetLinearVelocity(direction.Normalised() * TutorialGame::GetGame()->GetTrain()->GetForce() * dt);
+        UpdateOrientation();
+
+        float mm = (this->GetTransform().GetPosition() - target).Length();
+        if (mm < 0.5) {
+            if (GetDirection() < 3) transform.SetPosition(Vector3(target.x, transform.GetPosition().y, transform.GetPosition().z));
+            else transform.SetPosition(Vector3(transform.GetPosition().x, transform.GetPosition().y, target.z));
+            physicsObject->SetLinearVelocity(Vector3());
+            path.erase(path.begin());
+        }
+    }
+
+    float speed = 1.0f;
+    float1 = water;
+    if (water > 0.0f) water -= dt * speed;
+    float color = water / 100.f;
+    renderObject->SetColour(Vector4(1 - color, 0, color, 1));
+
+    if (water <= 0) {
+        train->SetOnFire(true);
     }
 }

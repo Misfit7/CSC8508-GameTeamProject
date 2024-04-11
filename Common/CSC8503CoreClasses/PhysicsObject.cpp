@@ -12,7 +12,8 @@ PhysicsObject::PhysicsObject(Transform* parentTransform, const CollisionVolume* 
 	elasticity	= 0.8f;
 	friction	= 0.8f;
 
-	gravity = true;
+	channel = 2;
+	gravity = false;
 	resolve = true;
 }
 

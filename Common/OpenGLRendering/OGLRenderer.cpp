@@ -47,10 +47,10 @@ OGLRenderer::~OGLRenderer() {
 #endif
 }
 
-void OGLRenderer::OnWindowResize(int w, int h)	 {
-	windowSize = Vector2i(w, h);
-	width = windowSize.x;
-	height = windowSize.y;
+void OGLRenderer::OnWindowResize(int w, int h) {
+    windowSize = Vector2i(w, h);
+    width = windowSize.x;
+    height = windowSize.y;
 
     glViewport(0, 0, windowSize.x, windowSize.y);
 }
@@ -232,9 +232,9 @@ void OGLRenderer::DrawSubMesh(int i, uint32_t numInstances) {
     int		offset = 0;
 
 
-        const SubMesh* m = boundMesh->GetSubMesh(i);
-        offset = m->start;
-        count = m->count;
+    const SubMesh* m = boundMesh->GetSubMesh(i);
+    offset = m->start;
+    count = m->count;
 
     switch (boundMesh->GetPrimitiveType()) {
     case GeometryPrimitive::Triangles:		mode = GL_TRIANGLES;		break;

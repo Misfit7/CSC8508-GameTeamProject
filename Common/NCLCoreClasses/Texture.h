@@ -10,31 +10,31 @@ https://research.ncl.ac.uk/game/
 #include "Vector2i.h"
 
 namespace NCL::Rendering {
-	using namespace Maths;
+    using namespace Maths;
 
-	using UniqueTexture = std::unique_ptr<class Texture>;
-	using SharedTexture = std::shared_ptr<class Texture>;
+    using UniqueTexture = std::unique_ptr<class Texture>;
+    using SharedTexture = std::shared_ptr<class Texture>;
 
-	class Texture	{
-	public:
-		virtual ~Texture();
+    class Texture {
+    public:
+        virtual ~Texture();
 
-		Vector2i GetDimensions() const {
-			return dimensions;
-		}
+        Vector2i GetDimensions() const {
+            return dimensions;
+        }
 
-		uint32_t GetAssetID() const {
-			return assetID;
-		}
+        uint32_t GetAssetID() const {
+            return assetID;
+        }
 
-		void SetAssetID(uint32_t newID) {
-			assetID = newID;
-		}
+        void SetAssetID(uint32_t newID) {
+            assetID = newID;
+        }
 
-	protected:
-		Texture();
+    protected:
+        Texture();
 
-		Vector2i		dimensions;
-		uint32_t		assetID;
-	};
+        Vector2i		dimensions;
+        uint32_t		assetID;
+    };
 }
