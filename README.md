@@ -1,5 +1,10 @@
 # CSC8508 
+## Demo Link
+
+Most of the functionality is demonstrated in the following demo Youtube: [video](https://youtu.be/cUqIk4fCExI) Bili: [video]()
+
 ## Game Operation
+
 |  Platform   | Keys  | Features|
 |  :----:  | :----:  |:----:  |
 | PC  | WASD | Character Movement|
@@ -22,7 +27,9 @@
 |   |Square| Put down rail road|
 |   |L3/R3| AI chase/not chase character|
 |   |Options| Pause|
+
 ## Game Goal
+
 * Pick up your tool, collect woods and rocks
 * Build rails on train to make the train move further
 * Final goal for the railway is the train station
