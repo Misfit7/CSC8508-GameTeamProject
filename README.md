@@ -1,7 +1,7 @@
 # CSC8508 
 ## Demo Link
 
-Most of the functionality is demonstrated in the following demo Youtube: [video](https://youtu.be/cUqIk4fCExI) Bili: [video]()
+Most of the functionality is demonstrated in the following demo Youtube: [video](https://youtu.be/cUqIk4fCExI) Bili: [video](https://www.bilibili.com/video/BV1pM4m1X7ut/)
 
 ## Game Operation
 
